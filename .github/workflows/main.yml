@@ -24,6 +24,7 @@ jobs:
           node-version: '16.6.2'
           check-latest: true
 
+      # FIXME
       # - name: Install Npm Dependencies
       #   run: yarn install
 
