@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    height: 100%;
+    background-color: black;
+  }
+
+  svg {
+    width: 100%;
+  }
+
+  a {
+    text-decoration: underline;
+    color: #99f9ff;
+  }
+
+  a.subnav {
+    text-decoration: none;
+    color: #616161;
+    font-size: 14px;
+    text-transform: capitalize;
+  }
+
+  a.subnav.active {
+    font-weight: bold;
+    color: #99f9ff;
+  }
+
+  body {
+    height: 100%;
+    color: white;
+  }
+
+  button {
+    background: #99f9ff;
+    color: #282828;
+    border-radius: 3px;
+    opacity: 100%;
+  }
+
+  input {
+    border: 1px solid #99f9ff !important;
+    background: none !important;
+    background-color: #282828;
+    outline: none;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type='checkbox']:checked {
+    background: #99f9ff !important;
+    outline: none;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  button:disabled {
+    background: #99f9ff;
+    color: #282828;
+    cursor: not-allowed;
+    opacity: 60%;
+  }
+
+  .disconnectButton {
+    background-color: #cb4464;
+    color: #fff;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .convertInput {
+    background: #272726;
+  }
+
+  select {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .dropdownSelect {
+    background: #074e53;
+    color: #99f9ff;
+    border: 1px solid #99f9ff !important;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dropdownSelect select {
+    border: 0;
+    position: relative;
+    z-index: 99;
+    background: none;
+  }
+
+  .dropdownSelect select:after {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #99f9ff !important;
+    position: absolute;
+    top: 0;
+    right: 0;
+    content: '';
+    z-index: 98;
+  }
+
+  /*
+    walletAddress-container
+  */
+
+  .walletAddress-container {
+    background-color: #5e5e5e;
+    padding: 10px;
+  }
+
+  .walletNetwork-container {
+    background-color: #5e5e5e;
+    padding: 10px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  /*
+    Toastr messages container
+  */
+
+  /*
+    --------------------
+    progress bar styles
+    --------------------
+  */
+
+  .circle-wrap {
+    margin: 150px auto;
+    width: 150px;
+    height: 150px;
+    background: #000;
+    border-radius: 50%;
+  }
+
+  .circle-wrap .circle .mask,
+  .circle-wrap .circle .fill {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .circle-wrap .circle .mask {
+    clip: rect(0px, 150px, 150px, 75px);
+  }
+
+  .circle-wrap .inside-circle {
+    width: 145px;
+    height: 145px;
+    border-radius: 50%;
+    background: #000;
+    text-align: center;
+    margin-top: 2px;
+    margin-left: 2px;
+    color: #99f9ff;
+    position: absolute;
+    z-index: 100;
+    line-height: normal;
+  }
+
+  .circle-wrap .inside-circle .timerNumber {
+    font-size: 3em;
+  }
+
+  .circle-wrap .inside-circle .timerLabel {
+    font-size: 1em;
+  }
+
+  .mask .fill {
+    clip: rect(0px, 75px, 150px, 0px);
+    background-color: #99f9ff;
+  }
+
+  /*
+    Supply container token information
+  */
+
+  .supplyContainer {
+    background-color: #272726;
+  }
+
+  .supplyContainer > h2,
+  .supplyContainer > div > h2 {
+    color: #99f9ff;
+    font-size: 19px;
+    font-weight: bold;
+    line-height: normal;
+  }
+
+  /*
+    FOOTER NAV
+  */
+
+  .footerNav a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+    line-height: normal;
+  }
+
+  .warning {
+    color: #ffc658;
+    font-size: 12px;
+    line-height: normal;
+    font-weight: light;
+  }
+
+  .openSoon,
+  .openNow,
+  .closed {
+    font-weight: bold;
+    font-size: 19px;
+    line-height: normal;
+  }
+
+  .openSoon {
+    color: #ffc658;
+  }
+
+  .openNow {
+    color: #99f9ff;
+  }
+
+  .closed {
+    color: #7a7a7a;
+  }
+
+  .stakingPeriod {
+    color: #99f9ff;
+    font-weight: bold;
+    font-size: 17px;
+  }
+}
