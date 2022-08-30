@@ -69,7 +69,7 @@ export const Web3Manager = () => {
  * @param {Tokens} token - The token you wish to create a contract for
  * @returns {object} A contract object from Web3
  */
-export const TokenContractManager = async (token:string, network:string) => {
+export const TokenContractManager = async (token='FUSTD', network:string) => {
     const web3Interface = Web3Manager();
     const [tokenContractMain, setTokenContract] = useState({});
     const [tokenType, setTokenType] = useState('');
@@ -80,7 +80,7 @@ export const TokenContractManager = async (token:string, network:string) => {
     //@ts-ignore
     const tokenAddressMain = await GetJsonAddresses().then((data) => data[_network]['TOKEN_ADDRESSES'][token]);
     //@ts-ignore
-    const tokenAddress = token.slice(0,2) === '0x' ? token : tokenAddressMain !== '' ? tokenAddressMain : TOKEN_ADDRESSES.USDT;
+    const tokenAddress = token !== null && token.slice(0,2) === '0x' ? token : tokenAddressMain !== '' && tokenAddressMain;
 
     if (tokenAddress !== undefined) {
         if(Object.keys(tokenContractMain).length === 0 || token !== tokenType) {

@@ -138,7 +138,7 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
             </div>
           </div>
           <div className="flex flex-cols m-2 mb-8 warning">
-            <span className="w-2/12"><AlertTriangle /></span><p className="w-10/12">Warning: once you staked your Standard Token (TST) you can not unstake them until the {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</p>
+            <span className="w-2/12"><AlertTriangle /></span><p className="w-10/12">Warning: once you have staked your Standard Token (TST) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</p>
           </div>
         </span>
             <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved ? `${TOKENS.HUMAN_READABLE.TST} Approved` : loading ? 'loading...' : `Approve ${TOKENS.HUMAN_READABLE.TST}`}</button>

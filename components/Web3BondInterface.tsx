@@ -26,7 +26,7 @@ type Rate = {
 function Web3BondInterface() {
   const { address, web3Provider, network } = useWeb3Context();
   const [contractAddresses, setContractAddresses] = useState({});
-  const [otherTokenAddress, setOtherTokenAddress] = useState('');
+  const [otherTokenAddress, setOtherTokenAddress] = useState(null);
   const [otherTokenSymbol, setOtherTokenSymbol] = useState('');
   const [otherTokenDecimal, setOtherTokenDecimal] = useState(0);
   const [mainTokenDecimal, setmainTokenDecimal] = useState(0);
@@ -45,7 +45,7 @@ function Web3BondInterface() {
   const OperatorStage2Contract = SmartContractManager('OperatorStage2' as Contract, _network).then((data) => { return data });
   const SmartContract = SmartContractManager('BondingEvent' as Contract, _network).then((data) => { return data });
   //@ts-ignore
-  const TokenContract_other = TokenContractManager(otherTokenAddress as Tokens, network).then((data) => { return data });
+  const TokenContract_other = TokenContractManager(otherTokenAddress, _network).then((data) => { return data });
     //@ts-ignore
   const TokenContract_main = TokenContractManager(TOKENS.HUMAN_READABLE.SEURO as Tokens, network).then((data) => { return data });
 
@@ -63,6 +63,11 @@ function Web3BondInterface() {
     getOtherTokenAddress();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [web3Provider]);
+
+  useEffect(() => {
+    getOtherContractAddress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [otherTokenAddress])
 
   // tokens are currently fixed to SEURO and USDT
   useEffect(() => {
@@ -87,6 +92,26 @@ function Web3BondInterface() {
     getTokenBalance('other');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [otherTokenAddress, otherTokenSymbol, otherTokenDecimal]);
+
+  const getOtherContractAddress = async () => {
+    //@ts-ignore
+    if (otherTokenAddress !== null) {
+      await (await TokenContract_other).methods.decimals().call()
+      .then((data:never) => {
+        setOtherTokenDecimal(data);
+      }).catch((error:never) => {
+        console.log('error retrieving other token decimal', error);
+      });
+  
+      // @ts-ignore
+      await (await TokenContract_other).methods.symbol().call()
+      .then((data:never) => {
+        setOtherTokenSymbol(data);
+      }).catch((error:never) => {
+        console.log('error retrieving other token symbol', error);
+      });
+    }
+  }
 
   const getContractAddresses = async () => {
     Object.keys(contractAddresses).length === 0 && await GetJsonAddresses().then((data) => {
@@ -173,27 +198,10 @@ function Web3BondInterface() {
 
   const getOtherTokenAddress = async () => {
     const smartContract = await (await SmartContract);
-    console.log('smartContract', smartContract);
     // @ts-ignore
     smartContract && await (await SmartContract).methods.OTHER_ADDRESS().call()
     .then(async (data:never) => {
       setOtherTokenAddress(data);
-
-      await (await TokenContract_other).methods.decimals().call()
-      .then((data:never) => {
-        setOtherTokenDecimal(data);
-      }).catch((error:never) => {
-        console.log('error retrieving other token decimal', error);
-      });
-  
-      // @ts-ignore
-      await (await TokenContract_other).methods.symbol().call()
-      .then((data:never) => {
-        setOtherTokenSymbol(data);
-      }).catch((error:never) => {
-        console.log('error retrieving other token symbol', error);
-      });
-
     }).catch((error:never) => {
       console.log('error retrieving other address', error);
     });
