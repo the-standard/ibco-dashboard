@@ -1,7 +1,6 @@
 import { useEffect, useReducer, useCallback } from 'react'
 import { ethers } from 'ethers'
 import Web3Modal from 'web3modal'
-import WalletConnectProvider from '@walletconnect/web3-provider'
 
 import {
   Web3ProviderState,
@@ -13,12 +12,6 @@ import {
 import { toast } from 'react-toastify'
 
 const providerOptions = {
-  walletconnect: {
-    package: WalletConnectProvider, // required
-    options: {
-      infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-    },
-  },
 }
 
 let web3Modal: Web3Modal | null
@@ -27,6 +20,7 @@ if (typeof window !== 'undefined') {
     network: 'goerli', // optional
     cacheProvider: true,
     providerOptions, // required
+    theme: 'dark',
   })
 }
 

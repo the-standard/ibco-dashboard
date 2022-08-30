@@ -100,7 +100,7 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
             </div>
             <div>
                 <h2>TST/sEURO Price</h2>
-                <p>&euro; {((tokenInfo.tstSeuroPrice / 1000000)).toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+                <p>&euro; {((tokenInfo.tstSeuroPrice / 10000000)).toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
             </div>
         </div>
     )
