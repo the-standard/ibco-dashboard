@@ -14,7 +14,6 @@ type RateSelectionButtonType = {
 }
 
 export const RateSelectionButton = ({rate, isSelected, clickHandler}:RateSelectionButtonType) => {
-    console.log('Rate button', rate);
     const week2year = (rate:string) => {
         const _rate = parseInt(rate);
         const weekPerYear = 52.14285714;

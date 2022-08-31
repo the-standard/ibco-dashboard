@@ -28,8 +28,10 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
     });
 
     useEffect(() => {
-        getAllTokenInfo();
-        getTstSeuroPrice();
+        if (web3Provider) {
+            getAllTokenInfo();
+            getTstSeuroPrice();
+        }
     }, [web3Provider]);
 
     // MAIN FUNCTIONS

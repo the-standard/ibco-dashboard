@@ -5,3 +5,4 @@ export { Web3SwapInterface } from './StageComponents/SwapStage/Web3SwapInterface
 export { Web3StakingInterface } from './StageComponents/StakeStage/Web3StakingInterface'
 export { TokenInformationInterface } from '../components/StageComponents/SwapStage/components/TokenInformationInterface'
 export { BondingCurveInterface } from './StageComponents/SwapStage/components/BondingCurveInterface'
+export { ConnectWalletModal } from './shared/uiElements/Modal/ConnectWalletModal/ConnectWalletModal'

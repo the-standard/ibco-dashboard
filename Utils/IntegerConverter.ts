@@ -50,7 +50,7 @@ const decimal2name = (decimal:number) => {
  * @param {string} value - The value to convert to Javascript Number
  * @param {string} decimal - The decimal places to convert from
  */
-export const ConvertFrom = (value:number, decimal:number) => {
+export const ConvertFrom = (value:number|string, decimal:number) => {
     const decimalName = decimal2name(decimal) as Unit;
     let fromWei: string;
 
@@ -73,7 +73,7 @@ export const ConvertFrom = (value:number, decimal:number) => {
  * @param {number} value - The value to convert to BigNumber
  * @param {number} decimal - The decimal places to convert to
  */
-export const ConvertTo = (value:number, decimal:number) => {
+export const ConvertTo = (value:number|string, decimal:number) => {
     const decimalName = decimal2name(decimal) as Unit;
     const toWei = web3.utils.toWei((value).toString(), decimalName);
 

@@ -6,7 +6,7 @@ import SubNavigation from '../components/shared/navigation/SubNavigation';
 import NextHeadComponent from '../components/shared/NextHeadComponent';
 import { Web3SwapInterface } from '../components';
 import { TokenInformationInterface, BondingCurveInterface } from '../components';
-import { Contract, SmartContractManager } from '../Utils';
+import { Contract, SmartContractManager, TOKENS } from '../Utils';
 import Footer from '../components/shared/footer';
 import { useWeb3Context } from '../context';
 import { GetJsonAddresses } from '../Utils/ContractManager';
@@ -42,11 +42,11 @@ const Stage1: NextPage = () => {
       <main className="flex flex-row justify-between p-4">
         <div className="container w-9/12">
           <div className="supplyContainer mb-4 mr-6 px-5 py-3 flex flex-cols">
-            <h2>sEURO Address:</h2> <p className="ml-20">{seuroAddress}</p>
+            <h2>{TOKENS.DISPLAY.SEURO} Address:</h2> <p className="ml-20">{seuroAddress}</p>
           </div>
           {
             <>
-              { web3Provider && <TokenInformationInterface bondingCurveContract={BondingCurveContract} /> }
+              <TokenInformationInterface bondingCurveContract={BondingCurveContract} />
               <BondingCurveInterface />
             </>
           }

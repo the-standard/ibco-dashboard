@@ -19,7 +19,7 @@ import Dropdown from '../../shared/uiElements/Dropdown/Dropdown';
 import { GetJsonAddresses } from '../../../Utils/ContractManager';
 
 export function Web3SwapInterface() {
-  const { address, web3Provider, network } = useWeb3Context();
+  const { address, network } = useWeb3Context();
   const [contractAddresses, setContractAddresses] = useState({});
   const [from, setFrom] = useState(0);
   const [to, setTo] = useState(0.0);
@@ -212,7 +212,6 @@ export function Web3SwapInterface() {
   return (
     //TODO: Finish styling for all devices
     <div className="convertInput grid grid-flow-row auto-rows-max p-5 py-8 w-full">
-      { web3Provider && Object.keys(contractAddresses).length !== 0 ? (
         <>
             <p className="p-0 m-0 text-sm">Converting from</p>
             <div className="container w-full">
@@ -245,8 +244,6 @@ export function Web3SwapInterface() {
             transactionData && <button className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</button>
             }
             </>
-      ) : <div>Please Connect Wallet...</div>
-}
     </div>
   )
 }

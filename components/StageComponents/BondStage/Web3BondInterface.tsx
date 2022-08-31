@@ -31,7 +31,8 @@ function Web3BondInterface() {
   const [otherTokenDecimal, setOtherTokenDecimal] = useState(0);
   const [mainTokenDecimal, setmainTokenDecimal] = useState(0);
   const [from, setFrom] = useState(0);
-  const [to, setTo] = useState(0);
+  const [to, setTo] = useState('0');
+  const [toDisplay, setToDisplay] = useState(0);
   const [rates, setRates] = useState([]);
   const [balance, setBalance] = useState({main: 0, other: 0});
   const [bondingLength, setBondingLength] = useState<Rate>();
@@ -67,7 +68,7 @@ function Web3BondInterface() {
   useEffect(() => {
     //disable approval buttons
     from > 0 ? setDisabledApprovalButton({main: false, other:assetApproved.other}) : setDisabledApprovalButton({main: true, other:assetApproved.other});
-    to > 0  ? setDisabledApprovalButton({other:false, main:assetApproved.main}) : setDisabledApprovalButton({other:true, main:assetApproved.main});
+    to !== '0'  ? setDisabledApprovalButton({other:false, main:assetApproved.main}) : setDisabledApprovalButton({other:true, main:assetApproved.main});
 
     // disable approval buttons after token is approved
     assetApproved.main && setDisabledApprovalButton({main: true, other:assetApproved.other});
@@ -76,7 +77,7 @@ function Web3BondInterface() {
     // enable bonding button if both assets are approved
     assetApproved.main && assetApproved.other && bondingLength !== null && setDisabledSend(false);
 
-    from > 0 ? getTokenAmount() : setTo(0);
+    from > 0 ? getTokenAmount() : setTo('0');
     
   
   }, [from, to, assetApproved]);
@@ -216,17 +217,20 @@ function Web3BondInterface() {
     await(await SmartContract).methods.getOtherAmount(formatSeuro).call()
     .then((data:never) => {
       setLoading(false);
-      const bigNumberFrom = ConvertFrom(data['amountOther'], 6).toFloat();
-      setTo(bigNumberFrom);
+      const bigNumberTo = ConvertFrom(data['amountOther'], otherTokenDecimal).raw();
+      const convertDisplayTo = ConvertFrom(data['amountOther'], 6).toFloat();
+
+      setToDisplay(convertDisplayTo);
+      setTo(bigNumberTo);
     }).catch((error:never) => {
       setLoading(false);
-      toast.error('Get USTD amount error', error);
+      toast.error(`Get ${otherTokenSymbol} amount error`, error);
     });
   }
 
   const SendBondTransaction = async () => {
     setLoading(true);
-    const _formatValue = ConvertTo(from, otherTokenDecimal).raw();
+    const _formatValue = ConvertFrom(from, mainTokenDecimal).raw();
     // @ts-ignores
     const _bondingRate = bondingLength['rate'] || 0;
     // @ts-ignore
@@ -251,7 +255,7 @@ function Web3BondInterface() {
             <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
               <input className="w-9/12" type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : 0} />
               <div className="dropdownSelect py-2 text-center w-3/12">
-              <p className="mx-auto">{TOKENS.HUMAN_READABLE.SEURO}</p>
+              <p className="mx-auto">{TOKENS.DISPLAY.SEURO}</p>
               </div>
             </div>
           </div>
@@ -260,7 +264,7 @@ function Web3BondInterface() {
           <p className="p-0 m-0 text-sm">Bonding asset 2</p>
           <div className="container w-full">
             <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
-              <input className="w-9/12" type='number' step="any" min={0} readOnly={true} maxLength={8} onInput={checkMaxLength}  value={to > 0 ? to : 0} />
+              <input className="w-9/12" type='number' step="any" readOnly={true} value={to !== '0' ? toDisplay : 0} />
               <div className="dropdownSelect py-2 text-center w-3/12">
                 <p className="mx-auto">{otherTokenSymbol ? otherTokenSymbol : 'Loading...'}</p>
               </div>
@@ -284,7 +288,7 @@ function Web3BondInterface() {
               <div className="mb-8 mt-1 flex flex-rows w-full justify between">
                 {
                   <>
-                  <button className="w-6/12 px-2 py-1 mr-4 font-light" disabled={disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${TOKENS.HUMAN_READABLE.SEURO} Approved` : loading ? 'loading...' : `Approve ${TOKENS.HUMAN_READABLE.SEURO}`}</button>
+                  <button className="w-6/12 px-2 py-1 mr-4 font-light" disabled={disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${TOKENS.DISPLAY.SEURO} Approved` : loading ? 'loading...' : `Approve ${TOKENS.DISPLAY.SEURO}`}</button>
                   <button className="w-6/12 px-2 py-1 font-light" disabled={disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${otherTokenSymbol} Approved` : loading ? 'loading...' : `Approve ${otherTokenSymbol}`}</button>
                   </>
                 }
