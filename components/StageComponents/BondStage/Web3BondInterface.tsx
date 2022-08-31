@@ -4,7 +4,6 @@ import React, {
   useEffect, 
   useState } from 'react'
 import { toast } from 'react-toastify';
-//import Web3 from 'web3';
 
 //Util Helpers
 import { 
@@ -263,7 +262,7 @@ function Web3BondInterface() {
             <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
               <input className="w-9/12" type='number' step="any" min={0} readOnly={true} maxLength={8} onInput={checkMaxLength}  value={to > 0 ? to : 0} />
               <div className="dropdownSelect py-2 text-center w-3/12">
-                <p className="mx-auto">{otherTokenSymbol}</p>
+                <p className="mx-auto">{otherTokenSymbol ? otherTokenSymbol : 'Loading...'}</p>
               </div>
             </div>
           </div>
@@ -272,11 +271,13 @@ function Web3BondInterface() {
         
         <div className="mb-8 mt-1 flex flex-cols justify-between">
           {
-            rates.map((rate:Rate, index) => {
+            rates.length > 0 ? rates.map((rate:Rate, index) => {
               return (
                 <RateSelectionButton rate={rate} key={index} isSelected={bondingLength?.durationInWeeks === rate.durationInWeeks} clickHandler={(event) => setBondingLengthClickHandler(event)}/>
               )
             })
+            :
+            'Loading Rates...'
           }
         </div>
             {
