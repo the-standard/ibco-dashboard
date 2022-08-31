@@ -25,9 +25,9 @@ export const Web3StakingInterface = () => {
     }
 
     const getPositions = async () => {
-        //console.log('await (await StakingContract)', await (await StakingContract));
+        const stakingContract = await (await StakingContract);
         // @ts-ignore
-        await (await StakingContract).methods.list().call().then((data:string[]) => {
+        stakingContract.methods.list().call().then((data:string[]) => {
             //@ts-ignore
             setStakeAddresses([...new Set(data)]);
         }).catch((error: never) => {

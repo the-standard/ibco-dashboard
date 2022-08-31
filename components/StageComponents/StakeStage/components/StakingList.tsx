@@ -14,13 +14,25 @@ type StakingObj = {
 }
 
 type StakeList = {
-    stakes: string[],
+    stakes: StakingObj[],
     clickFunction: React.MouseEventHandler<string>
 }
 
 // @ts-ignore
 export const StakingList = ({stakes, clickFunction}:StakeList) => {
+    const ArrayCopy = [...stakes];
+    const sortedStakes = ArrayCopy.sort((a,b) => (parseInt(a.start) > parseInt(b.start)) ? 1 : ((parseInt(b.start) > parseInt(a.start)) ? -1 : 0))
     const [stakeInfo, setStakeInfo] = useState<StakingObj[]>([]);
+
+    useEffect(() => {
+        //@ts-ignore
+        stakes.length > 0 ? sortedStakes.map(async (stake:string) => {
+            const hasElemInArray = stakeInfo.some( stakeInfo => stakeInfo['address'] === stake )
+            const _stakeInfo = await getStakingObject(stake);
+            !hasElemInArray && setStakeInfo(prevState => [...prevState, _stakeInfo]);
+        }):
+        'Loading Stake Options...'
+    }, []);
 
     const getStakingObject = async (contractAddress:string) => {
         const stakingContract = StakingContractManager(contractAddress as Contract).then((data) => data);
@@ -65,15 +77,6 @@ export const StakingList = ({stakes, clickFunction}:StakeList) => {
 
         return stakingObj;
     };
-
-    useEffect(() => {
-        //@ts-ignore
-        stakes.length > 0 && stakes.map(async (stake:string) => {
-            const hasElemInArray = stakeInfo.some( stakeInfo => stakeInfo['address'] === stake )
-            const _stakeInfo = await getStakingObject(stake);
-            !hasElemInArray && setStakeInfo(prevState => [...prevState, _stakeInfo]);
-        });
-    }, []);
 
     return (
         <div>

@@ -33,11 +33,11 @@ function Web3BondInterface() {
   const [from, setFrom] = useState(0);
   const [to, setTo] = useState(0);
   const [rates, setRates] = useState([]);
-  const [balance, setBalance] = useState({SEURO: 0, USDT: 0});
+  const [balance, setBalance] = useState({main: 0, other: 0});
   const [bondingLength, setBondingLength] = useState<Rate>();
   const [disabledSend, setDisabledSend] = useState(true);
-  const [assetApproved, setAssetApproved] = useState({SEURO: false, USDT: false});
-  const [disabledApprovalButton, setDisabledApprovalButton] = useState({SEURO: true, USDT: true});
+  const [assetApproved, setAssetApproved] = useState({main: false, other: false});
+  const [disabledApprovalButton, setDisabledApprovalButton] = useState({main: true, other: true});
   const [loading, setLoading] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
   // CONTRACT MANAGER INIT
@@ -66,15 +66,15 @@ function Web3BondInterface() {
   // tokens are currently fixed to SEURO and USDT
   useEffect(() => {
     //disable approval buttons
-    from > 0 ? setDisabledApprovalButton({SEURO: false, USDT:assetApproved.USDT}) : setDisabledApprovalButton({SEURO: true, USDT:assetApproved.USDT});
-    to > 0  ? setDisabledApprovalButton({USDT:false, SEURO:assetApproved.SEURO}) : setDisabledApprovalButton({USDT:true, SEURO:assetApproved.SEURO});
+    from > 0 ? setDisabledApprovalButton({main: false, other:assetApproved.other}) : setDisabledApprovalButton({main: true, other:assetApproved.other});
+    to > 0  ? setDisabledApprovalButton({other:false, main:assetApproved.main}) : setDisabledApprovalButton({other:true, main:assetApproved.main});
 
     // disable approval buttons after token is approved
-    assetApproved.SEURO && setDisabledApprovalButton({SEURO: true, USDT:assetApproved.USDT});
-    assetApproved.USDT && setDisabledApprovalButton({USDT: true, SEURO:assetApproved.SEURO});
+    assetApproved.main && setDisabledApprovalButton({main: true, other:assetApproved.other});
+    assetApproved.other && setDisabledApprovalButton({main: true, other:assetApproved.main});
 
     // enable bonding button if both assets are approved
-    assetApproved.SEURO && assetApproved.USDT && bondingLength !== null && setDisabledSend(false);
+    assetApproved.main && assetApproved.other && bondingLength !== null && setDisabledSend(false);
 
     from > 0 ? getTokenAmount() : setTo(0);
     
@@ -143,19 +143,19 @@ function Web3BondInterface() {
 
   const approveCurrency = async (token:string) => {
     setLoading(true);
-    const _depositAmount = token !== TOKENS.HUMAN_READABLE.SEURO ? ConvertTo(to, otherTokenDecimal).raw() : ConvertTo(from, mainTokenDecimal).raw();
+    const _depositAmount = token === TOKENS.HUMAN_READABLE.SEURO ? ConvertTo(from, mainTokenDecimal).raw() : ConvertTo(to, otherTokenDecimal).raw();
     // Check the allowance of each of the currencies
 
     //set the approval if required!
     // @ts-ignore
-    token === TOKENS.HUMAN_READABLE.USDT ? (
+    token === TOKENS.HUMAN_READABLE.SEURO ? (
       //@ts-ignore
     await (await TokenContract_main).methods.approve(contractAddresses[network['name']]['CONTRACT_ADDRESSES']['BondingEvent'], _depositAmount).send({from: address}).then(() => {
       setLoading(false);
-      setAssetApproved({USDT: true, SEURO: assetApproved.SEURO});
+      setAssetApproved({other: true, main: assetApproved.main});
     }).catch((error:never) => {
       setLoading(false);
-      setAssetApproved({USDT: false, SEURO: assetApproved.SEURO});
+      setAssetApproved({other: false, main: assetApproved.main});
       toast.error('approval error', error);
     })
     )
@@ -164,10 +164,10 @@ function Web3BondInterface() {
       //@ts-ignore
     await (await TokenContract_other).methods.approve(contractAddresses[network['name']]['CONTRACT_ADDRESSES']['BondingEvent'], _depositAmount).send({from: address}).then(() => {
       setLoading(false);
-      setAssetApproved({SEURO: true, USDT: assetApproved.USDT});
+      setAssetApproved({main: true, other: assetApproved.other});
     }).catch((error:never) => {
       setLoading(false);
-      setAssetApproved({SEURO: false, USDT: assetApproved.USDT});
+      setAssetApproved({main: false, other: assetApproved.other});
       toast.error('approval error', error);
     })
     )
@@ -226,11 +226,11 @@ function Web3BondInterface() {
 
   const SendBondTransaction = async () => {
     setLoading(true);
-    const _formatSeuro = ConvertTo(from, mainTokenDecimal).raw();
+    const _formatValue = ConvertTo(from, otherTokenDecimal).raw();
     // @ts-ignores
     const _bondingRate = bondingLength['rate'] || 0;
     // @ts-ignore
-    await (await OperatorStage2Contract).methods.newBond(_formatSeuro, _bondingRate).send({from:address})
+    await (await OperatorStage2Contract).methods.newBond(_formatValue, _bondingRate).send({from:address})
       .then((data:never) => {
         setTransactionData(data);
         // @ts-ignore
@@ -255,7 +255,7 @@ function Web3BondInterface() {
               </div>
             </div>
           </div>
-          <div className="mb-2">Available: {balance.SEURO > 0 ? (balance.SEURO).toLocaleString(undefined, { minimumFractionDigits: 2 }) : 0}</div>
+          <div className="mb-2">Available: {balance.main > 0 ? (balance.other).toLocaleString(undefined, { minimumFractionDigits: 2 }) : 0}</div>
 
           <p className="p-0 m-0 text-sm">Bonding asset 2</p>
           <div className="container w-full">
@@ -266,7 +266,7 @@ function Web3BondInterface() {
               </div>
             </div>
           </div>
-          <div className="mb-2">Available: {balance.USDT > 0 ? (balance.USDT).toLocaleString(undefined, { minimumFractionDigits: 2 }) : 0}</div>
+          <div className="mb-2">Available: {balance.other > 0 ? (balance.other).toLocaleString(undefined, { minimumFractionDigits: 2 }) : 0}</div>
         </span>
         
         <div className="mb-8 mt-1 flex flex-cols justify-between">
@@ -284,8 +284,8 @@ function Web3BondInterface() {
               <div className="mb-8 mt-1 flex flex-rows w-full justify between">
                 {
                   <>
-                  <button className="w-6/12 px-2 py-1 mr-4 font-light" disabled={disabledApprovalButton.SEURO} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.SEURO ? `${TOKENS.HUMAN_READABLE.SEURO} Approved` : loading ? 'loading...' : `Approve ${TOKENS.HUMAN_READABLE.SEURO}`}</button>
-                  <button className="w-6/12 px-2 py-1 font-light" disabled={disabledApprovalButton.USDT} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.USDT)}>{assetApproved.USDT ? `${TOKENS.HUMAN_READABLE.USDT} Approved` : loading ? 'loading...' : `Approve ${TOKENS.HUMAN_READABLE.USDT}`}</button>
+                  <button className="w-6/12 px-2 py-1 mr-4 font-light" disabled={disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${TOKENS.HUMAN_READABLE.SEURO} Approved` : loading ? 'loading...' : `Approve ${TOKENS.HUMAN_READABLE.SEURO}`}</button>
+                  <button className="w-6/12 px-2 py-1 font-light" disabled={disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${otherTokenSymbol} Approved` : loading ? 'loading...' : `Approve ${otherTokenSymbol}`}</button>
                   </>
                 }
               </div>
