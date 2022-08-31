@@ -18,6 +18,10 @@ If you're looking for the docs, you'll find them here:
 
 https://the-standard.gitbook.io/ibco-documentation/
 
+### Current Branch ###
+
+Development is currently happening only on the beta branch. This may change soon.
+
 ### Installation ###
 
 _install yarn globally_
