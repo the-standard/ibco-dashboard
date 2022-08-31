@@ -1,5 +1,5 @@
 import React from 'react'
-import { useWeb3Context } from '../context/'
+import { useWeb3Context } from '../../../context/'
 import { Web3Address } from './Web3Address';
 import { CreditCard } from 'react-feather';
 

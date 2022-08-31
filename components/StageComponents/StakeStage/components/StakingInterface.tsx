@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { useWeb3Context } from '../context/'
+import { useWeb3Context } from '../../../../context'
 import React, { 
   useEffect, 
   useState } from 'react'
@@ -13,7 +13,7 @@ import {
   ConvertTo, 
   TOKENS,
   StakingContractManager, 
-} from '../Utils';
+} from '../../../../Utils';
 import moment from 'moment';
 
 type StakingInterfaceType = {

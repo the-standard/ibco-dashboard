@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { useWeb3Context } from '../context/'
+import { useWeb3Context } from '../../../context'
 import React, { 
   useEffect, 
   useState } from 'react'
@@ -14,9 +14,9 @@ import {
   SmartContractManager, 
   TokenContractManager, 
   TOKENS,
-  Web3Manager} from '../Utils';
-import Dropdown from './shared/uiElements/Dropdown/Dropdown';
-import { GetJsonAddresses } from '../Utils/ContractManager';
+  Web3Manager} from '../../../Utils';
+import Dropdown from '../../shared/uiElements/Dropdown/Dropdown';
+import { GetJsonAddresses } from '../../../Utils/ContractManager';
 
 export function Web3SwapInterface() {
   const { address, web3Provider, network } = useWeb3Context();
@@ -88,8 +88,10 @@ export function Web3SwapInterface() {
 
   //MAIN FUNCTIONS
   const getUsableTokens = async () => {
+    const tokenManager = await (await TokenManager);
+
     // @ts-ignore
-    await (await TokenManager).methods.getAcceptedTokens().call().then((data) => {
+    tokenManager.methods.getAcceptedTokens().call().then((data) => {
       setDDTokens(data);
     }).catch((error:never) => toast.error(`unable to retrieve contract ${error}`));
   }

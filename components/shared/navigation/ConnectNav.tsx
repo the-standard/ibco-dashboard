@@ -1,5 +1,5 @@
 import React from "react";
-import { Web3Button } from "../../Web3Button";
+import { Web3Button } from "../../../components/shared/uiElements/Web3Button";
 
 const ConnectNav = () => {
     return (

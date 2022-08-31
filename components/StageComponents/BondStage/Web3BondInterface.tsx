@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { useWeb3Context } from '../context/'
+import { useWeb3Context } from '../../../context'
 import React, { 
   useEffect, 
   useState } from 'react'
@@ -15,8 +15,9 @@ import {
   TokenContractManager, 
   TOKENS,
   Tokens, 
-} from '../Utils';
-import { GetJsonAddresses } from '../Utils/ContractManager';
+} from '../../../Utils';
+import { GetJsonAddresses } from '../../../Utils/ContractManager';
+import { RateSelectionButton } from './components/RateSelectionButton/RateSelectionButton';
 
 type Rate = {
   durationInWeeks: string, 
@@ -34,7 +35,7 @@ function Web3BondInterface() {
   const [to, setTo] = useState(0);
   const [rates, setRates] = useState([]);
   const [balance, setBalance] = useState({SEURO: 0, USDT: 0});
-  const [bondingLength, setBondingLength] = useState({});
+  const [bondingLength, setBondingLength] = useState<Rate>();
   const [disabledSend, setDisabledSend] = useState(true);
   const [assetApproved, setAssetApproved] = useState({SEURO: false, USDT: false});
   const [disabledApprovalButton, setDisabledApprovalButton] = useState({SEURO: true, USDT: true});
@@ -49,12 +50,6 @@ function Web3BondInterface() {
     //@ts-ignore
   const TokenContract_main = TokenContractManager(TOKENS.HUMAN_READABLE.SEURO as Tokens, network).then((data) => { return data });
 
-  // PRIVATE HELPERS
-
-  const week2year = (rate:string) => {
-    const _rate = parseInt(rate);
-    return Math.floor(_rate/52.14285714)
-  }
 
   // MAIN UPDATE FUNCTIONS
   useEffect(() => {
@@ -182,8 +177,11 @@ function Web3BondInterface() {
   const getBondingLengths = async() => {
     // @ts-ignore
     await (await OperatorStage2Contract).methods.showRates().call()
-    .then((data:never) => {
-      setRates(data);
+    .then((data:Rate[]) => {
+      const ArrayCopy = [...data];
+      const sortedRates = ArrayCopy.sort((a,b) => (parseInt(a.durationInWeeks) > parseInt(b.durationInWeeks)) ? 1 : ((parseInt(b.durationInWeeks) > parseInt(a.durationInWeeks)) ? -1 : 0))
+      //@ts-ignore
+      setRates(sortedRates);
     });
     // @ts-ignore
     await (await TokenContract_main).methods.decimals().call()
@@ -206,6 +204,7 @@ function Web3BondInterface() {
   }
 
   const setBondingLengthClickHandler = (rateObj:object) => {
+    //@ts-ignore
     setBondingLength(rateObj);
   }
 
@@ -275,17 +274,9 @@ function Web3BondInterface() {
           {
             rates.map((rate:Rate, index) => {
               return (
-                <button onClick={() => {setBondingLengthClickHandler(rate);}} className="rateContainer flex flex-cols justify-between font-light m-1 p-2" key={index}>
-                  {week2year(rate.durationInWeeks) < 1 ? `${rate.durationInWeeks} ${parseInt(rate.durationInWeeks) === 1 ? 'week' : 'weeks'}` : `${week2year(rate.durationInWeeks)} ${week2year(rate.durationInWeeks) === 1 ? 'year' : 'years'}`}
-                </button>
+                <RateSelectionButton rate={rate} key={index} isSelected={bondingLength?.durationInWeeks === rate.durationInWeeks} clickHandler={(event) => setBondingLengthClickHandler(event)}/>
               )
             })
-          }
-        </div>
-        <div>
-          {
-            // @ts-ignore
-            bondingLength && <p>Rate selected: {bondingLength['durationInWeeks'] || 0}</p>
           }
         </div>
             {

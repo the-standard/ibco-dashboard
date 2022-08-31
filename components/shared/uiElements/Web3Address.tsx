@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react'
-import { useWeb3Context } from '../context/'
+import { useWeb3Context } from '../../../context'
 
 export function Web3Address() {
   const { address, network } = useWeb3Context();

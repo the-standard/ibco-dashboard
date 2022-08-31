@@ -2,10 +2,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
 import { toast } from "react-toastify";
-import { useWeb3Context } from "../context";
-import { Contract, SmartContractManager } from "../Utils";
-import { StakingList } from "./StakingList";
-import { StakingInterface } from "./StakingInterface";
+import { useWeb3Context } from "../../../context";
+import { Contract, SmartContractManager } from "../../../Utils";
+import { StakingList } from "./components/StakingList";
+import { StakingInterface } from "./components/StakingInterface";
 
 export const Web3StakingInterface = () => {
     const { address, network } = useWeb3Context();

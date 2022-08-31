@@ -4,7 +4,7 @@ import Footer from '../components/shared/footer'
 import ConnectNav from '../components/shared/navigation/ConnectNav'
 import SubNavigation from '../components/shared/navigation/SubNavigation'
 import NextHeadComponent from '../components/shared/NextHeadComponent'
-import Web3BondInterface from '../components/Web3BondInterface'
+import Web3BondInterface from '../components/StageComponents/BondStage/Web3BondInterface'
 
 //@ts-ignore
 const Stage2: NextPage = () => {
@@ -15,7 +15,7 @@ const Stage2: NextPage = () => {
       <ConnectNav />
       <SubNavigation />
 
-      <main className="container mx-auto w-4/12">
+      <main className="container mx-auto w-5/12">
         <Web3BondInterface />
       </main>
 

@@ -11,7 +11,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 // @ts-ignore
-import { chartArray } from '../public/data/chartData';
+import { chartArray } from '../../../../public/data/chartData';
 
 ChartJS.register(
   CategoryScale,

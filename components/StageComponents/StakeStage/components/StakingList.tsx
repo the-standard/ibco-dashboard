@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from "react";
-import { Contract, StakingContractManager } from "../Utils";
-import { StakingSelector } from "./shared/uiElements/StakingSelector";
+import { Contract, StakingContractManager } from "../../../../Utils";
+import { StakingSelector } from "./StakingSelector";
 
 type StakingObj = {
     address: string,

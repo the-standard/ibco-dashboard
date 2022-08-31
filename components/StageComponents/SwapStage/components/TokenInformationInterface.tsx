@@ -2,8 +2,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useWeb3Context } from "../context";
-import { Contract, SmartContractManager } from "../Utils";
+import { useWeb3Context } from "../../../../context";
+import { Contract, SmartContractManager } from "../../../../Utils";
 //import { Contract, ConvertFrom, SmartContractManager } from "../Utils";
 
 type tokeninfo = {
