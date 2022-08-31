@@ -108,7 +108,6 @@ export const SmartContractManager = async (contract:Contract, network:string) =>
     const [contractMain, setContract] = useState({});
     const [contractType, setContractType] = useState('');
 
-    // @ts-ignore
     if(Object.keys(contractMain).length === 0 && contractType !== contract) {
         return await getContractABI(contract)
                         .then(async (ABIData) => {
@@ -116,7 +115,7 @@ export const SmartContractManager = async (contract:Contract, network:string) =>
 
                             return await GetJsonAddresses()
                                 .then(async (contractAddress) => {
-                                    //@ts-ignore
+                                    
                                     const _contract = new web3Interface.eth.Contract(ABIData['data'].abi, contractAddress[network]['CONTRACT_ADDRESSES'][contract]);
 
                                     setContract(_contract);

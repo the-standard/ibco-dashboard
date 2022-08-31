@@ -61,12 +61,12 @@ function Web3BondInterface() {
     getBondingLengths();
     getContractAddresses();
     getOtherTokenAddress();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [web3Provider]);
 
   useEffect(() => {
     getOtherContractAddress();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [otherTokenAddress])
 
   // tokens are currently fixed to SEURO and USDT
@@ -84,17 +84,16 @@ function Web3BondInterface() {
 
     from > 0 ? getTokenAmount() : setTo(0);
     
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  
   }, [from, to, assetApproved]);
 
   useEffect(() => {
     getTokenBalance('main');
     getTokenBalance('other');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [otherTokenAddress, otherTokenSymbol, otherTokenDecimal]);
 
   const getOtherContractAddress = async () => {
-    //@ts-ignore
     if (otherTokenAddress !== null) {
       await (await TokenContract_other).methods.decimals().call()
       .then((data:never) => {
@@ -103,7 +102,6 @@ function Web3BondInterface() {
         console.log('error retrieving other token decimal', error);
       });
   
-      // @ts-ignore
       await (await TokenContract_other).methods.symbol().call()
       .then((data:never) => {
         setOtherTokenSymbol(data);
