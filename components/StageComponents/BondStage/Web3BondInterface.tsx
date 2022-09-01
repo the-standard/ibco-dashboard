@@ -169,13 +169,11 @@ function Web3BondInterface() {
     //@ts-ignore
     const bondingEventAddress = contractAddresses[network['name']]['CONTRACT_ADDRESSES']['BondingEvent'];
     const TokenContract = token === TOKENS.HUMAN_READABLE.SEURO ? await (await TokenContract_main) : await (await TokenContract_other);
-    console.log('bondingEventAddress', bondingEventAddress);
     // Check the allowance of each of the currencies
 
     //set the approval if required!
     // @ts-ignore
     token === TOKENS.HUMAN_READABLE.SEURO ? (
-      console.log('TokenContract main', TokenContract),
       //@ts-ignore
       TokenContract.methods.approve(bondingEventAddress, _depositAmount).send({from: address}).then(() => {
       setLoading(false);
@@ -195,7 +193,6 @@ function Web3BondInterface() {
     )
     :
     (
-      console.log('TokenContract other', TokenContract),
       //@ts-ignore
     TokenContract.methods.approve(bondingEventAddress, _depositAmount).send({from: address}).then(() => {
       setLoading(false);
