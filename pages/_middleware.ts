@@ -5,5 +5,5 @@ export default function middleware(
   event: NextFetchEvent,
 ) {
   // return your new response;
-  console.log('request', request, 'Event', event, 'User IP', request.geo);
+  //console.log('request', request, 'Event', event);
 }
