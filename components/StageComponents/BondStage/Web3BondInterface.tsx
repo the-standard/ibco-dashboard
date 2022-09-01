@@ -67,12 +67,33 @@ function Web3BondInterface() {
   // tokens are currently fixed to SEURO and USDT
   useEffect(() => {
     //disable approval buttons
-    from > 0 ? setDisabledApprovalButton({main: false, other:assetApproved.other}) : setDisabledApprovalButton({main: true, other:assetApproved.other});
-    to !== '0'  ? setDisabledApprovalButton({other:false, main:assetApproved.main}) : setDisabledApprovalButton({other:true, main:assetApproved.main});
+    from > 0 ? setDisabledApprovalButton(prevState => ({
+      ...prevState,
+      main: false
+    })) 
+    : setDisabledApprovalButton(prevState => ({
+      ...prevState,
+      main: true
+    }));
+
+    to !== '0'  ? setDisabledApprovalButton(prevState => ({
+      ...prevState,
+      other: false
+    })) 
+    : setDisabledApprovalButton(prevState => ({
+      ...prevState,
+      other: true
+    }));
 
     // disable approval buttons after token is approved
-    assetApproved.main && setDisabledApprovalButton({main: true, other:assetApproved.other});
-    assetApproved.other && setDisabledApprovalButton({main: true, other:assetApproved.main});
+    assetApproved.main && setDisabledApprovalButton(prevState => ({
+      ...prevState,
+      main: true
+    }));
+    assetApproved.other && setDisabledApprovalButton(prevState => ({
+      ...prevState,
+      other: true
+    }));
 
     // enable bonding button if both assets are approved
     assetApproved.main && assetApproved.other && bondingLength !== null && setDisabledSend(false);
@@ -158,10 +179,17 @@ function Web3BondInterface() {
       //@ts-ignore
       TokenContract.methods.approve(bondingEventAddress, _depositAmount).send({from: address}).then(() => {
       setLoading(false);
-      setAssetApproved({main: true, other: assetApproved.other});
+      //setAssetApproved({main: true, other: assetApproved.other});
+      setAssetApproved(prevState => ({
+        ...prevState,
+        main: true
+      }))
     }).catch((error:never) => {
       setLoading(false);
-      setAssetApproved({main: false, other: assetApproved.other});
+      setAssetApproved(prevState => ({
+        ...prevState,
+        main: false
+      }))
       toast.error('approval error', error);
     })
     )
@@ -171,10 +199,16 @@ function Web3BondInterface() {
       //@ts-ignore
     TokenContract.methods.approve(bondingEventAddress, _depositAmount).send({from: address}).then(() => {
       setLoading(false);
-      setAssetApproved({other: true, main: assetApproved.main});
+      setAssetApproved(prevState => ({
+        ...prevState,
+        other: true
+      }))
     }).catch((error:never) => {
       setLoading(false);
-      setAssetApproved({other: false, main: assetApproved.main});
+      setAssetApproved(prevState => ({
+        ...prevState,
+        other: false
+      }))
       toast.error('approval error', error);
     })
     )
