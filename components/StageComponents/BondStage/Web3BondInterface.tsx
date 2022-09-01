@@ -217,8 +217,10 @@ function Web3BondInterface() {
     await(await SmartContract).methods.getOtherAmount(formatSeuro).call()
     .then((data:never) => {
       setLoading(false);
+      const _otherTokenDecimal = parseInt(otherTokenDecimal.toString());
+
       const bigNumberTo = ConvertFrom(data['amountOther'], otherTokenDecimal).raw();
-      const convertDisplayTo = ConvertFrom(data['amountOther'], 6).toFloat();
+      const convertDisplayTo = ConvertFrom(data['amountOther'], _otherTokenDecimal).toFloat();
 
       setToDisplay(convertDisplayTo);
       setTo(bigNumberTo);
