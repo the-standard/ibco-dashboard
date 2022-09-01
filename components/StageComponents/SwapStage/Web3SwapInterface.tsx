@@ -124,12 +124,9 @@ export function Web3SwapInterface() {
   }
 
   const checkAllowance = async (_address:string, _seuroAddress:string) => {
-    setLoading(true);
     await (await TokenContract).methods.allowance(_address, _seuroAddress).call().then((data: React.SetStateAction<number>) => {
-        setLoading(false);
         setAllowance(data)
       }).catch((error: never) => {
-        setLoading(false);
         return error
       })
   }
@@ -140,9 +137,6 @@ export function Web3SwapInterface() {
     // @ts-ignore
     const getUserBalance = isTokenNotEth(token) ? await web3Interface.eth.getBalance(address) : await (await TokenContract).methods.balanceOf(address);
     const formatUserBalance = ConvertTo(getUserBalance, tokenDecimal).toInt();
-    console.log('_depositAmount.toString()', _depositAmount.toString());
-    //@ts-ignore
-    console.log('contractAddresses[network]', contractAddresses[network['name']], 'network', network, 'contractAddresses', contractAddresses);
     formatUserBalance < parseInt(_depositAmount.toString()) ? 
       toast.error('you do not have enough to cover this swap') 
     :

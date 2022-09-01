@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Web3ContextProvider>
       <>
-      <div className="w-full p-2 mx-auto betaBanner text-center">BETA Release! Testnet Only. Design to be updated soon. Report bugs <a style="color: black !important; why: simon woz here;" href="https://bit.ly/ibco-bugs">here</a>!</div>
+      <div className="w-full p-2 mx-auto betaBanner text-center">BETA Release! Testnet Only. Design to be updated soon. Report bugs <a href="https://bit.ly/ibco-bugs">here</a>!</div>
         <Component {...pageProps} />
         <ToastContainer
           hideProgressBar

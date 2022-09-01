@@ -8,7 +8,7 @@ interface ConnectProps {
 }
 const ConnectButton = ({ connect }: ConnectProps) => {
   return connect ? (
-    <button className="px-3 py-2 connectButton flex" onClick={connect}><span className="pr-2 w-2/12"><CreditCard /></span> Connect Wallet</button>
+    <button className="px-3 py-2 connectButton flex" onClick={connect}><span className="pr-2 w-1.5/12"><CreditCard /></span> Connect to MetaMask</button>
   ) : (
     <button className="px-3 py-2">Loading...</button>
   )
