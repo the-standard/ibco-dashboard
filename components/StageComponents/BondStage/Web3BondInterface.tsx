@@ -19,7 +19,7 @@ import { GetJsonAddresses } from '../../../Utils/ContractManager';
 import { RateSelectionButton } from './components/RateSelectionButton/RateSelectionButton';
 
 type Rate = {
-  durationInWeeks: string, 
+  duration: string, 
   rate: string
 }
 
@@ -216,7 +216,8 @@ function Web3BondInterface() {
     await (await OperatorStage2Contract).methods.showRates().call()
     .then((data:Rate[]) => {
       const ArrayCopy = [...data];
-      const sortedRates = ArrayCopy.sort((a,b) => (parseInt(a.durationInWeeks) > parseInt(b.durationInWeeks)) ? 1 : ((parseInt(b.durationInWeeks) > parseInt(a.durationInWeeks)) ? -1 : 0))
+      console.log('ArrayCopy', ArrayCopy);
+      const sortedRates = ArrayCopy.sort((a,b) => (parseInt(a.duration) > parseInt(b.duration)) ? 1 : ((parseInt(b.duration) > parseInt(a.duration)) ? -1 : 0))
       //@ts-ignore
       setRates(sortedRates);
     });
@@ -318,7 +319,7 @@ function Web3BondInterface() {
           {
             rates.length > 0 ? rates.map((rate:Rate, index) => {
               return (
-                <RateSelectionButton rate={rate} key={index} isSelected={bondingLength?.durationInWeeks === rate.durationInWeeks} clickHandler={(event) => setBondingLengthClickHandler(event)}/>
+                <RateSelectionButton rate={rate} key={index} isSelected={bondingLength?.duration === rate.duration} clickHandler={(event) => setBondingLengthClickHandler(event)}/>
               )
             })
             :

@@ -3,7 +3,7 @@ import React from "react";
 import { StyledButton, StyledRateLengthP, StyledROIP } from './Styles';
 
 type RateType = {
-    durationInWeeks: string, 
+    duration: string, 
     rate: string
   }
 
@@ -16,13 +16,14 @@ type RateSelectionButtonType = {
 export const RateSelectionButton = ({rate, isSelected, clickHandler}:RateSelectionButtonType) => {
     const week2year = (rate:string) => {
         const _rate = parseInt(rate);
-        const weekPerYear = 52.14285714;
+        const weekPerYear = 52;
+
         return Math.floor(_rate/weekPerYear)
     }
 
-    const WeekCalc = week2year(rate.durationInWeeks);
+    const WeekCalc = week2year(rate.duration);
 
-    const rateLength = WeekCalc < 1 ? `${rate.durationInWeeks} ${parseInt(rate.durationInWeeks) === 1 ? 'week' : 'weeks'}` : `${WeekCalc} ${WeekCalc === 1 ? 'year' : 'years'}`
+    const rateLength = WeekCalc < 1 ? `${rate.duration} ${parseInt(rate.duration) === 1 ? 'week' : 'weeks'}` : `${WeekCalc} ${WeekCalc === 1 ? 'year' : 'years'}`
     return (
         //@ts-ignore
         <StyledButton className={isSelected ? 'selected' : ''} onClick={() => clickHandler(rate)}>
