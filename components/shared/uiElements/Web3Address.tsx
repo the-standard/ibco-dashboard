@@ -8,7 +8,7 @@ export function Web3Address() {
   return (
     <div className="flex items-center justify-center">
           <span className="walletNetwork-container pl-4 text-right text-sm font-light">
-          using network: {
+          {
             // @ts-ignore
           network['name']
           }

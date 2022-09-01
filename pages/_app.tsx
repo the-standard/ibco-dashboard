@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Web3ContextProvider>
       <>
-      <div className="w-full p-2 mx-auto betaBanner text-center">BETA Relase: Values not representative of real contracts!</div>
+      <div className="w-full p-2 mx-auto betaBanner text-center">BETA Release: Values not representative of real contracts!</div>
         <Component {...pageProps} />
         <ToastContainer
           hideProgressBar
