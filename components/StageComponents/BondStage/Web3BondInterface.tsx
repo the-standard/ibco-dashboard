@@ -158,10 +158,10 @@ function Web3BondInterface() {
       //@ts-ignore
       TokenContract.methods.approve(bondingEventAddress, _depositAmount).send({from: address}).then(() => {
       setLoading(false);
-      setAssetApproved({other: true, main: assetApproved.main});
+      setAssetApproved({main: true, other: assetApproved.other});
     }).catch((error:never) => {
       setLoading(false);
-      setAssetApproved({other: false, main: assetApproved.main});
+      setAssetApproved({main: false, other: assetApproved.other});
       toast.error('approval error', error);
     })
     )
@@ -239,10 +239,10 @@ function Web3BondInterface() {
   const SendBondTransaction = async () => {
     setLoading(true);
     const _formatValue = ConvertTo(from, mainTokenDecimal).raw();
-    console.log('_formatValue', _formatValue);
     console.log('operatorStage2Contract', await (await OperatorStage2Contract));
     // @ts-ignores
     const _bondingRate = bondingLength['rate'] || 0;
+    console.log()
     // @ts-ignore
     await (await OperatorStage2Contract).methods.newBond(_formatValue, _bondingRate).send({from:address})
       .then((data:never) => {
