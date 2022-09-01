@@ -171,10 +171,10 @@ function Web3BondInterface() {
       //@ts-ignore
     TokenContract.methods.approve(bondingEventAddress, _depositAmount).send({from: address}).then(() => {
       setLoading(false);
-      setAssetApproved({main: true, other: assetApproved.other});
+      setAssetApproved({other: true, main: assetApproved.main});
     }).catch((error:never) => {
       setLoading(false);
-      setAssetApproved({main: false, other: assetApproved.other});
+      setAssetApproved({other: false, main: assetApproved.main});
       toast.error('approval error', error);
     })
     )
