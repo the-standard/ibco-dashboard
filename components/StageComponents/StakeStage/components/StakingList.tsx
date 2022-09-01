@@ -82,7 +82,7 @@ export const StakingList = ({stakes, clickFunction}:StakeList) => {
         <div>
             {
                 // @ts-ignore
-                stakeInfo.length > 0 && stakeInfo.map((stake:StakingObj) => (<StakingSelector key={stake.address} stakingObj={stake} clickFunction={clickFunction} />))
+                stakeInfo.length > 0 && stakeInfo.map((stake:StakingObj) => (stake.isActive && <StakingSelector key={stake.address} stakingObj={stake} clickFunction={clickFunction} />))
             }
         </div>
         

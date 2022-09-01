@@ -20,8 +20,6 @@ type StakeList = {
 export const StakingSelector = ({stakingObj, clickFunction}:StakeList) => {
     const startPeriod = moment(parseInt(stakingObj.start)*1000);
     const endPeriod = moment(parseInt(stakingObj.end)*1000);
-    //const maturity = moment(parseInt(stakingObj.maturity)*1000);
-
 
     const [duration, setDuration] = useState(0);
     const [hasOpened, setHasOpened] = useState(false);
@@ -35,7 +33,7 @@ export const StakingSelector = ({stakingObj, clickFunction}:StakeList) => {
         <div className="w-full p-2 convertInput grid grid-cols-4 gap-1 mb-4">
             <div>{ `${duration} ${duration > 1 ? 'weeks' : 'week'}` }</div>
             <div>{`+${parseInt(stakingObj.interestRate) / 1000}%`}</div>
-            <div>{!hasOpened ? !stakingObj.isActive || moment().isAfter(endPeriod) ? <span className="closed">Closed</span> : <span className="openSoon">Opening Soon</span>: <span className="openNow">Open Now</span>}</div>
+            <div>{!hasOpened ? moment().isAfter(endPeriod) ? <span className="closed">Closed</span> : <span className="openSoon">Opening Soon</span>: <span className="openNow">Open Now</span>}</div>
             <div>{
                 !hasOpened ? 
                     !stakingObj.isActive || moment().isAfter(endPeriod) ?
