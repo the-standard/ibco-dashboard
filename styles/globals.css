@@ -69,6 +69,25 @@
     opacity: 60%;
   }
 
+  p.descriptionCopy {
+    color: #bdbdbd;
+    font-size: 16px;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  .backButton {
+    color: #6c6c6c;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  .bondingHistoryButton {
+    background: none;
+    color: #99f9ff;
+    border: 1px solid #99f9ff;
+  }
+
   .disconnectButton {
     background-color: #cb4464;
     color: #fff;

@@ -6,3 +6,4 @@ export { Web3StakingInterface } from './StageComponents/StakeStage/Web3StakingIn
 export { TokenInformationInterface } from '../components/StageComponents/SwapStage/components/TokenInformationInterface'
 export { BondingCurveInterface } from './StageComponents/SwapStage/components/BondingCurveInterface'
 export { ConnectWalletModal } from './shared/uiElements/Modal/ConnectWalletModal/ConnectWalletModal'
+export { BondingHistoryInterface } from './StageComponents/BondStage/components/BondingHistoryInterface/BondingHistoryInterface';

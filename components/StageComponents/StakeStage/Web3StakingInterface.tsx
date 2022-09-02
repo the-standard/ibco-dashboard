@@ -59,22 +59,24 @@ export const Web3StakingInterface = () => {
     }
 
    return !ShowStakingInterface ? (
-    <>
-    <div className="container mx-auto w-8/12 p-4 convertInput">{tokenSymbol} address: {tokenAddress}</div>
-    <div className="mx-auto w-8/12 p-5 pb-0 grid grid-cols-4 gap-1">
-        <span>Staking Period</span>
-        <span>Approx. Reward</span>
-        <span>Opening</span>
-        <span>Status</span>
+    <div className="mx-auto w-8/12">
+        <div className="flex supplyContainer mb-10 mr-6 px-5 py-3 w-full">
+            <h2>{tokenSymbol} Address:</h2> <p className="ml-20">{tokenAddress}</p>
+        </div>
+
+        <div className="w-full p-5 p-0 my-4 grid grid-cols-4 gap-1">
+            <span>Staking Period</span>
+            <span>Approx. Reward</span>
+            <span>Opening</span>
+            <span>Status</span>
+        </div>
+        <div className="container mx-auto w-full p-0">
+            {
+                //@ts-ignore
+                stakeAddresses.length > 0 ? <StakingList stakes={stakeAddresses} clickFunction={stakeSelectionClickHandler} /> : `No stakes are available`
+            }
+        </div>
     </div>
-    <div className="container mx-auto w-8/12 p-4">
-        {
-            //@ts-ignore
-            stakeAddresses.length > 0 ? <StakingList stakes={stakeAddresses} clickFunction={stakeSelectionClickHandler} /> : `No stakes are available`
-        }
-    </div>
-    </>
-        
     )
 
     :

@@ -17,6 +17,7 @@ import {
 } from '../../../Utils';
 import { GetJsonAddresses } from '../../../Utils/ContractManager';
 import { RateSelectionButton } from './components/RateSelectionButton/RateSelectionButton';
+import { BondingHistoryInterface } from './components/BondingHistoryInterface/BondingHistoryInterface';
 
 type Rate = {
   duration: string, 
@@ -25,6 +26,7 @@ type Rate = {
 
 function Web3BondInterface() {
   const { address, web3Provider, network } = useWeb3Context();
+  const [showHistoryInterface, setShowHistoryInterface] = useState(false);
   const [contractAddresses, setContractAddresses] = useState({});
   const [otherTokenAddress, setOtherTokenAddress] = useState(null);
   const [otherTokenSymbol, setOtherTokenSymbol] = useState('');
@@ -284,8 +286,17 @@ function Web3BondInterface() {
       });
   }
 
-  return (
-    //TODO: Finish styling for all devices
+  const bondingHistoryClickHandler = () => {
+      setShowHistoryInterface(!showHistoryInterface)
+  }
+
+  return !showHistoryInterface ? (
+    <>
+    <div className="convertInput text-center p-5 mb-4 w-full">
+      <p className="descriptionCopy mb-6 px-10">explanation: Lorem ipsum dolor sit amet, consectetur et doloreadipiscing elit, sed do eiusmod tempor incididun.</p>
+      <button className="mx-auto py-2 px-16 bondingHistoryButton" onClick={bondingHistoryClickHandler}>View History</button>
+    </div>
+
     <div className="convertInput grid grid-flow-row auto-rows-max p-5 py-8 w-full">
       { web3Provider ? (
         <>
@@ -343,9 +354,19 @@ function Web3BondInterface() {
             }
             </>
       ) : <div>Please Connect Wallet...</div>
-}
+      }
     </div>
-  )
+    </>
+    )
+    :
+    (
+      <div className="container mx-auto w-4/12 p-4">
+            {
+                // @ts-ignore
+                <BondingHistoryInterface backButton={bondingHistoryClickHandler} />
+            }
+      </div>
+    )
 }
 
 export default Web3BondInterface;

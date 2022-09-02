@@ -30,7 +30,7 @@ export const StakingSelector = ({stakingObj, clickFunction}:StakeList) => {
     }, [moment, stakingObj])
 
     return (
-        <div className="w-full p-2 convertInput grid grid-cols-4 gap-1 mb-4">
+        <div className="w-full px-4 py-2 convertInput grid grid-cols-4 gap-1 mb-4">
             <div>{ `${duration} ${duration > 1 ? 'weeks' : 'week'}` }</div>
             <div>{`+${parseInt(stakingObj.interestRate) / 1000}%`}</div>
             <div>{!hasOpened ? moment().isAfter(endPeriod) ? <span className="closed">Closed</span> : <span className="openSoon">Opening Soon</span>: <span className="openNow">Open Now</span>}</div>

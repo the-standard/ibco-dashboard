@@ -4,7 +4,7 @@ import React, {
   useEffect, 
   useState } from 'react'
 import { toast } from 'react-toastify';
-import { AlertTriangle } from 'react-feather';
+import { AlertTriangle, ChevronLeft } from 'react-feather';
 //import Web3 from 'web3';
 
 //Util Helpers
@@ -135,11 +135,10 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   }
 
   return (
-    //TODO: Finish styling for all devices
     <>
     {
       // @ts-ignore
-      <div className="mb-4"><button className="px-2 py-1" onClick={backButton}>Back to stakes</button></div>
+      <div className="mb-4 w-4/12"><a href="#" className="py-1 flex backButton" onClick={backButton}><span className="flex w-5"><ChevronLeft /></span> Back</a></div>
     }
     
     <div className="convertInput grid grid-flow-row auto-rows-max p-5 py-8 w-full">
@@ -160,7 +159,7 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
             </div>
           </div>
           <div className="flex flex-cols m-2 mb-8 warning">
-            <span className="w-2/12"><AlertTriangle /></span><p className="w-10/12">Warning: once you have staked your Standard Token (TST) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</p>
+            <span className="w-2/12"><AlertTriangle /></span><p className="w-10/12">Warning: once you have staked your Standard Token ({tokenSymbol}) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</p>
           </div>
         </span>
             <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved ? `${tokenSymbol} Approved` : loading ? 'loading...' : `Approve ${tokenSymbol}`}</button>
