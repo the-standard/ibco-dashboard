@@ -153,7 +153,7 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
           <p className="p-0 m-0 text-sm">Staking...</p>
           <div className="container w-full">
             <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
-              <input className="w-9/12" type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : 0} />
+              <input className="w-9/12" type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${tokenSymbol} Staking Amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
               <div className="dropdownSelect py-2 text-center w-3/12">
               <p className="mx-auto">{tokenSymbol}</p>
               </div>

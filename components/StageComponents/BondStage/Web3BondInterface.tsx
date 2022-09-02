@@ -293,7 +293,7 @@ function Web3BondInterface() {
           <p className="p-0 m-0 text-sm">Bonding asset 1</p>
           <div className="container w-full">
             <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
-              <input className="w-9/12" type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : 0} />
+              <input className="w-9/12" type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${TOKENS.DISPLAY.SEURO} amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
               <div className="dropdownSelect py-2 text-center w-3/12">
               <p className="mx-auto">{TOKENS.DISPLAY.SEURO}</p>
               </div>
@@ -304,7 +304,7 @@ function Web3BondInterface() {
           <p className="p-0 m-0 text-sm">Bonding asset 2</p>
           <div className="container w-full">
             <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
-              <input className="w-9/12" type='number' step="any" readOnly={true} value={to !== '0' ? toDisplay : 0} />
+              <input className="w-9/12" type='number' step="any" readOnly={true} placeholder={`${otherTokenSymbol} amount`} value={to !== '0' ? toDisplay : ''} />
               <div className="dropdownSelect py-2 text-center w-3/12">
                 <p className="mx-auto">{otherTokenSymbol ? otherTokenSymbol : 'Loading...'}</p>
               </div>

@@ -117,8 +117,6 @@ export function Web3SwapInterface() {
                           .then((data:never) => data['addr'])
                           :
                           accounts;
-
-    console.log('tokenAddress', tokenAddress);
     //@ts-ignore
     await (await TokenManager).methods.getTokenDecimalFor(token).call().then((decimal:never) => {
       const _decimal = parseInt(decimal) === 0 ? 18 : parseInt(decimal);
@@ -219,7 +217,7 @@ export function Web3SwapInterface() {
             <p className="p-0 m-0 text-sm">Converting from</p>
             <div className="container w-full">
               <div className="mb-8 mt-1 flex flex-rows w-full">
-                <input className="w-9/12 from" type='number' step="any" min={0} maxLength={5} onInput={checkMaxLength} onChange={e => setValueChangeHandler(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} id="from" placeholder='converting from' value={from || 0} />
+                <input className="w-9/12 from" type='number' step="any" min={0} maxLength={5} onInput={checkMaxLength} onChange={e => setValueChangeHandler(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} id="from" placeholder='converting from' value={from || ''} />
               <div className="w-3/12">
                 {
                   // @ts-ignore
@@ -231,7 +229,7 @@ export function Web3SwapInterface() {
 
             <p className="p-0 m-0 text-sm">Converting to</p>
             <div className="mb-8 mt-1 flex flex-rows w-full">
-              <input className="w-9/12 px-3 py-2" type='string' readOnly={true} value={to > 0 ? to.toLocaleString( undefined, { minimumFractionDigits: 2 }) : 0} /> 
+              <input className="w-9/12 px-3 py-2" type='string' readOnly={true} placeholder="Converting to" value={to > 0 ? to.toLocaleString( undefined, { minimumFractionDigits: 2 }) : ''} /> 
               <div className="dropdownSelect p-2 w-3/12 text-center">
                 SEURO
               </div>
