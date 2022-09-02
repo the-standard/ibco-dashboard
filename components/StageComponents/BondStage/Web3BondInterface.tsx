@@ -216,7 +216,6 @@ function Web3BondInterface() {
     await (await OperatorStage2Contract).methods.showRates().call()
     .then((data:Rate[]) => {
       const ArrayCopy = [...data];
-      console.log('ArrayCopy', ArrayCopy);
       const sortedRates = ArrayCopy.sort((a,b) => (parseInt(a.duration) > parseInt(b.duration)) ? 1 : ((parseInt(b.duration) > parseInt(a.duration)) ? -1 : 0))
       //@ts-ignore
       setRates(sortedRates);

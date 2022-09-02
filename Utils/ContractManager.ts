@@ -67,6 +67,7 @@ export const Web3Manager = () => {
  * Initializes a contract with Web3 for a certain token
  * @constructor
  * @param {Tokens} token - The token you wish to create a contract for
+ * @param {string} network - The name of the connected wallet network
  * @returns {object} A contract object from Web3
  */
 export const TokenContractManager = async (token='FUSTD', network:string) => {

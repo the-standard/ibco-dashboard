@@ -23,7 +23,7 @@ export function Web3SwapInterface() {
   const [contractAddresses, setContractAddresses] = useState({});
   const [from, setFrom] = useState(0);
   const [to, setTo] = useState(0.0);
-  const [token, setToken] = useState(TOKENS.HUMAN_READABLE.ETH);
+  const [token, setToken] = useState({token: TOKENS.HUMAN_READABLE.ETH, address: ''});
   const [tokenDecimal, setTokenDecimal] = useState(0);
   const [allowance, setAllowance] = useState(0);
   const [disabledSend, setDisabledSend] = useState(true);
@@ -37,8 +37,8 @@ export function Web3SwapInterface() {
   const web3Interface = Web3Manager();
   const _network = network?.name || 'goerli';
   const SmartContract = SmartContractManager('SEuroOffering' as Contract, _network).then((data) => data);
-  const TokenContract = TokenContractManager(token, _network).then((data) => data);
   const TokenManager = SmartContractManager('TokenManager' as Contract, _network).then((data) => data);
+  const TokenContract = TokenContractManager(token.address, _network).then((data) => data);
 
   // PRIVATE HELPERS
   const isTokenNotEth = (token:string) => {
@@ -65,9 +65,9 @@ export function Web3SwapInterface() {
       //@ts-ignore
       const contractAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['SEuroOffering'];
 
-      isTokenNotEth(token) ? setTokenApprove(_from > 0 && allowance >= _deposit) : setTokenApprove(true);
+      isTokenNotEth(token.token) ? setTokenApprove(_from > 0 && allowance >= _deposit) : setTokenApprove(true);
       //@ts-ignore
-      (isTokenNotEth(token) && address && contractAddress) && checkAllowance(address, contractAddress);
+      (isTokenNotEth(token.token) && address && contractAddress) && checkAllowance(address, contractAddress);
     }
   }, [network, from])
 
@@ -111,6 +111,15 @@ export function Web3SwapInterface() {
   const changeTokenClickHandler = async (token=TOKENS.HUMAN_READABLE.ETH) => {
     const _from = from || 0;
     //@ts-ignore
+    const accounts = await web3Interface.eth.getAccounts().then((data:string[]) => data[0]);
+    //@ts-ignore
+    const tokenAddress = token !== TOKENS.HUMAN_READABLE.ETH ? await (await TokenManager).methods.get(token).call()
+                          .then((data:never) => data['addr'])
+                          :
+                          accounts;
+
+    console.log('tokenAddress', tokenAddress);
+    //@ts-ignore
     await (await TokenManager).methods.getTokenDecimalFor(token).call().then((decimal:never) => {
       const _decimal = parseInt(decimal) === 0 ? 18 : parseInt(decimal);
       setTokenDecimal(_decimal);
@@ -118,7 +127,7 @@ export function Web3SwapInterface() {
 
     setTransactionData(null);
     setFrom(0);
-    setToken(token);
+    setToken({token: token, address: tokenAddress});
 
     isTokenNotEth(token) ? allowance < ConvertFrom(_from, tokenDecimal).toInt() && setTokenApprove(false) : setTokenApprove(true);
   }
@@ -135,12 +144,12 @@ export function Web3SwapInterface() {
     setLoading(true);
     const _depositAmount =  ConvertTo(from, tokenDecimal).raw();
     // @ts-ignore
-    const getUserBalance = isTokenNotEth(token) ? await web3Interface.eth.getBalance(address) : await (await TokenContract).methods.balanceOf(address);
+    const getUserBalance = isTokenNotEth(token.token) ? await web3Interface.eth.getBalance(address) : await (await TokenContract).methods.balanceOf(address);
     const formatUserBalance = ConvertTo(getUserBalance, tokenDecimal).toInt();
     formatUserBalance < parseInt(_depositAmount.toString()) ? 
       toast.error('you do not have enough to cover this swap') 
     :
-      isTokenNotEth(token) ? 
+      isTokenNotEth(token.token) ? 
         (//@ts-ignore
           await (await TokenContract).methods.approve(contractAddresses[network['name']]['CONTRACT_ADDRESSES']['SEuroOffering'], _depositAmount.toString()).send({from: address})
         .then((data: { [x: string]: never; }) => {
@@ -164,7 +173,7 @@ export function Web3SwapInterface() {
     
     const _formattedInt = ConvertTo(from, tokenDecimal).raw();
     // @ts-ignore
-    await (await SmartContract).methods.readOnlyCalculateSwap(token, _formattedInt.toString()).call().then((data) => {
+    await (await SmartContract).methods.readOnlyCalculateSwap(token.token, _formattedInt.toString()).call().then((data) => {
         setLoading(false);
         const bigNumberFrom = ConvertFrom(data, 18).toFloat();
         setTo(bigNumberFrom)
@@ -177,9 +186,9 @@ export function Web3SwapInterface() {
   const SendTransaction = async () => {
     setLoading(true);
     const _formattedInt = ConvertTo(from, tokenDecimal).toInt();
-    isTokenNotEth(token) ? 
+    isTokenNotEth(token.token) ? 
     // @ts-ignore
-    await (await SmartContract).methods.swap(token, _formattedInt).send({from: address})
+    await (await SmartContract).methods.swap(token.token, _formattedInt).send({from: address})
     .then((data: never) => {
       setLoading(false);
       setTransactionData(data);
@@ -228,7 +237,7 @@ export function Web3SwapInterface() {
               </div>
             </div>
             {
-              isTokenNotEth(token) ? from > 0 && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledCheck} onClick={() => confirmCurrency()}>{loading ? 'loading...' : 'Approve'} {token}</button> : ''
+              isTokenNotEth(token.token) ? from > 0 && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledCheck} onClick={() => confirmCurrency()}>{loading ? 'loading...' : 'Approve'} {token.token}</button> : ''
             }
             
             {            
