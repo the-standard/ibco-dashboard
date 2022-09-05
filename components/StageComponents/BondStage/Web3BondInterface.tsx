@@ -51,6 +51,10 @@ function Web3BondInterface() {
   const TokenContract_other = TokenContractManager(otherTokenAddress, _network).then((data) => { return data });
     //@ts-ignore
   const TokenContract_main = TokenContractManager(TOKENS.HUMAN_READABLE.SEURO as Tokens, network).then((data) => { return data });
+  const otherTokenInfo = {
+    otherTokenSymbol, 
+    otherTokenDecimal
+  };
 
 
   // MAIN UPDATE FUNCTIONS
@@ -233,6 +237,7 @@ function Web3BondInterface() {
 
   const getOtherTokenAddress = async () => {
     const smartContract = await (await SmartContract);
+    console.log('')
     // @ts-ignore
     smartContract && await (await SmartContract).methods.OTHER_ADDRESS().call()
     .then(async (data:never) => {
@@ -278,10 +283,12 @@ function Web3BondInterface() {
     // @ts-ignore
     await (await OperatorStage2Contract).methods.newBond(_formatValue, _bondingRate).send({from:address})
       .then((data:never) => {
+        setLoading(false);
         setTransactionData(data);
         // @ts-ignore
         toast.success(`transaction success: ${data['transactionHash']}`);
       }).catch((error:never) => {
+        setLoading(false);
         toast.error(`Problem with bonding event: ${ error}`);
       });
   }
@@ -292,12 +299,12 @@ function Web3BondInterface() {
 
   return !showHistoryInterface ? (
     <>
-    <div className="convertInput text-center p-5 mb-4 w-full">
+    <div className="convertInput mx-auto text-center p-5 mb-4 w-6/12">
       <p className="descriptionCopy mb-6 px-10">explanation: Lorem ipsum dolor sit amet, consectetur et doloreadipiscing elit, sed do eiusmod tempor incididun.</p>
       <button className="mx-auto py-2 px-16 bondingHistoryButton" onClick={bondingHistoryClickHandler}>View History</button>
     </div>
 
-    <div className="convertInput grid grid-flow-row auto-rows-max p-5 py-8 w-full">
+    <div className="convertInput mx-auto grid grid-flow-row auto-rows-max p-5 py-8 w-6/12">
       { web3Provider ? (
         <>
         <span>
@@ -347,7 +354,7 @@ function Web3BondInterface() {
             }
             
             {            
-            <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledSend} onClick={() => SendBondTransaction()}>{loading ? 'loading...' : 'Start Bond'}</button>
+            <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledSend} onClick={() => SendBondTransaction()}>{loading ? 'loading...' : transactionData ? 'Start Another Bond' : 'Start Bond'}</button>
             }
             {// @ts-ignore
             transactionData && <button className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</button>
@@ -360,10 +367,10 @@ function Web3BondInterface() {
     )
     :
     (
-      <div className="container mx-auto w-4/12 p-4">
+      <div className="container mx-auto w-full">
             {
                 // @ts-ignore
-                <BondingHistoryInterface backButton={bondingHistoryClickHandler} />
+                <BondingHistoryInterface backButton={bondingHistoryClickHandler} otherTokenData={otherTokenInfo} />
             }
       </div>
     )

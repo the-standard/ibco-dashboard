@@ -15,7 +15,7 @@ const Stage2: NextPage = () => {
       <ConnectNav />
       <SubNavigation />
 
-      <main className="container mx-auto w-5/12">
+      <main className="container mx-auto w-full">
         <Web3BondInterface />
       </main>
 

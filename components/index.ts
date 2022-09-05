@@ -7,3 +7,4 @@ export { TokenInformationInterface } from '../components/StageComponents/SwapSta
 export { BondingCurveInterface } from './StageComponents/SwapStage/components/BondingCurveInterface'
 export { ConnectWalletModal } from './shared/uiElements/Modal/ConnectWalletModal/ConnectWalletModal'
 export { BondingHistoryInterface } from './StageComponents/BondStage/components/BondingHistoryInterface/BondingHistoryInterface';
+export { UserBondsHistoryList } from './StageComponents/BondStage/components/UserBondsHistoryList/UserBondsHistoryList';

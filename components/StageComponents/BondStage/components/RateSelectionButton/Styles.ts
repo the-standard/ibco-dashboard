@@ -5,7 +5,7 @@ export const StyledButton = styled.button`
     background: none;
     border: 1px solid #727272;
     border-radius: 2px;
-    min-width: 82px;
+    min-width: 18%;
 
     &.selected {
         border: 1px solid #99f9ff;
