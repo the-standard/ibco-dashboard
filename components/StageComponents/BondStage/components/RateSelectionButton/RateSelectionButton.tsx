@@ -15,7 +15,7 @@ type RateSelectionButtonType = {
 
 export const RateSelectionButton = ({rate, isSelected, clickHandler}:RateSelectionButtonType) => {
     const timeCorruptionAgent = () => {
-        const _rate = parseInt(rate.toString());
+        const _rate = parseInt(rate.duration.toString());
         const seconds2minutes = Math.floor(_rate/60);
         const minutes2hours = Math.floor(seconds2minutes/60);
         const hours2days = Math.floor(minutes2hours/24);
