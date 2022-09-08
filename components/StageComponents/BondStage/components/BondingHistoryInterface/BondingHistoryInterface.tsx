@@ -92,7 +92,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
     const activateClaim = async () => {
         const bondStorageContract = await BondStorageContract;
         //@ts-ignore
-        await bondStorageContract.methods.claimReward(address).send({from: address}).then((data: never) => {
+        await bondStorageContract.methods.claimReward(address).send({from: address}).then(() => {
             toast.success(`All bonds claimed, you have ${claimAmount} ${tstTokenInfo.tokenSymbol}`)
         })
         .catch((error:never) => {
