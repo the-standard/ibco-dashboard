@@ -117,13 +117,14 @@ function Web3BondInterface() {
 
   const getOtherContractAddress = async () => {
     if (otherTokenAddress !== null) {
+      //@ts-ignore
       await (await TokenContract_other).methods.decimals().call()
       .then((data:never) => {
         setOtherTokenDecimal(data);
       }).catch((error:never) => {
         console.log('error retrieving other token decimal', error);
       });
-  
+      //@ts-ignore
       await (await TokenContract_other).methods.symbol().call()
       .then((data:never) => {
         setOtherTokenSymbol(data);
@@ -148,6 +149,7 @@ function Web3BondInterface() {
     const tokenContract = token === 'other' ? (await TokenContract_other) : (await TokenContract_main);
 
     if(address && tokenContract) {
+      //@ts-ignore
       const balance = tokenContract.methods.balanceOf(address).call();
       const formatBalance = token === 'other' ? ConvertFrom(balance, otherTokenDecimal).toInt() : ConvertFrom(balance, mainTokenDecimal).toInt();
 

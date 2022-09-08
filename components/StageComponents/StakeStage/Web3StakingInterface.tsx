@@ -15,7 +15,7 @@ export const Web3StakingInterface = () => {
     const [selectedStake, setSelectedStake] = useState<string>();
     const [stakeAddresses, setStakeAddresses] = useState<string[]>([]);
     const [tokenAddress, setTokenAddress] = useState('');
-    const [otherTokenAddress, setOtherTokenAddress] = useState('');
+    //const [otherTokenAddress, setOtherTokenAddress] = useState('');
     const [tokenSymbol, setTokenSymbol] = useState('');
     const [stakeHistory, setStakeHistory] = useState<string[]>([]);
     const [stakeFilteredHistory, setStakeFilteredHistory] = useState<string[]>([]);
@@ -44,14 +44,15 @@ export const Web3StakingInterface = () => {
         //@ts-ignore
         stakingContractInit.methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data)).catch((error:never) => console.log('TST_ADDRESS error', error));
         //@ts-ignore
-        stakingContractInit.methods.SEURO_ADDRESS().call().then((data:never) => setOtherTokenAddress(data)).catch((error:never) => console.log('SEURO_ADDRESS error', error));
+        //stakingContractInit.methods.SEURO_ADDRESS().call().then((data:never) => setOtherTokenAddress(data)).catch((error:never) => console.log('SEURO_ADDRESS error', error));
 
         const TokenContract = await (await TokenContract_TST);
 
         if(TokenContract && Object.keys(TokenContract).length !== 0) {
-        TokenContract.methods.symbol().call()
-        .then((data:never) => setTokenSymbol(data))
-        .catch((error:never) => console.log('error getting token symbol', error));
+            //@ts-ignore
+            TokenContract.methods.symbol().call()
+            .then((data:never) => setTokenSymbol(data))
+            .catch((error:never) => console.log('error getting token symbol', error));
         }
     }
 

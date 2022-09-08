@@ -131,6 +131,7 @@ export function Web3SwapInterface() {
   }
 
   const checkAllowance = async (_address:string, _seuroAddress:string) => {
+    //@ts-ignore
     await (await TokenContract).methods.allowance(_address, _seuroAddress).call().then((data: React.SetStateAction<number>) => {
         setAllowance(data)
       }).catch((error: never) => {

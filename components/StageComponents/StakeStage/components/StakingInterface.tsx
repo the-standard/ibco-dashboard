@@ -70,10 +70,11 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
     const TokenContract = await (await TokenContract_TST);
 
     if(TokenContract && Object.keys(TokenContract).length !== 0) {
+      //@ts-ignore
       TokenContract.methods.symbol().call()
       .then((data:never) => setTokenSymbol(data))
       .catch((error:never) => console.log('error getting token symbol', error));
-
+      //@ts-ignore
       TokenContract.methods.decimals().call()
       .then((data:never) => setTokenDecimal(data))
       .catch((error:never) => console.log('error getting token decimal', error));
