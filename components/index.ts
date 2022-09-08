@@ -8,3 +8,4 @@ export { BondingCurveInterface } from './StageComponents/SwapStage/components/Bo
 export { ConnectWalletModal } from './shared/uiElements/Modal/ConnectWalletModal/ConnectWalletModal'
 export { BondingHistoryInterface } from './StageComponents/BondStage/components/BondingHistoryInterface/BondingHistoryInterface';
 export { UserBondsHistoryList } from './StageComponents/BondStage/components/UserBondsHistoryList/UserBondsHistoryList';
+export { StakingHistoryList } from './StageComponents/StakeStage/components/StakingHistoryList';

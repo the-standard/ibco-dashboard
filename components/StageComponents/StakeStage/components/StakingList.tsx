@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from "react";
-import { Contract, StakingContractManager } from "../../../../Utils";
+import { StakingContractManager } from "../../../../Utils";
 import { StakingSelector } from "./StakingSelector";
 
 type StakingObj = {
@@ -35,7 +35,7 @@ export const StakingList = ({stakes, clickFunction}:StakeList) => {
     }, []);
 
     const getStakingObject = async (contractAddress:string) => {
-        const stakingContract = StakingContractManager(contractAddress as Contract).then((data) => data);
+        const stakingContract = StakingContractManager(contractAddress).then((data) => data);
         const stakingObj:StakingObj = {
             address: contractAddress,
             maturity: '0',

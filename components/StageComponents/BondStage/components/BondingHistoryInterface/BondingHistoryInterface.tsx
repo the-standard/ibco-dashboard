@@ -4,7 +4,7 @@ import { ChevronLeft } from 'react-feather';
 import { toast } from "react-toastify";
 import { ClaimRewardContainer } from './styles';
 import { useWeb3Context } from "../../../../../context";
-import { SmartContractManager, TokenContractManager } from "../../../../../Utils";
+import { ConvertFrom, SmartContractManager, TokenContractManager } from "../../../../../Utils";
 import { UserBondsHistoryList } from "../UserBondsHistoryList/UserBondsHistoryList";
 
 type BondingHistoryInterfaceType = {
@@ -69,6 +69,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
             }));
 
             if(tokenContract) {
+               // @ts-ignore
                     tokenContract.methods.symbol().call().then((data:never) => {
                     setTstTokenInfo(prevState => ({
                         ...prevState,
@@ -76,6 +77,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
                     }))
                 });
 
+                // @ts-ignore
                 tokenContract.methods.decimals().call().then((data:never) => {
                     setTstTokenInfo(prevState => ({
                         ...prevState,
@@ -88,11 +90,9 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
     }
 
     const activateClaim = async () => {
-        const bondStorageContract = await(await BondStorageContract);
-
+        const bondStorageContract = await BondStorageContract;
         //@ts-ignore
-        bondStorageContract.methods.claimReward(address).call().then((data: never) => {
-            console.log('claim success', data);
+        await bondStorageContract.methods.claimReward(address).send({from: address}).then((data: never) => {
             toast.success(`All bonds claimed, you have ${claimAmount} ${tstTokenInfo.tokenSymbol}`)
         })
         .catch((error:never) => {
@@ -132,7 +132,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
                 parseInt(claimAmount) > 0 ?
                     <>
                         <p>claimable reward:</p>
-                        <p className="mt-3"><strong>{claimAmount} {tstTokenInfo.tokenSymbol}</strong></p>
+                        <p className="mt-3"><strong>{(ConvertFrom(claimAmount, tstTokenInfo.tokenDecimal).toFloat()).toFixed(2)} {tstTokenInfo.tokenSymbol}</strong></p>
                         <button className="px-3 py-2 mt-3" onClick={activateClaim}>Claim Reward</button>
                     </>
                     :

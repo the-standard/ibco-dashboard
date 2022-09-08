@@ -76,6 +76,10 @@
     text-justify: inter-word;
   }
 
+  .greyText {
+    color: #7a7a7a;
+  }
+
   .backButton {
     color: #6c6c6c;
     font-size: 14px;
