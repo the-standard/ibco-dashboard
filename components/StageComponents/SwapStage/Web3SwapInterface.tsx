@@ -187,7 +187,7 @@ export function Web3SwapInterface() {
     const _formattedInt = ConvertTo(from, tokenDecimal).toInt();
     isTokenNotEth(token.token) ? 
     // @ts-ignore
-    await (await SmartContract).methods.swap(token.token, _formattedInt).send({from: address})
+    await (await SmartContract).methods.swap(token.token, _formattedInt.toString()).send({from: address})
     .then((data: never) => {
       setLoading(false);
       setTransactionData(data);
