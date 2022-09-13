@@ -37,7 +37,7 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
     const [tstTokenInfo, setTstTokenInfo] = useState<TokenInformationType>(defaultTokenObj);
     const [seuroTokenInfo, setseuroTokenInfo] = useState<TokenInformationType>(defaultTokenObj);
     const [tokenAddresses, setTokenAddresses] = useState({SEURO_ADDRESS: '', TST_ADDRESS: ''});
-    const [stakeInfo, setStakeInfo] = useState({maturity: 0, activeStake: false});
+    const [stakeInfo, setStakeInfo] = useState({maturity: 0});
     const [claimed, setClaimed] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -73,10 +73,6 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
 
             stakingContract.methods.maturity().call().then((data:never) => {
                 setStakeInfo(prevState => ({...prevState, maturity: parseInt(data)*1000}));
-            });
-
-            stakingContract.methods.active().call().then((data:never) => {
-                setStakeInfo(prevState => ({...prevState, activeStake: data}));
             });
         }
     }
