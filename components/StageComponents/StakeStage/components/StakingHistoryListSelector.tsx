@@ -124,12 +124,12 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
             <span>{ConvertFrom(StakingObj.stake, parseInt(tstTokenInfo.decimal.toString())).toFloat()} {tstTokenInfo.symbol}</span>
             <span>{ConvertFrom(StakingObj.reward, parseInt(seuroTokenInfo.decimal.toString())).toFloat()} {TOKENS.DISPLAY.SEURO}</span>
             <span>{
-                //@ts-ignore
+            //@ts-ignore
             moment(parseInt(stakeInfo.maturity)).format('ll')
             }</span>
             <span>{
                 //@ts-ignore
-                moment().isSameOrAfter(moment(parseInt(stakeInfo.maturity))) ? <button className="px-3 py-1" onClick={() => claimStake()}>{!loading ? 'Claim' : 'Loading...'}</button> : <p>Pending</p>
+                moment().isSameOrAfter(moment(parseInt(stakeInfo.maturity))) && !claimed ? <button className="px-3 py-1" onClick={() => claimStake()}>{!loading ? 'Claim' : 'Loading...'}</button> : claimed ? <p>Already Claimed</p> : <p>Pending</p>
             }</span>
         </div>
     )
