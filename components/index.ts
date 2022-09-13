@@ -9,3 +9,4 @@ export { ConnectWalletModal } from './shared/uiElements/Modal/ConnectWalletModal
 export { BondingHistoryInterface } from './StageComponents/BondStage/components/BondingHistoryInterface/BondingHistoryInterface';
 export { UserBondsHistoryList } from './StageComponents/BondStage/components/UserBondsHistoryList/UserBondsHistoryList';
 export { StakingHistoryList } from './StageComponents/StakeStage/components/StakingHistoryList';
+export { StakingHistoryListSelector } from './StageComponents/StakeStage/components/StakingHistoryListSelector';
