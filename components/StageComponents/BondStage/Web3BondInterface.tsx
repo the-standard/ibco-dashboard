@@ -105,8 +105,6 @@ function Web3BondInterface() {
     assetApproved.main && assetApproved.other && bondingLength !== null && setDisabledSend(false);
 
     from > 0 ? getTokenAmount() : setTo('0');
-    
-  
   }, [from, to, assetApproved]);
 
   useEffect(() => {
@@ -146,20 +144,15 @@ function Web3BondInterface() {
   }
 
   const getTokenBalance = async (token:string) => {
-    const tokenContract = token === 'other' ? (await TokenContract_other) : (await TokenContract_main);
+    const tokenContract = token === 'other' ? await TokenContract_other : await TokenContract_main;
 
     if(address && tokenContract) {
       //@ts-ignore
-      const balance = tokenContract.methods.balanceOf(address).call();
-      const formatBalance = token === 'other' ? ConvertFrom(balance, otherTokenDecimal).toInt() : ConvertFrom(balance, mainTokenDecimal).toInt();
+      tokenContract.methods.balanceOf(address).call().then((data:never) => {
+        token === 'other' ? setBalance(prevState => ({...prevState, other: parseInt(data)})) : setBalance(prevState => ({...prevState, main: parseInt(data)}));
+      });
 
-      setBalance(prevState => ({
-        ...prevState,
-        [token]: formatBalance
-      }));
-      setBalance(prevState => ({
-        ...prevState
-      }));
+      token === 'other' ? setBalance(prevState => ({...prevState, other: ConvertFrom(balance.other.toString(), otherTokenDecimal).toFloat()})) : setBalance(prevState => ({...prevState, main: ConvertFrom(balance.main.toString(), mainTokenDecimal).toFloat()}));
     }
   }
 
@@ -239,7 +232,6 @@ function Web3BondInterface() {
 
   const getOtherTokenAddress = async () => {
     const smartContract = await (await SmartContract);
-    console.log('')
     // @ts-ignore
     smartContract && await (await SmartContract).methods.OTHER_ADDRESS().call()
     .then(async (data:never) => {
@@ -319,7 +311,7 @@ function Web3BondInterface() {
               </div>
             </div>
           </div>
-          <div className="mb-2">Available: {balance.main > 0 ? (balance.other).toLocaleString(undefined, { minimumFractionDigits: 2 }) : 0}</div>
+          <div className="mb-2">Available: {balance.main > 0 && mainTokenDecimal > 0 ? ConvertFrom(balance.main, parseInt(mainTokenDecimal.toString())).toFloat().toFixed(2): 0}</div>
 
           <p className="p-0 m-0 text-sm">Bonding asset 2</p>
           <div className="container w-full">
@@ -330,7 +322,7 @@ function Web3BondInterface() {
               </div>
             </div>
           </div>
-          <div className="mb-2">Available: {balance.other > 0 ? (balance.other).toLocaleString(undefined, { minimumFractionDigits: 2 }) : 0}</div>
+          <div className="mb-2">Available: {balance.other > 0 && otherTokenDecimal > 0 ? ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2) : 0}</div>
         </span>
         
         <div className="mb-8 mt-1 flex flex-cols justify-between">
