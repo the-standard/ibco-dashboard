@@ -102,12 +102,12 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
         return tokenInfoObj;
     };
 
-    const claimStake = async (amount:string) => {
+    const claimStake = async () => {
         setLoading(true);
         const stakingContract = await stakingContractInit;
 
         //@ts-ignore
-        stakingContract.methods.mint(amount).send({from: address}).then(() => {
+        stakingContract.methods.burn().send({from: address}).then(() => {
             setLoading(false);
             toast.success(`Successfully claimed ${ConvertFrom(StakingObj.reward, parseInt(seuroTokenInfo.decimal.toString())).toFloat()} ${TOKENS.DISPLAY.SEURO}`);
             setClaimed(true);
@@ -117,7 +117,6 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
             console.log('staking claim error', error);
             setClaimed(false);
         });
-        //tst amount to the mint function of the staking contract
     }
 
     return (
@@ -130,7 +129,7 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
             }</span>
             <span>{
                 //@ts-ignore
-                moment().isSameOrAfter(moment(parseInt(stakeInfo.maturity))) ? <button className="px-3 py-1" onClick={() => claimStake(StakingObj.stake)}>{!loading ? 'Claim' : 'Loading...'}</button> : <p>Pending</p>
+                moment().isSameOrAfter(moment(parseInt(stakeInfo.maturity))) ? <button className="px-3 py-1" onClick={() => claimStake()}>{!loading ? 'Claim' : 'Loading...'}</button> : <p>Pending</p>
             }</span>
         </div>
     )
