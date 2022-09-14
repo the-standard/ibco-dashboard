@@ -93,6 +93,12 @@ export const Web3StakingInterface = () => {
 
    return !ShowStakingInterface ? (
     <>
+    <div className="mx-auto mb-4 w-6/12">
+        <div className="convertInput text-center p-5">
+        <p className="descriptionCopy"><b>What is this section?</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor cursus quam at faucibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel consequat arcu.</p>
+        </div>
+    </div>
+
     <div className="mx-auto w-6/12">
         <div className="flex supplyContainer mb-10 mr-6 px-5 py-3 w-full">
             <h2>{tokenSymbol} Address:</h2> <p className="ml-20">{tokenAddress}</p>

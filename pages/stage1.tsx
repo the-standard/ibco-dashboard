@@ -39,22 +39,29 @@ const Stage1: NextPage = () => {
       <ConnectNav />
       <SubNavigation />
 
-      <main className="flex flex-row justify-between p-4">
-        <div className="container w-9/12">
-          <div className="supplyContainer mb-4 mr-6 px-5 py-3 flex flex-cols">
-            <h2>{TOKENS.DISPLAY.SEURO} Address:</h2> <p className="ml-20">{seuroAddress}</p>
+      <main>
+        <div className="flex flex-row justify-between p-4 w-full">
+          <div className="convertInput mx-auto text-center p-5">
+            <p className="descriptionCopy"><b>What is this section?</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor cursus quam at faucibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel consequat arcu. Phasellus facilisis in est nec pulvinar. Donec vehicula erat tortor, sed laoreet justo pellentesque quis. Phasellus non quam nec leo ullamcorper pulvinar sit amet et mi. Aliquam facilisis lacus lectus, sit amet laoreet lacus hendrerit in. Suspendisse at fermentum purus, id semper dolor. Nullam suscipit dolor quis diam efficitur suscipit. Aenean placerat augue non cursus aliquet.</p>
           </div>
-          {
-            <>
-              <TokenInformationInterface bondingCurveContract={BondingCurveContract} />
-              <BondingCurveInterface />
-            </>
-          }
         </div>
-        <div className="container w-3/12">
-          <Web3SwapInterface />
+
+        <div className="flex flex-row justify-between p-4 pt-0 w-full">
+          <div className="container w-9/12">
+            <div className="supplyContainer mb-4 mr-6 px-5 py-3 flex flex-cols">
+              <h2>{TOKENS.DISPLAY.SEURO} Address:</h2> <p className="ml-20">{seuroAddress}</p>
+            </div>
+            {
+              <>
+                <TokenInformationInterface bondingCurveContract={BondingCurveContract} />
+                <BondingCurveInterface />
+              </>
+            }
+          </div>
+          <div className="container w-3/12">
+            <Web3SwapInterface />
+          </div>
         </div>
-        
       </main>
 
       <Footer />
