@@ -132,7 +132,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
                 parseInt(claimAmount) > 0 ?
                     <>
                         <p>claimable reward:</p>
-                        <p className="mt-3"><strong>{(ConvertFrom(claimAmount, tstTokenInfo.tokenDecimal).toFloat()).toFixed(2)} {tstTokenInfo.tokenSymbol}</strong></p>
+                        <p className="mt-3"><strong>{(ConvertFrom(claimAmount, parseInt(tstTokenInfo.tokenDecimal.toString())).toFloat()).toFixed(2)} {tstTokenInfo.tokenSymbol}</strong></p>
                         <button className="px-3 py-2 mt-3" onClick={activateClaim}>Claim Reward</button>
                     </>
                     :

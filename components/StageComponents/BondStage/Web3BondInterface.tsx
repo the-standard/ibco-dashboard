@@ -312,6 +312,11 @@ function Web3BondInterface() {
       .then((data:never) => {
         setLoading(false);
         setTransactionData(data);
+        setFrom(0);
+        setTo('');
+        setToDisplay(0);
+        setBondingLength(undefined);
+        setDisabledSend(true);
         // @ts-ignore
         toast.success(`transaction success: ${data['transactionHash']}`);
       }).catch((error:never) => {
