@@ -21,7 +21,7 @@ import { GetJsonAddresses } from '../../../Utils/ContractManager';
 export function Web3SwapInterface() {
   const { address, network } = useWeb3Context();
   const [contractAddresses, setContractAddresses] = useState({});
-  const [from, setFrom] = useState(0);
+  const [from, setFrom] = useState('0');
   const [to, setTo] = useState(0.0);
   const [token, setToken] = useState({token: TOKENS.HUMAN_READABLE.ETH, address: ''});
   const [tokenDecimal, setTokenDecimal] = useState(0);
@@ -51,8 +51,8 @@ export function Web3SwapInterface() {
   }, []);
 
   useEffect(() => {
-    const disabledSend = from > 0 && tokenApproved;
-    const disabledCheckState = from > 0;
+    const disabledSend = from !== '' && tokenApproved;
+    const disabledCheckState = from !== '';
 
     setDisabledSend(!disabledSend);
     setDisabledCheck(!disabledCheckState);
@@ -60,19 +60,19 @@ export function Web3SwapInterface() {
 
   useEffect(() => {
     if (Object.keys(contractAddresses).length !== 0) {
-      const _from:number = from || 0;
+      const _from:string = from || '0';
       const _deposit:number = ConvertTo(_from, tokenDecimal).toInt();
       //@ts-ignore
       const contractAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['SEuroOffering'];
 
-      isTokenNotEth(token.token) ? setTokenApprove(_from > 0 && allowance >= _deposit) : setTokenApprove(true);
+      isTokenNotEth(token.token) ? setTokenApprove(_from !== '' && allowance >= _deposit) : setTokenApprove(true);
       //@ts-ignore
       (isTokenNotEth(token.token) && address && contractAddress) && checkAllowance(address, contractAddress);
     }
   }, [network, from])
 
   useEffect(() => {
-    from > 0 ? getTokenAmount() : setTo(0);
+    from !== '0' ? getTokenAmount() : setTo(0);
   }, [from, token]);
 
   useEffect(() => {
@@ -96,17 +96,22 @@ export function Web3SwapInterface() {
     }).catch((error:never) => toast.error(`unable to retrieve contract ${error}`));
   }
 
-  const setValueChangeHandler = (data:number) => {
+  const setValueChangeHandler = (data:string) => {
     setFrom(data)
   }
 
   const checkMaxLength = (inputData: { currentTarget: { value: string | never[]; };}) => {
-    if(inputData.currentTarget.value.slice(0,1) === '-')
-    inputData.currentTarget.value = '0'
+    // if(inputData.currentTarget.value.slice(0,1) === '-')
+    // inputData.currentTarget.value = '0'
 
     if(inputData.currentTarget.value.length > 8) 
       inputData.currentTarget.value = inputData.currentTarget.value.slice(0, 8);
   }
+
+  const onFocusEvent = (event: React.FocusEvent<HTMLInputElement, Element>) => {
+    if (event.target.value === '' || event.target.value === '0')
+      event.target.value = '';
+  };
 
   const changeTokenClickHandler = async (token=TOKENS.HUMAN_READABLE.ETH) => {
     const _from = from || 0;
@@ -124,7 +129,7 @@ export function Web3SwapInterface() {
     }).catch((error:never) => toast.error(`unable to retrieve contract ${error}`));
 
     setTransactionData(null);
-    setFrom(0);
+    setFrom('0');
     setToken({token: token, address: tokenAddress});
 
     isTokenNotEth(token) ? allowance < ConvertFrom(_from, tokenDecimal).toInt() && setTokenApprove(false) : setTokenApprove(true);
@@ -170,7 +175,7 @@ export function Web3SwapInterface() {
   const getTokenAmount = async () => {
     setLoading(true);
     
-    const _formattedInt = ConvertTo(from, tokenDecimal).raw();
+    const _formattedInt = from !== '' ? ConvertTo(from, tokenDecimal).raw() : 0;
     // @ts-ignore
     await (await SmartContract).methods.readOnlyCalculateSwap(token.token, _formattedInt.toString()).call().then((data) => {
         setLoading(false);
@@ -218,7 +223,7 @@ export function Web3SwapInterface() {
             <p className="p-0 m-0 text-sm">Converting from</p>
             <div className="container w-full">
               <div className="mb-8 mt-1 flex flex-rows w-full">
-                <input className="w-9/12 from" type='number' step="any" min={0} maxLength={5} onInput={checkMaxLength} onChange={e => setValueChangeHandler(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} id="from" placeholder='converting from' value={from || ''} />
+                <input className="w-9/12 from" type='number' step="any" min={0} maxLength={5} onInput={checkMaxLength} onChange={e => setValueChangeHandler(e.currentTarget.value)} onFocus={(event) => onFocusEvent(event)} id="from" placeholder='converting from' value={from} />
               <div className="w-3/12">
                 {
                   // @ts-ignore
@@ -236,7 +241,7 @@ export function Web3SwapInterface() {
               </div>
             </div>
             {
-              isTokenNotEth(token.token) ? from > 0 && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledCheck} onClick={() => confirmCurrency()}>{loading ? 'loading...' : 'Approve'} {token.token}</button> : ''
+              isTokenNotEth(token.token) ? from !== '0' && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledCheck} onClick={() => confirmCurrency()}>{loading ? 'loading...' : 'Approve'} {token.token}</button> : ''
             }
             
             {            

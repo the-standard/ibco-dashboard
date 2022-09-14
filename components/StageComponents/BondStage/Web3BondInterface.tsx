@@ -37,7 +37,7 @@ function Web3BondInterface() {
   const [toDisplay, setToDisplay] = useState(0);
   const [rates, setRates] = useState([]);
   const [balance, setBalance] = useState({main: 0, other: 0});
-  //const [allowance, setAllowance] = useState({main: 0, other: 0});
+  const [allowance, setAllowance] = useState({main: 0, other: 0});
   const [bondingLength, setBondingLength] = useState<Rate>();
   const [disabledSend, setDisabledSend] = useState(true);
   const [assetApproved, setAssetApproved] = useState({main: false, other: false});
@@ -63,12 +63,27 @@ function Web3BondInterface() {
     getBondingLengths();
     getContractAddresses();
     getOtherTokenAddress();
-    
+    checkAllowances();
   }, [web3Provider]);
 
   useEffect(() => {
+    const allowanceOther = ConvertFrom(allowance.other, otherTokenDecimal).toFloat();
+    const allowanceMain = ConvertFrom(allowance.main, mainTokenDecimal).toFloat();
+
+    from > 0 && allowanceMain >= from ?
+      setAssetApproved(prevState => ({...prevState, main: true}))
+      :
+      setAssetApproved(prevState => ({...prevState, main: false}));
+
+    parseFloat(to) > 0 && allowanceOther >= parseFloat(to) ?
+      setAssetApproved(prevState => ({...prevState, other: true}))
+      :
+      setAssetApproved(prevState => ({...prevState, other: false}))
+
+  }, [allowance, from, to])
+
+  useEffect(() => {
     getOtherContractAddress();
-    
   }, [otherTokenAddress])
 
   // tokens are currently fixed to SEURO and USDT
@@ -103,16 +118,35 @@ function Web3BondInterface() {
     }));
 
     // enable bonding button if both assets are approved
-    assetApproved.main && assetApproved.other && bondingLength !== null && setDisabledSend(false);
+    assetApproved.main && assetApproved.other && bondingLength !== undefined && setDisabledSend(false);
 
     from > 0 ? getTokenAmount() : setTo('0');
-  }, [from, to, assetApproved]);
+  }, [from, to, assetApproved, bondingLength]);
 
   useEffect(() => {
     getTokenBalance('main');
     getTokenBalance('other');
     
   }, [otherTokenAddress, otherTokenSymbol, otherTokenDecimal]);
+
+  const checkAllowances = async () => {
+    const MainToken = await TokenContract_main;
+    const OtherToken = await TokenContract_other;
+
+    if (MainToken && OtherToken && address && Object.keys(contractAddresses).length !== 0) {
+      //@ts-ignore
+      const BondingEventContractAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['BondingEvent'];
+      //@ts-ignore
+      MainToken.methods.allowance(address, BondingEventContractAddress).call().then((data:never) => {
+        setAllowance(prevState => ({...prevState, main: parseInt(data)}));
+      });
+
+      //@ts-ignore
+      OtherToken.methods.allowance(address, BondingEventContractAddress).call().then((data:never) => {
+        setAllowance(prevState => ({...prevState, other: parseInt(data)}));
+      });
+    }
+  }
 
   const getOtherContractAddress = async () => {
     if (otherTokenAddress !== null) {
@@ -153,10 +187,6 @@ function Web3BondInterface() {
         token === 'other' ? setBalance(prevState => ({...prevState, other: parseInt(data)})) : setBalance(prevState => ({...prevState, main: parseInt(data)}));
       });
 
-      // tokenContract.methods.allowance().call().then((data:never) => {
-
-      // });
-
       token === 'other' ? setBalance(prevState => ({...prevState, other: ConvertFrom(balance.other.toString(), otherTokenDecimal).toFloat()})) : setBalance(prevState => ({...prevState, main: ConvertFrom(balance.main.toString(), mainTokenDecimal).toFloat()}));
     }
   }
@@ -175,15 +205,13 @@ function Web3BondInterface() {
     //@ts-ignore
     const bondingEventAddress = contractAddresses[network['name']]['CONTRACT_ADDRESSES']['BondingEvent'];
     const TokenContract = token === TOKENS.HUMAN_READABLE.SEURO ? await (await TokenContract_main) : await (await TokenContract_other);
-    // Check the allowance of each of the currencies
 
-    //set the approval if required!
     // @ts-ignore
     token === TOKENS.HUMAN_READABLE.SEURO ? (
       //@ts-ignore
       TokenContract.methods.approve(bondingEventAddress, _depositAmount).send({from: address}).then(() => {
       setLoading(false);
-      //setAssetApproved({main: true, other: assetApproved.other});
+
       setAssetApproved(prevState => ({
         ...prevState,
         main: true

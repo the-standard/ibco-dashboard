@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useWeb3Context } from "../../../../context";
-import { Contract, SmartContractManager } from "../../../../Utils";
+import { Contract, ConvertFrom, SmartContractManager } from "../../../../Utils";
 //import { Contract, ConvertFrom, SmartContractManager } from "../Utils";
 
 type tokeninfo = {
@@ -94,11 +94,11 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
         <div className="grid grid-cols-3 gap-4 content-start mb-4 mr-6 p-5 supplyContainer">
             <div>
                 <h2>Market Cap</h2>
-                <p>&euro; {((tokenInfo.marketCap / 1000000000000000000) / 10000000000000000).toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                <p>&euro; {((tokenInfo.seuroPrice * tokenInfo.ibcoTotalSupply) / 1000000000000000000000000000000000000).toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
             </div>
             <div>
                 <h2>sEURO Price</h2>
-                <p>&euro; {((tokenInfo.seuroPrice / 1000000000000000000)).toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+                <p>&euro; {ConvertFrom(tokenInfo.seuroPrice, 18).toFloat().toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
             </div>
             <div>
                 <h2>TST/sEURO Price</h2>
