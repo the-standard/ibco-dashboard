@@ -42,7 +42,7 @@ const Stage1: NextPage = () => {
       <main>
         <div className="flex flex-row justify-between p-4 w-full">
           <div className="convertInput mx-auto text-center p-5">
-            <p className="descriptionCopy"><b>What is this section?</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor cursus quam at faucibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel consequat arcu. Phasellus facilisis in est nec pulvinar. Donec vehicula erat tortor, sed laoreet justo pellentesque quis. Phasellus non quam nec leo ullamcorper pulvinar sit amet et mi. Aliquam facilisis lacus lectus, sit amet laoreet lacus hendrerit in. Suspendisse at fermentum purus, id semper dolor. Nullam suscipit dolor quis diam efficitur suscipit. Aenean placerat augue non cursus aliquet.</p>
+            <p className="descriptionCopy"><b>What is Stage 1?</b> The Bonding Curve allows users to swap their collateral for sEURO. Initially, sEURO is discounted by 20% meaning 1 EURO of ETH will be exchanged for 1.2 sEURO. This discount declines until the total supply has been exhausted. </p>
           </div>
         </div>
 
