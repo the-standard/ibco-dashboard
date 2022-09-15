@@ -91,7 +91,7 @@ export const Web3StakingInterface = () => {
     <>
     <div className="mx-auto mb-4 w-6/12">
         <div className="convertInput text-center p-5">
-        <p className="descriptionCopy"><b>What is staking?</b>Similar to the bonding event, a user can transfer ("stake") their TST during limited time periods. This means that there will be one or multiple campaigns throughout the year where staking is possible with varying interest rates. If the user decides to participate then, at the end of the period, the initial amount of TST is returned to the user and an interest payment on top of it, paid in sEURO.</p>
+        <p className="descriptionCopy"><b>What is staking?</b>Similar to the bonding event, a user can transfer their TST during limited time periods. This means that there will be one or multiple campaigns throughout the year where staking is possible with varying interest rates. If the user decides to participate then, at the end of the period, the initial amount of TST is returned to the user and an interest payment on top of it, paid in sEURO.</p>
         </div>
     </div>
 
