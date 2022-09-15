@@ -15,7 +15,6 @@ export const Web3StakingInterface = () => {
     const [selectedStake, setSelectedStake] = useState<string>();
     const [stakeAddresses, setStakeAddresses] = useState<string[]>([]);
     const [tokenAddress, setTokenAddress] = useState('');
-    //const [otherTokenAddress, setOtherTokenAddress] = useState('');
     const [tokenSymbol, setTokenSymbol] = useState('');
     const [stakeHistory, setStakeHistory] = useState<string[]>([]);
     const [stakeFilteredHistory, setStakeFilteredHistory] = useState<string[]>([]);
@@ -40,14 +39,11 @@ export const Web3StakingInterface = () => {
 
     const getTokenAddress = async (stakeAddress:string) => {
         const StakingContract = StakingContractManager(stakeAddress as Contract).then((data) => data);
-        const stakingContractInit = await (await StakingContract);
+        const stakingContractInit = await StakingContract;
         //@ts-ignore
         stakingContractInit.methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data)).catch((error:never) => console.log('TST_ADDRESS error', error));
-        //@ts-ignore
-        //stakingContractInit.methods.SEURO_ADDRESS().call().then((data:never) => setOtherTokenAddress(data)).catch((error:never) => console.log('SEURO_ADDRESS error', error));
 
-        const TokenContract = await (await TokenContract_TST);
-
+        const TokenContract = await TokenContract_TST;
         if(TokenContract && Object.keys(TokenContract).length !== 0) {
             //@ts-ignore
             TokenContract.methods.symbol().call()
@@ -62,7 +58,7 @@ export const Web3StakingInterface = () => {
     }
 
     const getPositions = async () => {
-        const stakingContract = await (await StakingContract);
+        const stakingContract = await StakingContract;
         // @ts-ignore
         Object.keys(stakingContract).length !== 0 && stakingContract.methods.list().call().then((data:string[]) => {
             //@ts-ignore
@@ -76,15 +72,15 @@ export const Web3StakingInterface = () => {
         if(contractAddresses.length > 0) {
             contractAddresses.map(async (stakeAddress) => {
                 const stakingContract = StakingContractManager(stakeAddress).then((data) => data);
-                const _stakeContract = await(await stakingContract);
-
-                //@ts-ignore
+                const _stakeContract = await stakingContract;
+                console.log('_stakeContract', _stakeContract);
+                // //@ts-ignore
                 _stakeContract && _stakeContract.methods.position(address).call().then((data:never) => {
                     //@ts-ignore
                     const dataCopy = {...data};
                     dataCopy.address = stakeAddress;
                     data['tokenId'] !== '0' && setStakeHistory(prevState => ([...prevState, dataCopy]));
-                });
+                }).catch((error:never) => console.log('error with positions', error));
             })
             
         }
