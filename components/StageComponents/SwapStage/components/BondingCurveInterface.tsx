@@ -11,7 +11,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 // @ts-ignore
-import { chartArray } from '../public/data/chartData';
+import { chartArray } from '../../../../public/data/chartData';
 
 ChartJS.register(
   CategoryScale,
@@ -38,7 +38,7 @@ export const options = {
   }
 };
 
-const labels = new Array(chartArray.length).fill(0);
+const labels = new Array(chartArray.length).fill('Current sEuro Price');
 const ArrayElem = chartArray.splice(0, Math.ceil(chartArray.length))
 
 export const data = {

@@ -12,6 +12,7 @@
 .next
 /.next/
 /out/
+*.lock
 
 # production
 /build

@@ -1,4 +1,7 @@
 export const TOKENS = {
+    DISPLAY : {
+        SEURO: 'sEURO',
+    },
     HUMAN_READABLE : {
         DAI: 'DAI',
         ETH: 'ETH',

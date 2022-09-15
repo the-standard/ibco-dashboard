@@ -1,13 +1,14 @@
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/router";
+import { TOKENS } from "../../../Utils";
 
 const subNavigation = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const router = useRouter();
     const routes = [
-        {route: 'stage1', canonical: 'Get sEURO'}, 
-        {route: 'stage2', canonical: 'sEURO Bonding'}, 
+        {route: 'stage1', canonical: `Get ${TOKENS.DISPLAY.SEURO}`}, 
+        {route: 'stage2', canonical: `${TOKENS.DISPLAY.SEURO} Bonding`}, 
         {route: 'stage3', canonical: 'TST Staking'}
     ];
     const baseClasses = 'subnav text-lg font-light m-4';

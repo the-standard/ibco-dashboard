@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { useWeb3Context } from '../context/'
+import { useWeb3Context } from '../../../../context'
 import React, { 
   useEffect, 
   useState } from 'react'
 import { toast } from 'react-toastify';
-import { AlertTriangle } from 'react-feather';
+import { AlertTriangle, ChevronLeft } from 'react-feather';
 //import Web3 from 'web3';
 
 //Util Helpers
 import { 
   Contract, 
   ConvertTo, 
-  TOKENS,
-  StakingContractManager, 
-} from '../Utils';
+  StakingContractManager,
+  TokenContractManager, 
+} from '../../../../Utils';
 import moment from 'moment';
 
 type StakingInterfaceType = {
@@ -27,6 +27,8 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   const [stakeTerms, setStakeTerms] = useState('');
   const [stakeTermsEnd, setStakeTermsEnd] = useState('');
   const [tokenAddress, setTokenAddress] = useState('');
+  const [tokenSymbol, setTokenSymbol] = useState('');
+  const [tokenDecimal, setTokenDecimal] = useState('');
   const [disabledSend, setDisabledSend] = useState(true);
   const [assetApproved, setAssetApproved] = useState(false);
   const [disabledApprovalButton, setDisabledApprovalButton] = useState(true);
@@ -34,8 +36,10 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   const [transactionData, setTransactionData] = useState(null);
 
   // CONTRACT MANAGER INIT
+  const _network = network?.name || 'goerli';
   const TokenContract = StakingContractManager(tokenAddress as Contract).then((data) => data);
   const stakingContract = StakingContractManager(contractAddress as Contract).then((data) => data);
+  const TokenContract_TST = TokenContractManager(tokenAddress, _network).then((data) => data);
 
   // PRIVATE HELPERS
 
@@ -47,11 +51,14 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
 
     assetApproved && setDisabledApprovalButton(true);
     assetApproved && setDisabledSend(false);
-
-    console.log(tokenAddress);
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [from, assetApproved, tokenAddress]);
+
+  useEffect(() => {
+    //get token symbol
+    getTokenInformation();
+  }, [tokenAddress])
 
   useEffect(() => {
     getStake();
@@ -59,18 +66,32 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   }, []);
 
   //MAIN FUNCTIONS
+  const getTokenInformation = async () => {
+    const TokenContract = await (await TokenContract_TST);
+
+    if(TokenContract && Object.keys(TokenContract).length !== 0) {
+      //@ts-ignore
+      TokenContract.methods.symbol().call()
+      .then((data:never) => setTokenSymbol(data))
+      .catch((error:never) => console.log('error getting token symbol', error));
+      //@ts-ignore
+      TokenContract.methods.decimals().call()
+      .then((data:never) => setTokenDecimal(data))
+      .catch((error:never) => console.log('error getting token decimal', error));
+    }
+  }
+
   const setTokenValues = (data:number) => {
     setFrom(data);
   }
 
   const getStake = async () => {
-    console.log('await (await stakingContract)', await (await stakingContract));
     // @ts-ignore
     await(await stakingContract).methods.windowStart().call().then((data:string) => setStakeTerms(data)).catch((error:never) => console.log('windowStart error', error));
     // @ts-ignore
     await(await stakingContract).methods.windowEnd().call().then((data:string) => setStakeTermsEnd(data)).catch((error:never) => console.log('windowEnd error', error));
     //@ts-ignore
-    await (await stakingContract).methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data)).catch((error:never) => console.log('big old hairy poo bags', error));
+    await (await stakingContract).methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data)).catch((error:never) => console.log('TST_ADDRESS error', error));
   }
 
   const checkMaxLength = (inputData: { currentTarget: { value: string | never[]; };}) => {
@@ -83,7 +104,8 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
 
   const approveCurrency = async () => {
     setLoading(true);
-    const _depositAmount = ConvertTo(from, 18).raw();
+    const _tokenDecimal = parseInt(tokenDecimal.toString())
+    const _depositAmount = ConvertTo(from, _tokenDecimal).raw();
 
     // @ts-ignore
     await (await TokenContract).methods.approve(contractAddress, _depositAmount).send({from: address}).then(() => {
@@ -98,7 +120,8 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
 
   const SendStakeTransaction = async () => {
     setLoading(true);
-    const _formatTST = ConvertTo(from, 18).raw();
+    const _tokenDecimal = parseInt(tokenDecimal.toString())
+    const _formatTST = ConvertTo(from, _tokenDecimal).raw();
     // @ts-ignore
     await (await stakingContract).methods.mint(_formatTST).send({from:address})
       .then((data:never) => {
@@ -113,11 +136,10 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   }
 
   return (
-    //TODO: Finish styling for all devices
     <>
     {
       // @ts-ignore
-      <div className="mb-4"><button className="px-2 py-1" onClick={backButton}>Back to stakes</button></div>
+      <div className="mb-4 w-4/12"><a href="#" className="py-1 flex backButton" onClick={backButton}><span className="flex w-5"><ChevronLeft /></span> Back</a></div>
     }
     
     <div className="convertInput grid grid-flow-row auto-rows-max p-5 py-8 w-full">
@@ -131,17 +153,17 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
           <p className="p-0 m-0 text-sm">Staking...</p>
           <div className="container w-full">
             <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
-              <input className="w-9/12" type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : 0} />
+              <input className="w-9/12" type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${tokenSymbol} Staking Amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
               <div className="dropdownSelect py-2 text-center w-3/12">
-              <p className="mx-auto">{TOKENS.HUMAN_READABLE.TST}</p>
+              <p className="mx-auto">{tokenSymbol}</p>
               </div>
             </div>
           </div>
           <div className="flex flex-cols m-2 mb-8 warning">
-            <span className="w-2/12"><AlertTriangle /></span><p className="w-10/12">Warning: once you have staked your Standard Token (TST) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</p>
+            <span className="w-2/12"><AlertTriangle /></span><p className="w-10/12">Warning: once you have staked your Standard Token ({tokenSymbol}) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</p>
           </div>
         </span>
-            <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved ? `${TOKENS.HUMAN_READABLE.TST} Approved` : loading ? 'loading...' : `Approve ${TOKENS.HUMAN_READABLE.TST}`}</button>
+            <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved ? `${tokenSymbol} Approved` : loading ? 'loading...' : `Approve ${tokenSymbol}`}</button>
             
             {            
             <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledSend} onClick={() => SendStakeTransaction()}>{loading ? 'loading...' : 'Start Staking'}</button>

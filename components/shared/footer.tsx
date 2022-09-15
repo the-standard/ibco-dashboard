@@ -17,6 +17,7 @@ const Footer = () => {
                 <a href="Whitepaper" rel="noreferrer" target="_blank">Whitepaper</a>
                 <a href="Blog" rel="noreferrer" target="_blank">Blog</a>
             </div>
+            <p>BUILD ID: {process.env.NEXT_PUBLIC_GIT_COMMIT_SHA?.slice(0, 7)}</p>
         </footer>
     )
 }

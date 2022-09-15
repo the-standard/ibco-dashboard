@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/inline-script-id */
 import Head from 'next/head'
 
 interface HeadProps {
@@ -7,6 +8,7 @@ interface HeadProps {
 
 const NextHeadComponent = ({title, description}:HeadProps) => {
     return (
+        // eslint-disable-next-line @next/next/no-script-component-in-head
         <Head>
             <title>{title}</title>
             <meta name="description" content={description} />

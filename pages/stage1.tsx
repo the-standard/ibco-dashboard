@@ -6,7 +6,7 @@ import SubNavigation from '../components/shared/navigation/SubNavigation';
 import NextHeadComponent from '../components/shared/NextHeadComponent';
 import { Web3SwapInterface } from '../components';
 import { TokenInformationInterface, BondingCurveInterface } from '../components';
-import { Contract, SmartContractManager } from '../Utils';
+import { Contract, SmartContractManager, TOKENS } from '../Utils';
 import Footer from '../components/shared/footer';
 import { useWeb3Context } from '../context';
 import { GetJsonAddresses } from '../Utils/ContractManager';
@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 
 const Stage1: NextPage = () => {
   const [seuroAddress, setSeuroAddress] = useState('');
-  const { web3Provider, network } = useWeb3Context();
+  const { network } = useWeb3Context();
   const _network = network?.name || 'goerli';
   const BondingCurveContract = SmartContractManager('BondingCurve' as Contract, _network).then((data) => { return data });
 
@@ -39,22 +39,29 @@ const Stage1: NextPage = () => {
       <ConnectNav />
       <SubNavigation />
 
-      <main className="flex flex-row justify-between p-4">
-        <div className="container w-9/12">
-          <div className="supplyContainer mb-4 mr-6 px-5 py-3 flex flex-cols">
-            <h2>sEURO Address:</h2> <p className="ml-20">{seuroAddress}</p>
+      <main>
+        <div className="flex flex-row justify-between p-4 w-full">
+          <div className="convertInput mx-auto text-center p-5">
+            <p className="descriptionCopy"><b>What is Stage 1?</b> The Bonding Curve allows users to swap their collateral for sEURO. Initially, sEURO is discounted by 20% meaning 1 EURO of ETH will be exchanged for 1.2 sEURO. This discount declines until the total supply has been exhausted. </p>
           </div>
-          {
-            <>
-              { web3Provider && <TokenInformationInterface bondingCurveContract={BondingCurveContract} /> }
-              <BondingCurveInterface />
-            </>
-          }
         </div>
-        <div className="container w-3/12">
-          <Web3SwapInterface />
+
+        <div className="flex flex-row justify-between p-4 pt-0 w-full">
+          <div className="container w-9/12">
+            <div className="supplyContainer mb-4 mr-6 px-5 py-3 flex flex-cols">
+              <h2>{TOKENS.DISPLAY.SEURO} Address:</h2> <p className="ml-20">{seuroAddress}</p>
+            </div>
+            {
+              <>
+                <TokenInformationInterface bondingCurveContract={BondingCurveContract} />
+                <BondingCurveInterface />
+              </>
+            }
+          </div>
+          <div className="container w-3/12">
+            <Web3SwapInterface />
+          </div>
         </div>
-        
       </main>
 
       <Footer />

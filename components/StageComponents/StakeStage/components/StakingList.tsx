@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from "react";
-import { Contract, StakingContractManager } from "../Utils";
-import { StakingSelector } from "./shared/uiElements/StakingSelector";
+import { StakingContractManager } from "../../../../Utils";
+import { StakingSelector } from "./StakingSelector";
 
 type StakingObj = {
     address: string,
@@ -14,16 +14,28 @@ type StakingObj = {
 }
 
 type StakeList = {
-    stakes: string[],
+    stakes: StakingObj[],
     clickFunction: React.MouseEventHandler<string>
 }
 
 // @ts-ignore
 export const StakingList = ({stakes, clickFunction}:StakeList) => {
+    const ArrayCopy = [...stakes];
+    const sortedStakes = ArrayCopy.sort((a,b) => (parseInt(a.start) > parseInt(b.start)) ? 1 : ((parseInt(b.start) > parseInt(a.start)) ? -1 : 0))
     const [stakeInfo, setStakeInfo] = useState<StakingObj[]>([]);
 
+    useEffect(() => {
+        //@ts-ignore
+        stakes.length > 0 ? sortedStakes.map(async (stake:string) => {
+            const hasElemInArray = stakeInfo.some( stakeInfo => stakeInfo['address'] === stake )
+            const _stakeInfo = await getStakingObject(stake);
+            !hasElemInArray && setStakeInfo(prevState => [...prevState, _stakeInfo]);
+        }):
+        'Loading Stake Options...'
+    }, []);
+
     const getStakingObject = async (contractAddress:string) => {
-        const stakingContract = StakingContractManager(contractAddress as Contract).then((data) => data);
+        const stakingContract = StakingContractManager(contractAddress).then((data) => data);
         const stakingObj:StakingObj = {
             address: contractAddress,
             maturity: '0',
@@ -66,20 +78,11 @@ export const StakingList = ({stakes, clickFunction}:StakeList) => {
         return stakingObj;
     };
 
-    useEffect(() => {
-        //@ts-ignore
-        stakes.length > 0 && stakes.map(async (stake:string) => {
-            const hasElemInArray = stakeInfo.some( stakeInfo => stakeInfo['address'] === stake )
-            const _stakeInfo = await getStakingObject(stake);
-            !hasElemInArray && setStakeInfo(prevState => [...prevState, _stakeInfo]);
-        });
-    }, []);
-
     return (
         <div>
             {
                 // @ts-ignore
-                stakeInfo.length > 0 && stakeInfo.map((stake:StakingObj) => (<StakingSelector key={stake.address} stakingObj={stake} clickFunction={clickFunction} />))
+                stakeInfo.length > 0 && stakeInfo.map((stake:StakingObj) => (stake.isActive && <StakingSelector key={stake.address} stakingObj={stake} clickFunction={clickFunction} />))
             }
         </div>
         

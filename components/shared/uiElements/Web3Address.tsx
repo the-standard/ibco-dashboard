@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react'
-import { useWeb3Context } from '../context/'
+import { useWeb3Context } from '../../../context'
 
 export function Web3Address() {
   const { address, network } = useWeb3Context();
@@ -8,7 +8,7 @@ export function Web3Address() {
   return (
     <div className="flex items-center justify-center">
           <span className="walletNetwork-container pl-4 text-right text-sm font-light">
-          using network: {
+          {
             // @ts-ignore
           network['name']
           }

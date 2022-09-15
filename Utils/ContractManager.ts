@@ -51,25 +51,19 @@ const getContractAddressessJson = async() => {
  * @returns {object} A Web3 interface for the given wallet network and connection
  */
 export const Web3Manager = () => {
-    const [web3Interface, setInterface] = useState({});
-    let _interface;
+    const _interface = new Web3(Web3.givenProvider);
 
-    if(Object.keys(web3Interface).length === 0) {
-        _interface = new Web3(Web3.givenProvider);
-        setInterface(_interface);
-
-        return _interface;
-    } else
-        return web3Interface;
+    return _interface;
 }
 
 /**
  * Initializes a contract with Web3 for a certain token
  * @constructor
  * @param {Tokens} token - The token you wish to create a contract for
+ * @param {string} network - The name of the connected wallet network
  * @returns {object} A contract object from Web3
  */
-export const TokenContractManager = async (token='FUSTD', network:string) => {
+export const TokenContractManager = async (token:string, network:string) => {
     const web3Interface = Web3Manager();
     const [tokenContractMain, setTokenContract] = useState({});
     const [tokenType, setTokenType] = useState('');
@@ -96,6 +90,32 @@ export const TokenContractManager = async (token='FUSTD', network:string) => {
 }
 
 /**
+ * Initializes a contract with Web3 for a certain token with no useState hooks, suitable for nested functions
+ * @constructor
+ * @param {Tokens} token - The token you wish to create a contract for
+ * @param {string} network - The name of the connected wallet network
+ * @returns {object} A contract object from Web3
+ */
+ export const TokenContractManagerNoHooks = async (token:string, network:string) => {
+    const web3Interface = Web3Manager();
+    //@ts-ignore
+    const _network = network?.name || 'goerli';
+    // @ts-ignore
+    const ERC20ABIItem:AbiItem = ERC20ABI; //getTokenAddressFor
+    //@ts-ignore
+    const tokenAddressMain = await GetJsonAddresses().then((data) => data[_network]['TOKEN_ADDRESSES'][token]);
+    //@ts-ignore
+    const tokenAddress = token !== null && token.slice(0,2) === '0x' ? token : tokenAddressMain !== '' && tokenAddressMain;
+
+    if (tokenAddress !== undefined) {
+        // @ts-ignore
+        const contract = await new web3Interface.eth.Contract(ERC20ABIItem, tokenAddress);
+
+        return contract
+    }
+}
+
+/**
  * Initializes a contract with Web3 to connect to smart contracts elsewhere
  * @constructor
  * @param {string} contract - The name of the smart contract you want to create a contract for
@@ -108,7 +128,6 @@ export const SmartContractManager = async (contract:Contract, network:string) =>
     const [contractMain, setContract] = useState({});
     const [contractType, setContractType] = useState('');
 
-    // @ts-ignore
     if(Object.keys(contractMain).length === 0 && contractType !== contract) {
         return await getContractABI(contract)
                         .then(async (ABIData) => {
@@ -116,7 +135,7 @@ export const SmartContractManager = async (contract:Contract, network:string) =>
 
                             return await GetJsonAddresses()
                                 .then(async (contractAddress) => {
-                                    //@ts-ignore
+                                    
                                     const _contract = new web3Interface.eth.Contract(ABIData['data'].abi, contractAddress[network]['CONTRACT_ADDRESSES'][contract]);
 
                                     setContract(_contract);
