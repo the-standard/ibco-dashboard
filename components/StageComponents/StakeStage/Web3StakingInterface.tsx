@@ -73,7 +73,6 @@ export const Web3StakingInterface = () => {
             contractAddresses.map(async (stakeAddress) => {
                 const stakingContract = StakingContractManager(stakeAddress).then((data) => data);
                 const _stakeContract = await stakingContract;
-                console.log('_stakeContract', _stakeContract);
                 // //@ts-ignore
                 _stakeContract && _stakeContract.methods.position(address).call().then((data:never) => {
                     //@ts-ignore
@@ -125,7 +124,7 @@ export const Web3StakingInterface = () => {
         <div className="container mx-auto w-full px-4">
             {
                 //@ts-ignore
-                stakeFilteredHistory.length > 0 ? <StakingHistoryList stakeHistoryArray={stakeFilteredHistory} /> : `You have not staked anything my brooo`
+                stakeFilteredHistory.length > 0 ? <StakingHistoryList stakeHistoryArray={stakeFilteredHistory} /> : `You have not staked anything yet, please select from some of the staking options above`
             }
         </div>
     </div>
