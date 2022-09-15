@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import ReactGA from 'react-ga';
-const TRACKING_ID = "G-WTTTH4LM59"; // OUR_TRACKING_ID
+const TRACKING_ID = "GUA-240199374-2"; // OUR_TRACKING_ID
 
 function MyApp({ Component, pageProps }: AppProps) {
   ReactGA.initialize(TRACKING_ID);
