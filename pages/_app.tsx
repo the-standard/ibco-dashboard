@@ -2,14 +2,14 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { Web3ContextProvider } from '../context'
 import { ToastContainer } from 'react-toastify'
-
 import 'react-toastify/dist/ReactToastify.css'
-
-import ReactGA from 'react-ga';
-const TRACKING_ID = "UA-240199374-1"; // OUR_TRACKING_ID
+import TagManager from 'react-gtm-module';
+import { useEffect } from 'react'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  ReactGA.initialize(TRACKING_ID);
+  useEffect(() => {
+    TagManager.initialize({ gtmId: 'GTM-5G25J82' });
+}, []);
 
   return (
     <Web3ContextProvider>
