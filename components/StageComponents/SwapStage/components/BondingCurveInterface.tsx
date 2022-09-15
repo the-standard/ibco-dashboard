@@ -38,7 +38,7 @@ export const options = {
   }
 };
 
-const labels = new Array(chartArray.length).fill(0);
+const labels = new Array(chartArray.length).fill('Current sEuro Price');
 const ArrayElem = chartArray.splice(0, Math.ceil(chartArray.length))
 
 export const data = {

@@ -329,6 +329,8 @@ function Web3BondInterface() {
       setShowHistoryInterface(!showHistoryInterface)
   }
 
+  console.log('balance.main', balance.main);
+
   return !showHistoryInterface ? (
     <>
     <div className="convertInput mx-auto text-center p-5 mb-4 w-6/12">
