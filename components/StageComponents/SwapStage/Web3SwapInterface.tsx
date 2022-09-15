@@ -241,7 +241,7 @@ export function Web3SwapInterface() {
               </div>
             </div>
             {
-              isTokenNotEth(token.token) ? from !== '0' && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledCheck} onClick={() => confirmCurrency()}>{loading ? 'loading...' : 'Approve'} {token.token}</button> : ''
+              isTokenNotEth(token.token) ? from !== '0' && from !== '' && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledCheck} onClick={() => confirmCurrency()}>{loading ? 'loading...' : 'Approve'} {token.token}</button> : ''
             }
             
             {            
