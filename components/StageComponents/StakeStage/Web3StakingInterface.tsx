@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
-import { toast } from "react-toastify";
 import { useWeb3Context } from "../../../context";
 import { Contract, SmartContractManager, StakingContractManager, TokenContractManager } from "../../../Utils";
 import { StakingList } from "./components/StakingList";
@@ -10,7 +9,7 @@ import { StakingInterface } from "./components/StakingInterface";
 import { StakingHistoryList } from './components/StakingHistoryList';
 
 export const Web3StakingInterface = () => {
-    const { address, network } = useWeb3Context();
+    const { address, network, web3Provider } = useWeb3Context();
     const _network = network?.name || 'goerli';
     const [ShowStakingInterface, setShowStakingInterface] = useState(false);
     const [selectedStake, setSelectedStake] = useState<string>();
@@ -42,14 +41,13 @@ export const Web3StakingInterface = () => {
         const StakingContract = StakingContractManager(stakeAddress as Contract).then((data) => data);
         const stakingContractInit = await StakingContract;
         //@ts-ignore
-        stakingContractInit.methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data)).catch((error:never) => console.log('TST_ADDRESS error', error));
+        stakingContractInit.methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data));
 
         const TokenContract = await TokenContract_TST;
         if(TokenContract && Object.keys(TokenContract).length !== 0) {
             //@ts-ignore
             TokenContract.methods.symbol().call()
-            .then((data:never) => setTokenSymbol(data))
-            .catch((error:never) => console.log('error getting token symbol', error));
+            .then((data:never) => setTokenSymbol(data));
         }
     }
 
@@ -61,11 +59,9 @@ export const Web3StakingInterface = () => {
     const getPositions = async () => {
         const stakingContract = await StakingContract;
         // @ts-ignore
-        Object.keys(stakingContract).length !== 0 && stakingContract.methods.list().call().then((data:string[]) => {
+        web3Provider && Object.keys(stakingContract).length !== 0 && stakingContract.methods.list().call().then((data:string[]) => {
             //@ts-ignore
             setStakeAddresses([...new Set(data)]);
-        }).catch((error: never) => {
-            toast.error(`getPositions: ${error}`);
         });
     }
 

@@ -16,7 +16,7 @@ type BondingHistoryInterfaceType = {
 }
 
 export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHistoryInterfaceType) => {
-    const { address, network } = useWeb3Context();
+    const { address, network, web3Provider } = useWeb3Context();
     const _network = network?.name || 'goerli';
     const [userBonds, setUserBonds] = useState([]);
     const [claimAmount, setClaimAmount] = useState('0');
@@ -41,26 +41,20 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
     const getUserBonds = async() => {
         const bondStorageContract = await (await BondStorageContract);
         //@ts-ignore
-        bondStorageContract.methods.getUserBonds(address).call().then((data:never) => {
+        web3Provider && bondStorageContract.methods.getUserBonds(address).call().then((data:never) => {
             setUserBonds(data);
-        })
-        .catch((error:never) => {
-            toast.error(`Error getting user bonds: ${error}`)
         });
 
         //@ts-ignore
-        bondStorageContract.methods.getClaimAmount(address).call().then((data:never) => {
+        web3Provider && bondStorageContract.methods.getClaimAmount(address).call().then((data:never) => {
             setClaimAmount(data);
-        })
-        .catch((error:never) => {
-            console.log('error retrieving claim amount', error);
-        })
+        });
     }
 
     const getTSTInfo = async() => {
         const tokenContractSM = await (await TSTTokenInfoContract);
         //@ts-ignore
-        tokenContractSM.methods.TOKEN().call().then(async (data:never) => {
+        web3Provider && tokenContractSM.methods.TOKEN().call().then(async (data:never) => {
             const tokenContract = await (await TokenContract_TST);
 
             setTstTokenInfo(prevState => ({

@@ -11,6 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     TagManager.initialize({ gtmId: 'GTM-5G25J82' });
 }, []);
 
+
   return (
     <Web3ContextProvider>
       <>

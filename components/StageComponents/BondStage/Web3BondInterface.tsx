@@ -247,7 +247,7 @@ function Web3BondInterface() {
 
   const getBondingLengths = async() => {
     // @ts-ignore
-    await (await OperatorStage2Contract).methods.showRates().call()
+    web3Provider && await (await OperatorStage2Contract).methods.showRates().call()
     .then((data:Rate[]) => {
       const ArrayCopy = [...data];
       const sortedRates = ArrayCopy.sort((a,b) => (parseInt(a.duration) > parseInt(b.duration)) ? 1 : ((parseInt(b.duration) > parseInt(a.duration)) ? -1 : 0))

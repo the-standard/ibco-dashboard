@@ -19,7 +19,7 @@ import Dropdown from '../../shared/uiElements/Dropdown/Dropdown';
 import { GetJsonAddresses } from '../../../Utils/ContractManager';
 
 export function Web3SwapInterface() {
-  const { address, network } = useWeb3Context();
+  const { address, network, web3Provider } = useWeb3Context();
   const [contractAddresses, setContractAddresses] = useState({});
   const [from, setFrom] = useState('0');
   const [to, setTo] = useState(0.0);
@@ -91,9 +91,9 @@ export function Web3SwapInterface() {
     const tokenManager = await (await TokenManager);
 
     // @ts-ignore
-    tokenManager.methods.getAcceptedTokens().call().then((data) => {
+    web3Provider && tokenManager.methods.getAcceptedTokens().call().then((data) => {
       setDDTokens(data);
-    }).catch((error:never) => toast.error(`unable to retrieve contract ${error}`));
+    });
   }
 
   const setValueChangeHandler = (data:string) => {
@@ -116,17 +116,18 @@ export function Web3SwapInterface() {
   const changeTokenClickHandler = async (token=TOKENS.HUMAN_READABLE.ETH) => {
     const _from = from || 0;
     //@ts-ignore
-    const accounts = await web3Interface.eth.getAccounts().then((data:string[]) => data[0]);
+    const accounts = web3Provider && await web3Interface.eth.getAccounts().then((data:string[]) => data[0]);
     //@ts-ignore
     const tokenAddress = token !== TOKENS.HUMAN_READABLE.ETH ? await (await TokenManager).methods.get(token).call()
                           .then((data:never) => data['addr'])
                           :
                           accounts;
     //@ts-ignore
-    await (await TokenManager).methods.getTokenDecimalFor(token).call().then((decimal:never) => {
+    web3Provider && await (await TokenManager).methods.getTokenDecimalFor(token).call().then((decimal:never) => {
       const _decimal = parseInt(decimal) === 0 ? 18 : parseInt(decimal);
       setTokenDecimal(_decimal);
-    }).catch((error:never) => toast.error(`unable to retrieve contract ${error}`));
+    });
+    
 
     setTransactionData(null);
     setFrom('0');
@@ -139,9 +140,7 @@ export function Web3SwapInterface() {
     //@ts-ignore
     await (await TokenContract).methods.allowance(_address, _seuroAddress).call().then((data: React.SetStateAction<number>) => {
         setAllowance(data)
-      }).catch((error: never) => {
-        return error
-      })
+      });
   }
 
   const confirmCurrency = async () => {
@@ -162,10 +161,9 @@ export function Web3SwapInterface() {
           setLoading(false);
           return
         })
-        .catch((error: never) => {
+        .catch(() => {
           setLoading(false);
           setTokenApprove(false);
-          toast.error(error);
           return
         }))
     :
@@ -181,9 +179,8 @@ export function Web3SwapInterface() {
         setLoading(false);
         const bigNumberFrom = ConvertFrom(data, 18).toFloat();
         setTo(bigNumberFrom)
-      }).catch((error: never) => {
+      }).catch(() => {
         setLoading(false);
-        toast.error(error);
       });
   }
 
@@ -198,9 +195,8 @@ export function Web3SwapInterface() {
       setTransactionData(data);
 
       !data['status'] ? toast.error('Transaction error') : toast.success(`transaction successfull ${data['transactionHash']}`);
-    }).catch((error: never) => {
+    }).catch(() => {
       setLoading(false);
-      toast.error(error);
     })
     :
     // @ts-ignore
@@ -210,9 +206,8 @@ export function Web3SwapInterface() {
       setTransactionData(data);
 
       !data['status'] ? toast.error('Transaction error') : toast.success(`transaction successfull ${data['transactionHash']}`);
-    }).catch((error: never) => {
+    }).catch(() => {
       setLoading(false);
-      toast.error(error);
     })
   }
 
@@ -245,7 +240,7 @@ export function Web3SwapInterface() {
             }
             
             {            
-            <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledSend} onClick={() => SendTransaction()}>{loading ? 'loading...' : 'Swap'}</button>
+            web3Provider && <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledSend} onClick={() => SendTransaction()}>{loading ? 'loading...' : 'Swap'}</button>
             }
             {// @ts-ignore
             transactionData && <button className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</button>

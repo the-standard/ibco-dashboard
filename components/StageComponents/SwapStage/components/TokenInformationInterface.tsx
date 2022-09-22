@@ -46,8 +46,6 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
                     ...prevState,
                     ibcoTotalSupply: data
                 }));
-            }).catch((error:never) => {
-                toast.error(`unable to obtain ibcoTotalSupply: ${error}`);
             });
         // @ts-ignore
         await(await bondingCurveContract).methods.maxSupply().call()
@@ -56,8 +54,6 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
                     ...prevState,
                     maxSupply: data
                 }));
-            }).catch((error:never) => {
-                toast.error(`unable to obtain maxSupply: ${error}`);
             });
     };
 

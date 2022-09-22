@@ -108,9 +108,8 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
             toast.success(`Successfully claimed ${ConvertFrom(StakingObj.reward, parseInt(seuroTokenInfo.decimal.toString())).toFloat()} ${TOKENS.DISPLAY.SEURO}`);
             setClaimed(true);
         })
-        .catch((error:never) => {
+        .catch(() => {
             setLoading(false);
-            console.log('staking claim error', error);
             setClaimed(false);
         });
     }
