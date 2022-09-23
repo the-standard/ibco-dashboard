@@ -348,7 +348,7 @@ function Web3BondInterface() {
               </div>
             </div>
           </div>
-          <div className="mb-2">Available: {balance.main > 0 ? ConvertFrom(balance.main, parseInt(mainTokenDecimal.toString())).toFloat().toFixed(2): `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`}</div>
+          <div className="mb-2">Available: {balance.main > 0 ? ConvertFrom(balance.main.toString(), parseInt(mainTokenDecimal.toString())).toFloat().toFixed(2): `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`}</div>
 
           <p className="p-0 m-0 text-sm">Bonding asset 2</p>
           <div className="container w-full">
