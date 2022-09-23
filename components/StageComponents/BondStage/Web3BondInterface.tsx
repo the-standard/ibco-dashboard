@@ -339,7 +339,7 @@ function Web3BondInterface() {
       { web3Provider ? (
         <>
         <span>
-          <p className="p-0 m-0 text-sm">Bonding asset 1</p>
+          <p className="p-0 m-0 text-sm">Bonding asset 1 - <span>(available: {balance.main !== '0' ? `${ConvertFrom(balance.main.toString(), parseInt(mainTokenDecimal.toString())).toFloat().toFixed(2)} ${TOKENS.DISPLAY.SEURO}`: `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`})</span></p>
           <div className="container w-full">
             <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
               <input className="w-9/12" type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${TOKENS.DISPLAY.SEURO} amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
@@ -348,9 +348,8 @@ function Web3BondInterface() {
               </div>
             </div>
           </div>
-          <div className="mb-2">Available: {balance.main !== '0' ? ConvertFrom(balance.main.toString(), parseInt(mainTokenDecimal.toString())).toFloat().toFixed(2): `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`}</div>
 
-          <p className="p-0 m-0 text-sm">Bonding asset 2</p>
+          <p className="p-0 m-0 text-sm">Bonding asset 2 - (available: {balance.other !== '0' ? `${ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2)} ${otherTokenSymbol}` : `Warning: you do not have enough ${otherTokenSymbol}`})</p>
           <div className="container w-full">
             <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
               <input className="w-9/12" type='number' step="any" readOnly={true} placeholder={`${otherTokenSymbol} amount`} value={to !== '0' ? toDisplay : ''} />
@@ -359,7 +358,6 @@ function Web3BondInterface() {
               </div>
             </div>
           </div>
-          <div className="mb-2">Available: {balance.other !== '0' ? ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2) : `Warning: you do not have enough ${otherTokenSymbol}`}</div>
         </span>
         
         <div className="mb-8 mt-1 flex flex-cols justify-between">
