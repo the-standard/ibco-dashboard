@@ -36,7 +36,7 @@ function Web3BondInterface() {
   const [to, setTo] = useState('0');
   const [toDisplay, setToDisplay] = useState(0);
   const [rates, setRates] = useState([]);
-  const [balance, setBalance] = useState({main: 0, other: 0});
+  const [balance, setBalance] = useState({main: '0', other: '0'});
   const [allowance, setAllowance] = useState({main: 0, other: 0});
   const [bondingLength, setBondingLength] = useState<Rate>();
   const [disabledSend, setDisabledSend] = useState(true);
@@ -185,7 +185,7 @@ function Web3BondInterface() {
       //@ts-ignore
       tokenContract.methods.balanceOf(address).call().then((data:never) => {
         console.log('balanceOf', data);
-        token === 'other' ? setBalance(prevState => ({...prevState, other: parseInt(data)})) : setBalance(prevState => ({...prevState, main: parseInt(data)}));
+        token === 'other' ? setBalance(prevState => ({...prevState, other: data})) : setBalance(prevState => ({...prevState, main: data}));
       });
     }
   }
@@ -348,7 +348,7 @@ function Web3BondInterface() {
               </div>
             </div>
           </div>
-          <div className="mb-2">Available: {balance.main > 0 ? ConvertFrom(balance.main.toString(), parseInt(mainTokenDecimal.toString())).toFloat().toFixed(2): `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`}</div>
+          <div className="mb-2">Available: {balance.main !== '0' ? ConvertFrom(balance.main.toString(), parseInt(mainTokenDecimal.toString())).toFloat().toFixed(2): `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`}</div>
 
           <p className="p-0 m-0 text-sm">Bonding asset 2</p>
           <div className="container w-full">
@@ -359,7 +359,7 @@ function Web3BondInterface() {
               </div>
             </div>
           </div>
-          <div className="mb-2">Available: {balance.other > 0 ? ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2) : `Warning: you do not have enough ${otherTokenSymbol}`}</div>
+          <div className="mb-2">Available: {balance.other !== '0' ? ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2) : `Warning: you do not have enough ${otherTokenSymbol}`}</div>
         </span>
         
         <div className="mb-8 mt-1 flex flex-cols justify-between">
