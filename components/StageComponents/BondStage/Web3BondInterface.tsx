@@ -186,8 +186,6 @@ function Web3BondInterface() {
       tokenContract.methods.balanceOf(address).call().then((data:never) => {
         token === 'other' ? setBalance(prevState => ({...prevState, other: parseInt(data)})) : setBalance(prevState => ({...prevState, main: parseInt(data)}));
       });
-
-      token === 'other' ? setBalance(prevState => ({...prevState, other: ConvertFrom(balance.other.toString(), otherTokenDecimal).toFloat()})) : setBalance(prevState => ({...prevState, main: ConvertFrom(balance.main.toString(), mainTokenDecimal).toFloat()}));
     }
   }
 
