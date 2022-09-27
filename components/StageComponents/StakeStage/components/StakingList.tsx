@@ -47,32 +47,22 @@ export const StakingList = ({stakes, clickFunction}:StakeList) => {
         // @ts-ignore
         await(await stakingContract).methods.maturity().call().then((data:string) => {
             stakingObj.maturity = data;
-        }).catch((error:never) => {
-            console.log('maturity error', error);
         });
         // @ts-ignore
         await(await stakingContract).methods.windowStart().call().then((data:string) => {
             stakingObj.start = data;
-        }).catch((error:never) => {
-            console.log('windowStart error', error);
         });
         // @ts-ignore
         await(await stakingContract).methods.windowEnd().call().then((data:string) => {
             stakingObj.end = data;
-        }).catch((error:never) => {
-            console.log('windowEnd error', error);
         });
         // @ts-ignore
         await(await stakingContract).methods.SI_RATE().call().then((data:string) => {
             stakingObj.interestRate = data;
-        }).catch((error:never) => {
-            console.log('SI_RATE error', error);
         });
         // @ts-ignore
         await(await stakingContract).methods.active().call().then((data:boolean) => {
             stakingObj.isActive = data;
-        }).catch((error:never) => {
-            console.log('Get active status error', error);
         });
 
         return stakingObj;

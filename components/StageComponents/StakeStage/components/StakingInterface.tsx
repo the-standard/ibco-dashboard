@@ -72,12 +72,10 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
     if(TokenContract && Object.keys(TokenContract).length !== 0) {
       //@ts-ignore
       TokenContract.methods.symbol().call()
-      .then((data:never) => setTokenSymbol(data))
-      .catch((error:never) => console.log('error getting token symbol', error));
+      .then((data:never) => setTokenSymbol(data));
       //@ts-ignore
       TokenContract.methods.decimals().call()
-      .then((data:never) => setTokenDecimal(data))
-      .catch((error:never) => console.log('error getting token decimal', error));
+      .then((data:never) => setTokenDecimal(data));
     }
   }
 
@@ -87,11 +85,11 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
 
   const getStake = async () => {
     // @ts-ignore
-    await(await stakingContract).methods.windowStart().call().then((data:string) => setStakeTerms(data)).catch((error:never) => console.log('windowStart error', error));
+    await(await stakingContract).methods.windowStart().call().then((data:string) => setStakeTerms(data));
     // @ts-ignore
-    await(await stakingContract).methods.windowEnd().call().then((data:string) => setStakeTermsEnd(data)).catch((error:never) => console.log('windowEnd error', error));
+    await(await stakingContract).methods.windowEnd().call().then((data:string) => setStakeTermsEnd(data));
     //@ts-ignore
-    await (await stakingContract).methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data)).catch((error:never) => console.log('TST_ADDRESS error', error));
+    await (await stakingContract).methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data));
   }
 
   const checkMaxLength = (inputData: { currentTarget: { value: string | never[]; };}) => {

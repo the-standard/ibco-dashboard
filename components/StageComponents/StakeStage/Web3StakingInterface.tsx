@@ -1,7 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
-import { toast } from "react-toastify";
 import { useWeb3Context } from "../../../context";
 import { Contract, SmartContractManager, StakingContractManager, TokenContractManager } from "../../../Utils";
 import { StakingList } from "./components/StakingList";
@@ -9,7 +9,7 @@ import { StakingInterface } from "./components/StakingInterface";
 import { StakingHistoryList } from './components/StakingHistoryList';
 
 export const Web3StakingInterface = () => {
-    const { address, network } = useWeb3Context();
+    const { address, network, web3Provider } = useWeb3Context();
     const _network = network?.name || 'goerli';
     const [ShowStakingInterface, setShowStakingInterface] = useState(false);
     const [selectedStake, setSelectedStake] = useState<string>();
@@ -41,14 +41,13 @@ export const Web3StakingInterface = () => {
         const StakingContract = StakingContractManager(stakeAddress as Contract).then((data) => data);
         const stakingContractInit = await StakingContract;
         //@ts-ignore
-        stakingContractInit.methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data)).catch((error:never) => console.log('TST_ADDRESS error', error));
+        stakingContractInit.methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data));
 
         const TokenContract = await TokenContract_TST;
         if(TokenContract && Object.keys(TokenContract).length !== 0) {
             //@ts-ignore
             TokenContract.methods.symbol().call()
-            .then((data:never) => setTokenSymbol(data))
-            .catch((error:never) => console.log('error getting token symbol', error));
+            .then((data:never) => setTokenSymbol(data));
         }
     }
 
@@ -60,11 +59,9 @@ export const Web3StakingInterface = () => {
     const getPositions = async () => {
         const stakingContract = await StakingContract;
         // @ts-ignore
-        Object.keys(stakingContract).length !== 0 && stakingContract.methods.list().call().then((data:string[]) => {
+        web3Provider && Object.keys(stakingContract).length !== 0 && stakingContract.methods.list().call().then((data:string[]) => {
             //@ts-ignore
             setStakeAddresses([...new Set(data)]);
-        }).catch((error: never) => {
-            toast.error(`getPositions: ${error}`);
         });
     }
 
@@ -73,7 +70,6 @@ export const Web3StakingInterface = () => {
             contractAddresses.map(async (stakeAddress) => {
                 const stakingContract = StakingContractManager(stakeAddress).then((data) => data);
                 const _stakeContract = await stakingContract;
-                console.log('_stakeContract', _stakeContract);
                 // //@ts-ignore
                 _stakeContract && _stakeContract.methods.position(address).call().then((data:never) => {
                     //@ts-ignore
@@ -91,7 +87,7 @@ export const Web3StakingInterface = () => {
     <>
     <div className="mx-auto mb-4 w-6/12">
         <div className="convertInput text-center p-5">
-        <p className="descriptionCopy"><b>What is staking?</b>Similar to the bonding event, a user can transfer ("stake") their TST during limited time periods. This means that there will be one or multiple campaigns throughout the year where staking is possible with varying interest rates. If the user decides to participate then, at the end of the period, the initial amount of TST is returned to the user and an interest payment on top of it, paid in sEURO.</p>
+        <p className="descriptionCopy"><b>What is staking?</b> Similar to the bonding event, a user can transfer their TST during limited time periods. This means that there will be one or multiple campaigns throughout the year where staking is possible with varying interest rates. If the user decides to participate then, at the end of the period, the initial amount of TST is returned to the user and an interest payment on top of it, paid in sEURO.</p>
         </div>
     </div>
 
@@ -125,7 +121,7 @@ export const Web3StakingInterface = () => {
         <div className="container mx-auto w-full px-4">
             {
                 //@ts-ignore
-                stakeFilteredHistory.length > 0 ? <StakingHistoryList stakeHistoryArray={stakeFilteredHistory} /> : `You have not staked anything my brooo`
+                stakeFilteredHistory.length > 0 ? <StakingHistoryList stakeHistoryArray={stakeFilteredHistory} /> : `You have not staked anything yet, please select from some of the staking options above`
             }
         </div>
     </div>

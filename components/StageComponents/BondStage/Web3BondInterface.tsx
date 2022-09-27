@@ -36,7 +36,7 @@ function Web3BondInterface() {
   const [to, setTo] = useState('0');
   const [toDisplay, setToDisplay] = useState(0);
   const [rates, setRates] = useState([]);
-  const [balance, setBalance] = useState({main: 0, other: 0});
+  const [balance, setBalance] = useState({main: '0', other: '0'});
   const [allowance, setAllowance] = useState({main: 0, other: 0});
   const [bondingLength, setBondingLength] = useState<Rate>();
   const [disabledSend, setDisabledSend] = useState(true);
@@ -184,10 +184,9 @@ function Web3BondInterface() {
     if(address && tokenContract) {
       //@ts-ignore
       tokenContract.methods.balanceOf(address).call().then((data:never) => {
-        token === 'other' ? setBalance(prevState => ({...prevState, other: parseInt(data)})) : setBalance(prevState => ({...prevState, main: parseInt(data)}));
+        console.log('balanceOf', data);
+        token === 'other' ? setBalance(prevState => ({...prevState, other: data})) : setBalance(prevState => ({...prevState, main: data}));
       });
-
-      token === 'other' ? setBalance(prevState => ({...prevState, other: ConvertFrom(balance.other.toString(), otherTokenDecimal).toFloat()})) : setBalance(prevState => ({...prevState, main: ConvertFrom(balance.main.toString(), mainTokenDecimal).toFloat()}));
     }
   }
 
@@ -247,7 +246,7 @@ function Web3BondInterface() {
 
   const getBondingLengths = async() => {
     // @ts-ignore
-    await (await OperatorStage2Contract).methods.showRates().call()
+    web3Provider && await (await OperatorStage2Contract).methods.showRates().call()
     .then((data:Rate[]) => {
       const ArrayCopy = [...data];
       const sortedRates = ArrayCopy.sort((a,b) => (parseInt(a.duration) > parseInt(b.duration)) ? 1 : ((parseInt(b.duration) > parseInt(a.duration)) ? -1 : 0))
@@ -329,8 +328,6 @@ function Web3BondInterface() {
       setShowHistoryInterface(!showHistoryInterface)
   }
 
-  console.log('balance.main', balance.main);
-
   return !showHistoryInterface ? (
     <>
     <div className="convertInput mx-auto text-center p-5 mb-4 w-6/12">
@@ -342,7 +339,7 @@ function Web3BondInterface() {
       { web3Provider ? (
         <>
         <span>
-          <p className="p-0 m-0 text-sm">Bonding asset 1</p>
+          <p className="p-0 m-0 text-sm">Bonding asset 1 - <span>(available: {balance.main !== '0' ? `${ConvertFrom(balance.main.toString(), parseInt(mainTokenDecimal.toString())).toFloat().toFixed(2)} ${TOKENS.DISPLAY.SEURO}`: `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`})</span></p>
           <div className="container w-full">
             <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
               <input className="w-9/12" type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${TOKENS.DISPLAY.SEURO} amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
@@ -351,9 +348,8 @@ function Web3BondInterface() {
               </div>
             </div>
           </div>
-          <div className="mb-2">Available: {balance.main > 0 && mainTokenDecimal > 0 ? ConvertFrom(balance.main, parseInt(mainTokenDecimal.toString())).toFloat().toFixed(2): `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`}</div>
 
-          <p className="p-0 m-0 text-sm">Bonding asset 2</p>
+          <p className="p-0 m-0 text-sm">Bonding asset 2 - (available: {balance.other !== '0' ? `${ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2)} ${otherTokenSymbol}` : `Warning: you do not have enough ${otherTokenSymbol}`})</p>
           <div className="container w-full">
             <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
               <input className="w-9/12" type='number' step="any" readOnly={true} placeholder={`${otherTokenSymbol} amount`} value={to !== '0' ? toDisplay : ''} />
@@ -362,7 +358,6 @@ function Web3BondInterface() {
               </div>
             </div>
           </div>
-          <div className="mb-2">Available: {balance.other > 0 && otherTokenDecimal > 0 ? ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2) : `Warning: you do not have enough ${otherTokenSymbol}`}</div>
         </span>
         
         <div className="mb-8 mt-1 flex flex-cols justify-between">
