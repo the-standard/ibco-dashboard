@@ -40,14 +40,14 @@ const Stage1: NextPage = () => {
       <SubNavigation />
 
       <main>
-        <div className="flex flex-row justify-between p-4 w-full">
+        <div className="md:flex flex-row justify-between p-4 w-full">
           <div className="convertInput mx-auto text-center p-5">
             <p className="descriptionCopy"><b>What is Stage 1?</b> The Bonding Curve allows users to swap their collateral for sEURO. Initially, sEURO is discounted by 20% meaning 1 EURO of ETH will be exchanged for 1.2 sEURO. This discount declines until the total supply has been exhausted. </p>
           </div>
         </div>
 
-        <div className="flex flex-row justify-between p-4 pt-0 w-full">
-          <div className="container w-9/12">
+        <div className="md:flex flex-row justify-between p-4 pt-0 w-full">
+          <div className="container md:w-9/12">
             <div className="supplyContainer mb-4 mr-6 px-5 py-3 flex flex-cols">
               <h2>{TOKENS.DISPLAY.SEURO} Address:</h2> <p className="ml-20">{seuroAddress}</p>
             </div>
@@ -58,7 +58,7 @@ const Stage1: NextPage = () => {
               </>
             }
           </div>
-          <div className="container w-3/12">
+          <div className="container md:w-3/12">
             <Web3SwapInterface />
           </div>
         </div>
