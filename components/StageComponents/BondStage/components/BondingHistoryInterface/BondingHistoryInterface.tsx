@@ -100,8 +100,8 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
                 // @ts-ignore
                 <div className="mb-4 w-full mx-auto"><a href="#" className="py-1 flex backButton" onClick={backButton}><span className="flex w-5"><ChevronLeft /></span> Back</a></div>
             }
-            <div className="w-full mx-auto flex">
-                <div className="w-9/12">
+            <div className="w-full mx-auto lg:flex md:flex-cols">
+                <div className="lg:w-9/12 md:order-1">
                     <div className="w-full grid grid-cols-5 gap-2 mb-4 px-4">
                         <p>Profit</p>
                         <p>{tstTokenInfo.tokenSymbol} Amount</p>
@@ -121,7 +121,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
                     </div>
                 </div>
                 
-                <ClaimRewardContainer className="w-2/12 ml-2 p-4">
+                <ClaimRewardContainer className="lg:w-2/12 ml-2 p-4 md:order-2">
                 {
                 parseInt(claimAmount) > 0 ?
                     <>

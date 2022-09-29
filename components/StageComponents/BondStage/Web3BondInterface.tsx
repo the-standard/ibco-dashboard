@@ -330,12 +330,12 @@ function Web3BondInterface() {
 
   return !showHistoryInterface ? (
     <>
-    <div className="convertInput mx-auto text-center p-5 mb-4 w-6/12">
+    <div className="convertInput mx-auto text-center p-5 mb-4 md:w-6/12">
       <p className="descriptionCopy mb-6 px-10"><b>What is sEURO bonding?</b> Earn TST when you bond your {TOKENS.DISPLAY.SEURO} and {otherTokenSymbol}. When your bond expires, you will receive the total EURO value of your bonded assets (paid in TST). Plus a generous reward (also in TST)!</p>
       <button className="mx-auto py-2 px-16 bondingHistoryButton" onClick={bondingHistoryClickHandler}>View History</button>
     </div>
 
-    <div className="convertInput mx-auto grid grid-flow-row auto-rows-max p-5 py-8 w-6/12">
+    <div className="convertInput mx-auto grid grid-flow-row auto-rows-max p-5 py-8 md:w-6/12">
       { web3Provider ? (
         <>
         <span>

@@ -85,15 +85,15 @@ export const Web3StakingInterface = () => {
 
    return !ShowStakingInterface ? (
     <>
-    <div className="mx-auto mb-4 w-6/12">
+    <div className="mx-auto mb-4 lg:w-6/12">
         <div className="convertInput text-center p-5">
         <p className="descriptionCopy"><b>What is staking?</b> Similar to the bonding event, a user can transfer their TST during limited time periods. This means that there will be one or multiple campaigns throughout the year where staking is possible with varying interest rates. If the user decides to participate then, at the end of the period, the initial amount of TST is returned to the user and an interest payment on top of it, paid in sEURO.</p>
         </div>
     </div>
 
-    <div className="mx-auto w-6/12">
-        <div className="flex supplyContainer mb-10 mr-6 px-5 py-3 w-full">
-            <h2>{tokenSymbol} Address:</h2> <p className="ml-20">{tokenAddress}</p>
+    <div className="mx-auto lg:w-6/12">
+        <div className="lg:flex supplyContainer mb-10 mr-6 px-5 py-3 w-full ">
+            <h2>{tokenSymbol} Address:</h2> <p className="ml-20 addressHolder">{tokenAddress}</p>
         </div>
 
         <div className="w-full p-5 p-0 my-4 grid grid-cols-5 gap-1">
@@ -111,7 +111,7 @@ export const Web3StakingInterface = () => {
         </div>
     </div>
 
-    <div className="mx-auto w-6/12 mt-10">
+    <div className="mx-auto lg:w-6/12 mt-10">
         <h2>History</h2>
         <div className="w-full p-4 my-4 grid grid-cols-4 gap-2 convertInput">
             <span>Your Staking Positions</span>
@@ -131,7 +131,7 @@ export const Web3StakingInterface = () => {
     :
 
     (
-        <div className="container mx-auto w-4/12 p-4">
+        <div className="container mx-auto lg:w-4/12 p-4">
             {
                 // @ts-ignore
                 <StakingInterface contractAddress={selectedStake} backButton={stakeSelectionClickHandler} />

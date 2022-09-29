@@ -77,6 +77,10 @@
     text-justify: inter-word;
   }
 
+  .addressHolder {
+    overflow-wrap: anywhere;
+  }
+
   .greyText {
     color: #7a7a7a;
   }

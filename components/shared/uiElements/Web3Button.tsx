@@ -8,7 +8,7 @@ interface ConnectProps {
 }
 const ConnectButton = ({ connect }: ConnectProps) => {
   return connect ? (
-    <button className="px-3 py-2 connectButton flex" onClick={connect}><span className="pr-2 w-1.5/12"><CreditCard /></span> Connect to MetaMask</button>
+    <button className="px-3 py-2 connectButton flex" onClick={connect}><span className="pr-2 w-1.5/12"><CreditCard /></span> Connect Wallet</button>
   ) : (
     <button className="px-3 py-2">Loading...</button>
   )
@@ -22,7 +22,7 @@ const DisconnectButton = ({ disconnect }: DisconnectProps) => {
   return disconnect ? (
     <div className="flex flex-row justify-between">
       <Web3Address />
-      <button className="px-3 py-2 disconnectButton" onClick={disconnect}>Disconnect Wallet</button>
+      <button className="px-3 py-2 disconnectButton" onClick={disconnect}>Disconnect</button>
     </div>
     
   ) : (

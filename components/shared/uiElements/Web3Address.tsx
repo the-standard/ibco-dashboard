@@ -14,7 +14,7 @@ export function Web3Address() {
           }
           </span>
           <span className="walletAddress-container pl-4 text-right text-sm font-light">
-          🟢 &nbsp;{
+          {
             // @ts-ignore
           address.substring(0, 5)
           }...{

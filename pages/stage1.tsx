@@ -48,8 +48,8 @@ const Stage1: NextPage = () => {
 
         <div className="md:flex flex-row justify-between p-4 pt-0 w-full">
           <div className="container md:w-9/12">
-            <div className="supplyContainer mb-4 mr-6 px-5 py-3 flex flex-cols">
-              <h2>{TOKENS.DISPLAY.SEURO} Address:</h2> <p className="ml-20">{seuroAddress}</p>
+            <div className="supplyContainer mb-4 md:mr-6 px-5 py-3 flex flex-cols">
+              <h2>{TOKENS.DISPLAY.SEURO} Address:</h2> <p className="ml-20 addressHolder">{seuroAddress}</p>
             </div>
             {
               <>
