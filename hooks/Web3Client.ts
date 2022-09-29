@@ -36,9 +36,6 @@ export const useWeb3 = () => {
         const signer = web3Provider.getSigner()
         const address = await signer.getAddress()
         const network = await web3Provider.getNetwork()
-        if (network.name !== 'goerli') {
-          throw `Unsupported Network ${network.name}`
-        } else {
           toast.success(`Connected to Wallet: ${address.substring(0, 5)}...${address.slice(-4)}`)
 
         dispatch({
@@ -49,7 +46,6 @@ export const useWeb3 = () => {
           network,
           signer,
         } as Web3Action)
-        }
         
       } catch (e) {
         toast.error(`Wallet Connect Error: ${e}`)
