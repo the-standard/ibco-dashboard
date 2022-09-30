@@ -25,8 +25,8 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
         tokenSymbol: '',
         tokenDecimal: 0
     });
-    const BondStorageContract = SmartContractManager('BondStorage', _network).then((data) => data);
-    const TSTTokenInfoContract = SmartContractManager('StandardTokenGateway', _network).then((data) => data);
+    const BondStorageContract = SmartContractManager('BondStorage').then((data) => data);
+    const TSTTokenInfoContract = SmartContractManager('StandardTokenGateway').then((data) => data);
     const TokenContract_TST = TokenContractManager(tstTokenInfo.tokenAddress, _network).then((data) => data);
 
     useEffect(() => {

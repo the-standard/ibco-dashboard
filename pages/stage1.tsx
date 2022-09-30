@@ -16,7 +16,7 @@ const Stage1: NextPage = () => {
   const [seuroAddress, setSeuroAddress] = useState('');
   const { network } = useWeb3Context();
   const _network = network?.name || 'goerli';
-  const BondingCurveContract = SmartContractManager('BondingCurve' as Contract, _network).then((data) => { return data });
+  const BondingCurveContract = SmartContractManager('BondingCurve' as Contract).then((data) => { return data });
 
   useEffect(() => {
     getTokenAddress();

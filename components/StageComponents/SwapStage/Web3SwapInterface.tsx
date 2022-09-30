@@ -36,8 +36,8 @@ export function Web3SwapInterface() {
   // CONTRACT MANAGER INIT
   const web3Interface = Web3Manager();
   const _network = network?.name || 'goerli';
-  const SmartContract = SmartContractManager('SEuroOffering' as Contract, _network).then((data) => data);
-  const TokenManager = SmartContractManager('TokenManager' as Contract, _network).then((data) => data);
+  const SmartContract = SmartContractManager('SEuroOffering' as Contract).then((data) => data);
+  const TokenManager = SmartContractManager('TokenManager' as Contract).then((data) => data);
   const TokenContract = TokenContractManager(token.address, _network).then((data) => data);
 
   // PRIVATE HELPERS

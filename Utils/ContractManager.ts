@@ -122,31 +122,33 @@ export const TokenContractManager = async (token:string, network:string) => {
  * @param {string} network - The name of the connected wallet network
  * @returns {object} A contract object from Web3
  */
-export const SmartContractManager = async (contract:Contract, network:string) => {
+export const SmartContractManager = async (contract:Contract) => {
     const web3Interface = new Web3(Web3.givenProvider);
+    const _network = await web3Interface.eth.net.getNetworkType().then((network) => network) || null;
+    // const [contractMain, setContract] = useState({});
+    // const [contractType, setContractType] = useState('');
 
-    const [contractMain, setContract] = useState({});
-    const [contractType, setContractType] = useState('');
-
-    if(Object.keys(contractMain).length === 0 && contractType !== contract) {
+    if(_network !== null) {
+        console.log('_network', _network);
         return await getContractABI(contract)
                         .then(async (ABIData) => {
-                            setContractType(contract);
+                            //setContractType(contract);
 
                             return await GetJsonAddresses()
                                 .then(async (contractAddress) => {
-                                    
-                                    const _contract = new web3Interface.eth.Contract(ABIData['data'].abi, contractAddress[network]['CONTRACT_ADDRESSES'][contract]);
+                                    console.log('contract address', contractAddress[_network]['CONTRACT_ADDRESSES'][contract])
+                                    const _contract = new web3Interface.eth.Contract(ABIData['data'].abi, contractAddress[_network]['CONTRACT_ADDRESSES'][contract]);
 
-                                    setContract(_contract);
+                                    //setContract(_contract);
                                     
                                     return _contract
                                 })
                         })
                         .catch((error) => console.log('unable to retrieve ABI data', error))
-    } else {
-        return contractMain
-    }
+                    }
+    // } else {
+    //     return contractMain
+    // }
 }
 
 /**

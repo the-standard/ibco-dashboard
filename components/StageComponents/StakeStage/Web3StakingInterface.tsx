@@ -19,7 +19,7 @@ export const Web3StakingInterface = () => {
     const [stakeHistory, setStakeHistory] = useState<string[]>([]);
     const [stakeFilteredHistory, setStakeFilteredHistory] = useState<string[]>([]);
 
-    const StakingContract = SmartContractManager('StakingDirectory' as Contract, _network).then((data) => data);
+    const StakingContract = SmartContractManager('StakingDirectory' as Contract).then((data) => data);
     const TokenContract_TST = TokenContractManager(tokenAddress, _network).then((data) => data);
 
     useEffect(() => {
