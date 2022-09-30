@@ -9,8 +9,7 @@ import { StakingInterface } from "./components/StakingInterface";
 import { StakingHistoryList } from './components/StakingHistoryList';
 
 export const Web3StakingInterface = () => {
-    const { address, network, web3Provider } = useWeb3Context();
-    const _network = network?.name || 'goerli';
+    const { address, web3Provider } = useWeb3Context();
     const [ShowStakingInterface, setShowStakingInterface] = useState(false);
     const [selectedStake, setSelectedStake] = useState<string>();
     const [stakeAddresses, setStakeAddresses] = useState<string[]>([]);
@@ -20,7 +19,7 @@ export const Web3StakingInterface = () => {
     const [stakeFilteredHistory, setStakeFilteredHistory] = useState<string[]>([]);
 
     const StakingContract = SmartContractManager('StakingDirectory' as Contract).then((data) => data);
-    const TokenContract_TST = TokenContractManager(tokenAddress, _network).then((data) => data);
+    const TokenContract_TST = TokenContractManager(tokenAddress).then((data) => data);
 
     useEffect(() => {
         getPositions();

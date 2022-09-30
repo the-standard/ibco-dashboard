@@ -6,30 +6,39 @@ import SubNavigation from '../components/shared/navigation/SubNavigation';
 import NextHeadComponent from '../components/shared/NextHeadComponent';
 import { Web3SwapInterface } from '../components';
 import { TokenInformationInterface, BondingCurveInterface } from '../components';
-import { Contract, SmartContractManager, TOKENS } from '../Utils';
+import { Contract, SmartContractManager, TOKENS, Web3Manager } from '../Utils';
 import Footer from '../components/shared/footer';
-import { useWeb3Context } from '../context';
 import { GetJsonAddresses } from '../Utils/ContractManager';
 import { useEffect, useState } from 'react';
 
 const Stage1: NextPage = () => {
+  const web3Interface = Web3Manager();
   const [seuroAddress, setSeuroAddress] = useState('');
-  const { network } = useWeb3Context();
-  const _network = network?.name || 'goerli';
+  const [network, setNetwork] = useState<string>();
   const BondingCurveContract = SmartContractManager('BondingCurve' as Contract).then((data) => { return data });
 
   useEffect(() => {
-    getTokenAddress();
+    networkRetrieval();
+  }, []);
+
+  useEffect(() => {
+    network !== undefined && getTokenAddress();
   }, [network]);
 
   const getTokenAddress = async() => {
+    console.log('network', network)
     //@ts-ignore
     return seuroAddress === '' ? await GetJsonAddresses().then((data:never) => {
-      setSeuroAddress(data[_network]['TOKEN_ADDRESSES']['SEURO']);
+      //@ts-ignore
+      setSeuroAddress(data[network]['TOKEN_ADDRESSES']['SEURO']);
       return seuroAddress;
     })
     :
     seuroAddress
+  }
+
+  const networkRetrieval = async() => {
+    await web3Interface.eth.net.getNetworkType().then((network) => setNetwork(network));
   }
 
   return (

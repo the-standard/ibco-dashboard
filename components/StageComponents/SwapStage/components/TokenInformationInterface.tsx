@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useWeb3Context } from "../../../../context";
 import { Contract, ConvertFrom, SmartContractManager } from "../../../../Utils";
-//import { Contract, ConvertFrom, SmartContractManager } from "../Utils";
 
 type tokeninfo = {
     ibcoTotalSupply: number,
@@ -17,7 +16,7 @@ type tokeninfo = {
 // @ts-ignore
 export const TokenInformationInterface = ({bondingCurveContract}) => {
     const { web3Provider } = useWeb3Context();
-    const StandardTokenContract = SmartContractManager('StandardTokenGateway' as Contract).then((data) => { return data });
+    const StandardTokenContract = SmartContractManager('StandardTokenGateway' as Contract).then((data) => data);
     const [tokenInfo, setTokenInfo] = useState<tokeninfo>({
         ibcoTotalSupply: 0,
         maxSupply: 0,
@@ -36,8 +35,9 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
     // MAIN FUNCTIONS
 
     const getAllTokenInfo = async () => {
+        const bondingCurveContractInit = await bondingCurveContract;
         // @ts-ignore
-        await(await bondingCurveContract).methods.ibcoTotalSupply().call()
+        bondingCurveContractInit.methods.ibcoTotalSupply().call()
             .then((data:never) => {
                 data > 0 && getMarketCap(data);
 
@@ -47,7 +47,7 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
                 }));
             });
         // @ts-ignore
-        await(await bondingCurveContract).methods.maxSupply().call()
+        bondingCurveContractInit.methods.maxSupply().call()
             .then((data:never) => {
                 setTokenInfo(prevState => ({
                     ...prevState,
@@ -74,8 +74,10 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
     };
 
     const getTstSeuroPrice = async () => {
+        const standardTokenContractInit = await StandardTokenContract;
+        console.log('standardTokenContractInit', standardTokenContractInit)
         //@ts-ignore
-        await (await StandardTokenContract).methods.priceTstEur().call().then((data:never) => {
+        standardTokenContractInit.methods.priceTstEur().call().then((data:never) => {
                 setTokenInfo(prevState => ({
                     ...prevState,
                     tstSeuroPrice: data

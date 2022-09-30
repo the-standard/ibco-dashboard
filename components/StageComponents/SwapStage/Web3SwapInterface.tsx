@@ -19,10 +19,11 @@ import Dropdown from '../../shared/uiElements/Dropdown/Dropdown';
 import { GetJsonAddresses } from '../../../Utils/ContractManager';
 
 export function Web3SwapInterface() {
-  const { address, network, web3Provider } = useWeb3Context();
+  const { address, web3Provider } = useWeb3Context();
   const [contractAddresses, setContractAddresses] = useState({});
   const [from, setFrom] = useState('0');
   const [to, setTo] = useState(0.0);
+  const [network, setNetwork] = useState<string>();
   const [token, setToken] = useState({token: TOKENS.HUMAN_READABLE.ETH, address: ''});
   const [tokenDecimal, setTokenDecimal] = useState(0);
   const [allowance, setAllowance] = useState(0);
@@ -35,10 +36,9 @@ export function Web3SwapInterface() {
 
   // CONTRACT MANAGER INIT
   const web3Interface = Web3Manager();
-  const _network = network?.name || 'goerli';
   const SmartContract = SmartContractManager('SEuroOffering' as Contract).then((data) => data);
   const TokenManager = SmartContractManager('TokenManager' as Contract).then((data) => data);
-  const TokenContract = TokenContractManager(token.address, _network).then((data) => data);
+  const TokenContract = TokenContractManager(token.address).then((data) => data);
 
   // PRIVATE HELPERS
   const isTokenNotEth = (token:string) => {
@@ -47,6 +47,7 @@ export function Web3SwapInterface() {
 
   // MAIN UPDATE FUNCTIONS
   useEffect(() => {
+    networkRetrieval();
     getContractAddresses();
   }, []);
 
@@ -59,11 +60,11 @@ export function Web3SwapInterface() {
   }, [from, to, token, allowance, address, tokenApproved]);
 
   useEffect(() => {
-    if (Object.keys(contractAddresses).length !== 0) {
+    if (Object.keys(contractAddresses).length !== 0 && network !== undefined) {
       const _from:string = from || '0';
       const _deposit:number = ConvertTo(_from, tokenDecimal).toInt();
       //@ts-ignore
-      const contractAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['SEuroOffering'];
+      const contractAddress = contractAddresses[network]['CONTRACT_ADDRESSES']['SEuroOffering'];
 
       isTokenNotEth(token.token) ? setTokenApprove(_from !== '' && allowance >= _deposit) : setTokenApprove(true);
       //@ts-ignore
@@ -79,6 +80,10 @@ export function Web3SwapInterface() {
     getUsableTokens();
     changeTokenClickHandler(TOKENS.HUMAN_READABLE.ETH);
   }, [address]);
+
+  const networkRetrieval = async() => {
+    await web3Interface.eth.net.getNetworkType().then((network) => setNetwork(network));
+  }
 
   const getContractAddresses = async () => {
      Object.keys(contractAddresses).length === 0 ? await GetJsonAddresses().then((data) => {
