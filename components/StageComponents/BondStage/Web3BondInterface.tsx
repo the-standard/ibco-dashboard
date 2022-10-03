@@ -49,9 +49,9 @@ function Web3BondInterface() {
   const OperatorStage2Contract = SmartContractManager('OperatorStage2' as Contract).then((data) => { return data });
   const SmartContract = SmartContractManager('BondingEvent' as Contract).then((data) => { return data });
   //@ts-ignore
-  const TokenContract_other = TokenContractManager(otherTokenAddress, _network).then((data) => { return data });
+  const TokenContract_other = TokenContractManager(otherTokenAddress).then((data) => { return data });
     //@ts-ignore
-  const TokenContract_main = TokenContractManager(TOKENS.HUMAN_READABLE.SEURO as Tokens, network).then((data) => { return data });
+  const TokenContract_main = TokenContractManager(TOKENS.HUMAN_READABLE.SEURO as Tokens).then((data) => { return data });
   const otherTokenInfo = {
     otherTokenSymbol, 
     otherTokenDecimal

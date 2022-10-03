@@ -30,8 +30,7 @@ type TokenInformationType = {
 
 export const StakingHistoryListSelector = (stake:StakingObj) => {
     const StakingObj = stake.stake;
-    const { network, address } = useWeb3Context();
-    const _network = network?.name || 'goerli';
+    const { address } = useWeb3Context();
     const stakingContractInit = StakingContractManager(StakingObj.address).then((data) => data);
 
     const [tstTokenInfo, setTstTokenInfo] = useState<TokenInformationType>(defaultTokenObj);
@@ -79,7 +78,7 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
 
     const getTokenInformation = async (address:string) => {
         //@ts-ignore
-        const tokenContractInit = TokenContractManagerNoHooks(address, _network).then((data:never) => data);
+        const tokenContractInit = TokenContractManagerNoHooks(address).then((data:never) => data);
 
         const tokenInfoObj = {
             decimals: 0,

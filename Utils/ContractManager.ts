@@ -51,7 +51,8 @@ const getContractAddressessJson = async() => {
  * @returns {object} A Web3 interface for the given wallet network and connection
  */
 export const Web3Manager = () => {
-    const _interface = new Web3(Web3.givenProvider);
+    const provider = Web3.givenProvider;
+    const _interface = new Web3(provider);
 
     return _interface;
 }
@@ -101,7 +102,7 @@ export const TokenContractManager = async (token:string) => {
     //@ts-ignore
     const _network = await web3Interface.eth.net.getNetworkType().then((network) => network) || 'goerli';
     // @ts-ignore
-    const ERC20ABIItem:AbiItem = ERC20ABI; //getTokenAddressFor
+    const ERC20ABIItem:AbiItem = ERC20ABI;
     //@ts-ignore
     const tokenAddressMain = await GetJsonAddresses().then((data) => data[_network]['TOKEN_ADDRESSES'][token]);
     //@ts-ignore
@@ -124,19 +125,17 @@ export const TokenContractManager = async (token:string) => {
  */
 export const SmartContractManager = async (contract:Contract) => {
     const web3Interface = new Web3(Web3.givenProvider);
-    const _network = await web3Interface.eth.net.getNetworkType().then((network) => network) || null;
+    const _network = await web3Interface.eth.net.getNetworkType().then((network) => network) || 'goerli';
 
-    if(_network !== null) {
-        return await getContractABI(contract)
-                    .then(async (ABIData) => {
-                        return await GetJsonAddresses()
-                            .then(async (contractAddress) => {
-                                const _contract = new web3Interface.eth.Contract(ABIData['data'].abi, contractAddress[_network]['CONTRACT_ADDRESSES'][contract]);
-                                return _contract
-                            })
-                    })
-                    .catch((error) => console.log('unable to retrieve ABI data', error))
-    }
+    return await getContractABI(contract)
+                .then(async (ABIData) => {
+                    return await GetJsonAddresses()
+                        .then(async (contractAddress) => {
+                            const _contract = new web3Interface.eth.Contract(ABIData['data'].abi, contractAddress[_network]['CONTRACT_ADDRESSES'][contract]);
+                            return _contract
+                        })
+                })
+                .catch((error) => console.log('unable to retrieve ABI data', error))
 }
 
 /**
