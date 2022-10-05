@@ -35,10 +35,10 @@ export function Web3SwapInterface() {
 
   // CONTRACT MANAGER INIT
   const web3Interface = Web3Manager();
-  const _network = network?.name || 'goerli';
-  const SmartContract = SmartContractManager('SEuroOffering' as Contract, _network).then((data) => data);
-  const TokenManager = SmartContractManager('TokenManager' as Contract, _network).then((data) => data);
-  const TokenContract = TokenContractManager(token.address, _network).then((data) => data);
+  const _network = network?.name === 'homestead' ? 'main' : network?.name || 'goerli';
+  const SmartContract = _network && SmartContractManager('SEuroOffering' as Contract, _network).then((data) => data);
+  const TokenManager = _network && SmartContractManager('TokenManager' as Contract, _network).then((data) => data);
+  const TokenContract = _network && TokenContractManager(token.address, _network).then((data) => data);
 
   // PRIVATE HELPERS
   const isTokenNotEth = (token:string) => {
@@ -47,7 +47,7 @@ export function Web3SwapInterface() {
 
   // MAIN UPDATE FUNCTIONS
   useEffect(() => {
-    getContractAddresses();
+    _network !== undefined && getContractAddresses();
   }, []);
 
   useEffect(() => {
