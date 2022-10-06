@@ -32,13 +32,16 @@ export function Web3SwapInterface() {
   const [loading, setLoading] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
   const [ddTokens, setDDTokens] = useState({});
+  const [_network, setNetwork] = useState<string>();
 
   // CONTRACT MANAGER INIT
   const web3Interface = Web3Manager();
-  const _network = network?.name === 'homestead' ? 'main' : network?.name || 'goerli';
-  const SmartContract = _network && SmartContractManager('SEuroOffering' as Contract, _network).then((data) => data);
-  const TokenManager = _network && SmartContractManager('TokenManager' as Contract, _network).then((data) => data);
-  const TokenContract = _network && TokenContractManager(token.address, _network).then((data) => data);
+  //@ts-ignore
+  const SmartContract = _network !== undefined && SmartContractManager('SEuroOffering' as Contract, _network).then((data) => data);
+  //@ts-ignore
+  const TokenManager = _network !== undefined && SmartContractManager('TokenManager' as Contract, _network).then((data) => data);
+  //@ts-ignore
+  const TokenContract = _network !== undefined && TokenContractManager(token.address, _network).then((data) => data);
 
   // PRIVATE HELPERS
   const isTokenNotEth = (token:string) => {
@@ -47,7 +50,11 @@ export function Web3SwapInterface() {
 
   // MAIN UPDATE FUNCTIONS
   useEffect(() => {
-    _network !== undefined && getContractAddresses();
+    if (_network === undefined) {
+      setNetwork(network?.name === 'homestead' ? 'main' : network?.name)
+    } else {
+      getContractAddresses();
+    }
   }, []);
 
   useEffect(() => {
@@ -69,7 +76,7 @@ export function Web3SwapInterface() {
       //@ts-ignore
       (isTokenNotEth(token.token) && address && contractAddress) && checkAllowance(address, contractAddress);
     }
-  }, [network, from])
+  }, [from])
 
   useEffect(() => {
     from !== '0' ? getTokenAmount() : setTo(0);
@@ -91,7 +98,7 @@ export function Web3SwapInterface() {
     const tokenManager = await (await TokenManager);
 
     // @ts-ignore
-    web3Provider && tokenManager.methods.getAcceptedTokens().call().then((data) => {
+    web3Provider && _network !== undefined && tokenManager.methods.getAcceptedTokens().call().then((data) => {
       setDDTokens(data);
     });
   }
@@ -123,7 +130,7 @@ export function Web3SwapInterface() {
                           :
                           accounts;
     //@ts-ignore
-    web3Provider && await (await TokenManager).methods.getTokenDecimalFor(token).call().then((decimal:never) => {
+    web3Provider && _network !== undefined && await (await TokenManager).methods.getTokenDecimalFor(token).call().then((decimal:never) => {
       const _decimal = parseInt(decimal) === 0 ? 18 : parseInt(decimal);
       setTokenDecimal(_decimal);
     });

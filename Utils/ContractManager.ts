@@ -123,12 +123,14 @@ export const TokenContractManager = async (token:string, network:string) => {
  * @returns {object} A contract object from Web3
  */
 export const SmartContractManager = async (contract:Contract, network:string) => {
+    const _network = network === 'homestead' ? 'main' : network;
+    console.log('_network', _network);
     const web3Interface = new Web3(Web3.givenProvider);
 
     const [contractMain, setContract] = useState({});
     const [contractType, setContractType] = useState('');
 
-    if(Object.keys(contractMain).length === 0 && contractType !== contract) {
+    if(Object.keys(contractMain).length === 0 && contractType !== contract && _network !== undefined) {
         return await getContractABI(contract)
                         .then(async (ABIData) => {
                             setContractType(contract);
@@ -136,7 +138,7 @@ export const SmartContractManager = async (contract:Contract, network:string) =>
                             return await GetJsonAddresses()
                                 .then(async (contractAddress) => {
                                     
-                                    const _contract = new web3Interface.eth.Contract(ABIData['data'].abi, contractAddress[network]['CONTRACT_ADDRESSES'][contract]);
+                                    const _contract = new web3Interface.eth.Contract(ABIData['data'].abi, contractAddress[_network]['CONTRACT_ADDRESSES'][contract]);
 
                                     setContract(_contract);
                                     
