@@ -16,9 +16,8 @@ type tokeninfo = {
 
 // @ts-ignore
 export const TokenInformationInterface = ({bondingCurveContract}) => {
-    const { web3Provider, network } = useWeb3Context();
-    const _network = network?.name || 'goerli';
-    const StandardTokenContract = SmartContractManager('StandardTokenGateway' as Contract, _network).then((data) => { return data });
+    const { web3Provider } = useWeb3Context();
+    const StandardTokenContract = SmartContractManager('StandardTokenGateway' as Contract).then((data) =>  data);
     const [tokenInfo, setTokenInfo] = useState<tokeninfo>({
         ibcoTotalSupply: 0,
         maxSupply: 0,
@@ -75,6 +74,7 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
     };
 
     const getTstSeuroPrice = async () => {
+        console.log('await StandardTokenContract', await StandardTokenContract);
         //@ts-ignore
         await (await StandardTokenContract).methods.priceTstEur().call().then((data:never) => {
                 setTokenInfo(prevState => ({

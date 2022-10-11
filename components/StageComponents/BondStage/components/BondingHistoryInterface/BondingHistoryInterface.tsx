@@ -16,8 +16,7 @@ type BondingHistoryInterfaceType = {
 }
 
 export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHistoryInterfaceType) => {
-    const { address, network, web3Provider } = useWeb3Context();
-    const _network = network?.name || 'goerli';
+    const { address, web3Provider } = useWeb3Context();
     const [userBonds, setUserBonds] = useState([]);
     const [claimAmount, setClaimAmount] = useState('0');
     const [tstTokenInfo, setTstTokenInfo] = useState({
@@ -25,9 +24,9 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
         tokenSymbol: '',
         tokenDecimal: 0
     });
-    const BondStorageContract = SmartContractManager('BondStorage', _network).then((data) => data);
-    const TSTTokenInfoContract = SmartContractManager('StandardTokenGateway', _network).then((data) => data);
-    const TokenContract_TST = TokenContractManager(tstTokenInfo.tokenAddress, _network).then((data) => data);
+    const BondStorageContract = SmartContractManager('BondStorage').then((data) => data);
+    const TSTTokenInfoContract = SmartContractManager('StandardTokenGateway').then((data) => data);
+    const TokenContract_TST = TokenContractManager(tstTokenInfo.tokenAddress).then((data) => data);
 
     useEffect(() => {
         getUserBonds();

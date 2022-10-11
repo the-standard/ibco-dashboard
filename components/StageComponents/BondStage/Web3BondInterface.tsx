@@ -45,13 +45,13 @@ function Web3BondInterface() {
   const [loading, setLoading] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
   // CONTRACT MANAGER INIT
-  const _network = network?.name || 'goerli';
-  const OperatorStage2Contract = SmartContractManager('OperatorStage2' as Contract, _network).then((data) => { return data });
-  const SmartContract = SmartContractManager('BondingEvent' as Contract, _network).then((data) => { return data });
+  const _network = network?.name === 'homestead' ? 'main' : network?.name || 'goerli';
+  const OperatorStage2Contract = SmartContractManager('OperatorStage2' as Contract).then((data) =>  data);
+  const SmartContract = SmartContractManager('BondingEvent' as Contract).then((data) =>  data);
   //@ts-ignore
-  const TokenContract_other = TokenContractManager(otherTokenAddress, _network).then((data) => { return data });
+  const TokenContract_other = otherTokenAddress !== null && TokenContractManager(otherTokenAddress).then((data) =>  data);
     //@ts-ignore
-  const TokenContract_main = TokenContractManager(TOKENS.HUMAN_READABLE.SEURO as Tokens, network).then((data) => { return data });
+  const TokenContract_main = TokenContractManager(TOKENS.HUMAN_READABLE.SEURO as Tokens).then((data) => data);
   const otherTokenInfo = {
     otherTokenSymbol, 
     otherTokenDecimal
@@ -63,8 +63,7 @@ function Web3BondInterface() {
     getBondingLengths();
     getContractAddresses();
     getOtherTokenAddress();
-    checkAllowances();
-  }, [web3Provider]);
+  }, []);
 
   useEffect(() => {
     const allowanceOther = ConvertFrom(allowance.other, otherTokenDecimal).toFloat();
@@ -84,6 +83,7 @@ function Web3BondInterface() {
 
   useEffect(() => {
     getOtherContractAddress();
+    checkAllowances();
   }, [otherTokenAddress])
 
   // tokens are currently fixed to SEURO and USDT
@@ -133,9 +133,9 @@ function Web3BondInterface() {
     const MainToken = await TokenContract_main;
     const OtherToken = await TokenContract_other;
 
-    if (MainToken && OtherToken && address && Object.keys(contractAddresses).length !== 0) {
+    if (otherTokenAddress !== null && MainToken && OtherToken && address && Object.keys(contractAddresses).length !== 0) {
       //@ts-ignore
-      const BondingEventContractAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['BondingEvent'];
+      const BondingEventContractAddress = await contractAddresses[_network]['CONTRACT_ADDRESSES']['BondingEvent'];
       //@ts-ignore
       MainToken.methods.allowance(address, BondingEventContractAddress).call().then((data:never) => {
         setAllowance(prevState => ({...prevState, main: parseInt(data)}));
@@ -184,7 +184,6 @@ function Web3BondInterface() {
     if(address && tokenContract) {
       //@ts-ignore
       tokenContract.methods.balanceOf(address).call().then((data:never) => {
-        console.log('balanceOf', data);
         token === 'other' ? setBalance(prevState => ({...prevState, other: data})) : setBalance(prevState => ({...prevState, main: data}));
       });
     }
@@ -245,8 +244,11 @@ function Web3BondInterface() {
   }
 
   const getBondingLengths = async() => {
+    const TokenContractMain = await TokenContract_main;
+    const OperatorStage2 = await OperatorStage2Contract;
+
     // @ts-ignore
-    web3Provider && await (await OperatorStage2Contract).methods.showRates().call()
+    web3Provider && await OperatorStage2.methods.showRates().call()
     .then((data:Rate[]) => {
       const ArrayCopy = [...data];
       const sortedRates = ArrayCopy.sort((a,b) => (parseInt(a.duration) > parseInt(b.duration)) ? 1 : ((parseInt(b.duration) > parseInt(a.duration)) ? -1 : 0))
@@ -254,18 +256,18 @@ function Web3BondInterface() {
       setRates(sortedRates);
     });
     // @ts-ignore
-    await (await TokenContract_main).methods.decimals().call()
+    web3Provider && await TokenContractMain.methods.decimals().call()
     .then((data:never) => {
       setmainTokenDecimal(data);
     }).catch((error:never) => {
-      console.log('error retrieving main token symbol', error);
+      console.log('error retrieving main token decimal', error);
     });
   }
 
   const getOtherTokenAddress = async () => {
-    const smartContract = await (await SmartContract);
+    const smartContract = await SmartContract;
     // @ts-ignore
-    smartContract && await (await SmartContract).methods.OTHER_ADDRESS().call()
+    smartContract && await smartContract.methods.OTHER_ADDRESS().call()
     .then(async (data:never) => {
       setOtherTokenAddress(data);
     }).catch((error:never) => {

@@ -7,12 +7,15 @@ import TagManager from 'react-gtm-module';
 import { useEffect } from 'react'
 // import { Web3Button } from '../components'
 
+function getInitialProps() {
+  return {};  
+}
+
 function MyApp({ Component, pageProps }: AppProps) {
   //const {web3Provider} = useWeb3Context();
 
   useEffect(() => {
       TagManager.initialize({ gtmId: 'GTM-5G25J82' });
-
   }, []);
 
   return (
@@ -37,5 +40,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     </Web3ContextProvider>
   )
 }
+
+MyApp.getInitialProps = getInitialProps;
 
 export default MyApp

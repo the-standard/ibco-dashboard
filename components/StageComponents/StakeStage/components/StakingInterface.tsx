@@ -36,10 +36,9 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   const [transactionData, setTransactionData] = useState(null);
 
   // CONTRACT MANAGER INIT
-  const _network = network?.name || 'goerli';
   const TokenContract = StakingContractManager(tokenAddress as Contract).then((data) => data);
   const stakingContract = StakingContractManager(contractAddress as Contract).then((data) => data);
-  const TokenContract_TST = TokenContractManager(tokenAddress, _network).then((data) => data);
+  const TokenContract_TST = TokenContractManager(tokenAddress).then((data) => data);
 
   // PRIVATE HELPERS
 
