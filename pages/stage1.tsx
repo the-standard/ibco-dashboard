@@ -67,6 +67,6 @@ const Stage1: NextPage = () => {
       <Footer />
     </div>
   )
-}
+} 
 
 export default Stage1
