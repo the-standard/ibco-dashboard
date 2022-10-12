@@ -5,12 +5,14 @@ import { useWeb3Context } from '../../../context'
 export function Web3Address() {
   const { address, network } = useWeb3Context();
 
+  const _network = network?.name === 'homestead' ? 'main' : network?.name;
+
   return (
     <div className="flex items-center justify-center">
           <span className="walletNetwork-container pl-4 text-right text-sm font-light">
           {
             // @ts-ignore
-          network['name']
+            _network
           }
           </span>
           <span className="walletAddress-container pl-4 text-right text-sm font-light">

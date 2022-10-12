@@ -1,10 +1,11 @@
-import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { Web3ContextProvider } from '../context'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import TagManager from 'react-gtm-module';
-import { useEffect } from 'react'
+import { useEffect } from 'react';
+import GlobalCSS from '../styles/globalStyles';
+import 'react-toastify/scss/main.scss'
 // import { Web3Button } from '../components'
 
 function getInitialProps() {
@@ -21,6 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Web3ContextProvider>
       <>
+      <GlobalCSS />
       {/* {
         !web3Provider && <div className="connectModal mx-auto">
             <p className="mb-4">You must connect your wallet to continue</p>

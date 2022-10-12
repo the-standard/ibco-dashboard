@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/router";
 import { TOKENS } from "../../../Utils";
+import { StyledSubNav } from "./styles/SubNavStyles";
 
 const subNavigation = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -18,8 +19,9 @@ const subNavigation = () => {
             {routes.map((route) => {
                 const active = router.pathname === `/${route.route}`;
                 return (
+                    // eslint-disable-next-line @next/next/link-passhref
                     <Link href={`/${route.route}`} key={route.route}>
-                        <a className={`${baseClasses} ${active ? 'active' : ''}`}>{route.canonical}</a>
+                        <StyledSubNav className={`${baseClasses} ${active ? 'active' : ''}`}>{route.canonical}</StyledSubNav>
                     </Link>
                 )
             })}

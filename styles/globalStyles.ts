@@ -1,12 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+import { createGlobalStyle } from 'styled-components'
 
-@layer base {
+export default createGlobalStyle`
   html {
     width: 100%;
     height: 100%;
     background-color: black;
+    font-family: 
   }
 
   svg {
@@ -15,17 +14,6 @@
 
   a {
     text-decoration: underline;
-    color: #99f9ff;
-  }
-
-  a.subnav {
-    text-decoration: none;
-    color: #616161;
-    font-size: 14px;
-  }
-
-  a.subnav.active {
-    font-weight: bold;
     color: #99f9ff;
   }
 
@@ -305,4 +293,4 @@
     align-items: center;
     justify-content: center;
   }
-}
+`
