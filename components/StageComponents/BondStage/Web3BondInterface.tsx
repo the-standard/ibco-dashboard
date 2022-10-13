@@ -18,6 +18,8 @@ import {
 import { GetJsonAddresses } from '../../../Utils/ContractManager';
 import { RateSelectionButton } from './components/RateSelectionButton/RateSelectionButton';
 import { BondingHistoryInterface } from './components/BondingHistoryInterface/BondingHistoryInterface';
+import DescriptionContainer from '../../shared/uiElements/DescriptionContainer/DescriptionContainer';
+import { StyledBondingHistoryButton, StyledBondingHistoryButtonContainer, StyledInputContainers, StyledNoFormatP, StyledPContainer, StyledRateSelectionContainer, StyledTransactionButton, StyledTransactionButtonContainer } from './Styles';
 
 type Rate = {
   duration: string, 
@@ -332,37 +334,40 @@ function Web3BondInterface() {
 
   return !showHistoryInterface ? (
     <>
-    <div className="convertInput mx-auto text-center p-5 mb-4 md:w-6/12">
-      <p className="descriptionCopy mb-6 px-10"><b>What is sEURO bonding?</b> Earn TST when you bond your {TOKENS.DISPLAY.SEURO} and {otherTokenSymbol}. When your bond expires, you will receive the total EURO value of your bonded assets (paid in TST). Plus a generous reward (also in TST)!</p>
-      <button className="mx-auto py-2 px-16 bondingHistoryButton" onClick={bondingHistoryClickHandler}>View History</button>
-    </div>
+    <DescriptionContainer>
+      <b>What is sEURO bonding?</b> Earn TST when you bond your {TOKENS.DISPLAY.SEURO} and {otherTokenSymbol}. When your bond expires, you will receive the total EURO value of your bonded assets (paid in TST). Plus a generous reward (also in TST)!
+
+      <StyledBondingHistoryButtonContainer>
+        <StyledBondingHistoryButton onClick={bondingHistoryClickHandler}>View History</StyledBondingHistoryButton>
+      </StyledBondingHistoryButtonContainer>
+    </DescriptionContainer>
 
     <div className="convertInput mx-auto grid grid-flow-row auto-rows-max p-5 py-8 md:w-6/12">
       { web3Provider ? (
         <>
         <span>
-          <p className="p-0 m-0 text-sm">Bonding asset 1 - <span>(available: {balance.main !== '0' ? `${ConvertFrom(balance.main.toString(), parseInt(mainTokenDecimal.toString())).toFloat().toFixed(2)} ${TOKENS.DISPLAY.SEURO}`: `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`})</span></p>
-          <div className="container w-full">
-            <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
-              <input className="w-9/12" type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${TOKENS.DISPLAY.SEURO} amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
-              <div className="dropdownSelect py-2 text-center w-3/12">
-              <p className="mx-auto">{TOKENS.DISPLAY.SEURO}</p>
+          <StyledPContainer>Bonding asset 1 - <span>(available: {balance.main !== '0' ? `${ConvertFrom(balance.main.toString(), parseInt(mainTokenDecimal.toString())).toFloat().toFixed(2)} ${TOKENS.DISPLAY.SEURO}`: `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`})</span></StyledPContainer>
+          <div>
+            <StyledInputContainers>
+              <input type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${TOKENS.DISPLAY.SEURO} amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
+              <div className="dropdownSelect">
+                <StyledNoFormatP>{TOKENS.DISPLAY.SEURO}</StyledNoFormatP>
               </div>
-            </div>
+            </StyledInputContainers>
           </div>
 
-          <p className="p-0 m-0 text-sm">Bonding asset 2 - (available: {balance.other !== '0' ? `${ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2)} ${otherTokenSymbol}` : `Warning: you do not have enough ${otherTokenSymbol}`})</p>
-          <div className="container w-full">
-            <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
+          <StyledPContainer>Bonding asset 2 - (available: {balance.other !== '0' ? `${ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2)} ${otherTokenSymbol}` : `Warning: you do not have enough ${otherTokenSymbol}`})</StyledPContainer>
+          <div>
+            <StyledInputContainers>
               <input className="w-9/12" type='number' step="any" readOnly={true} placeholder={`${otherTokenSymbol} amount`} value={to !== '0' ? toDisplay : ''} />
-              <div className="dropdownSelect py-2 text-center w-3/12">
-                <p className="mx-auto">{otherTokenSymbol ? otherTokenSymbol : 'Loading...'}</p>
+              <div className="dropdownSelect">
+                <StyledNoFormatP>{otherTokenSymbol ? otherTokenSymbol : 'Loading...'}</StyledNoFormatP>
               </div>
-            </div>
+            </StyledInputContainers>
           </div>
         </span>
         
-        <div className="mb-8 mt-1 flex flex-cols justify-between">
+        <StyledRateSelectionContainer>
           {
             rates.length > 0 ? rates.map((rate:Rate, index) => {
               return (
@@ -372,20 +377,20 @@ function Web3BondInterface() {
             :
             'Loading Rates...'
           }
-        </div>
+        </StyledRateSelectionContainer>
             {
-              <div className="mb-8 mt-1 flex flex-rows w-full justify between">
+              <StyledTransactionButtonContainer>
                 {
                   <>
-                  <button className="w-6/12 px-2 py-1 mr-4 font-light" disabled={disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${TOKENS.DISPLAY.SEURO} Approved` : loading ? 'loading...' : `Approve ${TOKENS.DISPLAY.SEURO}`}</button>
-                  <button className="w-6/12 px-2 py-1 font-light" disabled={disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${otherTokenSymbol} Approved` : loading ? 'loading...' : `Approve ${otherTokenSymbol}`}</button>
+                  <StyledTransactionButton className="halfWidth" disabled={disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${TOKENS.DISPLAY.SEURO} Approved` : loading ? 'loading...' : `Approve ${TOKENS.DISPLAY.SEURO}`}</StyledTransactionButton>
+                  <StyledTransactionButton className="halfWidth" disabled={disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${otherTokenSymbol} Approved` : loading ? 'loading...' : `Approve ${otherTokenSymbol}`}</StyledTransactionButton>
                   </>
                 }
-              </div>
+              </StyledTransactionButtonContainer>
             }
             
             {            
-            <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledSend} onClick={() => SendBondTransaction()}>{loading ? 'loading...' : transactionData ? 'Start Another Bond' : 'Start Bond'}</button>
+            <StyledTransactionButton disabled={disabledSend} onClick={() => SendBondTransaction()}>{loading ? 'loading...' : transactionData ? 'Start Another Bond' : 'Start Bond'}</StyledTransactionButton>
             }
             {// @ts-ignore
             transactionData && <button className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</button>

@@ -4,23 +4,25 @@ import Footer from '../components/shared/footer'
 import ConnectNav from '../components/shared/navigation/ConnectNav'
 import SubNavigation from '../components/shared/navigation/SubNavigation'
 import NextHeadComponent from '../components/shared/NextHeadComponent'
+import { StyledGlobalContainer } from '../components/shared/uiElements/styles/SharedStylesGlobal'
+import { StyledMainContainer } from '../components/StageComponents/BondStage/Styles'
 import Web3BondInterface from '../components/StageComponents/BondStage/Web3BondInterface'
 
 //@ts-ignore
 const Stage2: NextPage = () => {
   return (
-    <div>
+    <StyledGlobalContainer>
       <NextHeadComponent title="The Standard | sEURO Bonding" description='sEURO Bonding' />
       
       <ConnectNav />
       <SubNavigation />
 
-      <main className="container mx-auto w-full">
+      <StyledMainContainer>
         <Web3BondInterface />
-      </main>
+      </StyledMainContainer>
 
       <Footer />
-    </div>
+    </StyledGlobalContainer>
   )
 }
 
