@@ -3,10 +3,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
 import { useWeb3Context } from "../../../context";
+import { isMobile } from "react-device-detect";
 import { Contract, SmartContractManager, StakingContractManager, TokenContractManager } from "../../../Utils";
 import { StakingList } from "./components/StakingList";
 import { StakingInterface } from "./components/StakingInterface";
 import { StakingHistoryList } from './components/StakingHistoryList';
+import DescriptionContainer from "../../shared/uiElements/DescriptionContainer/DescriptionContainer";
+import { StyledAddressHolderP, StyledCopyButton, StyledSupplyContainer } from "../SwapStage/Styles";
+import { toast } from "react-toastify";
+import { Copy } from "react-feather";
 
 export const Web3StakingInterface = () => {
     const { address, web3Provider } = useWeb3Context();
@@ -17,9 +22,16 @@ export const Web3StakingInterface = () => {
     const [tokenSymbol, setTokenSymbol] = useState('');
     const [stakeHistory, setStakeHistory] = useState<string[]>([]);
     const [stakeFilteredHistory, setStakeFilteredHistory] = useState<string[]>([]);
+    const [mobile, setMobile] = useState();
+    const [copied, setCopied] = useState(false);
 
     const StakingContract = SmartContractManager('StakingDirectory' as Contract).then((data) => data);
     const TokenContract_TST = TokenContractManager(tokenAddress).then((data) => data);
+
+    useEffect(() => {
+        //@ts-ignore
+        setMobile(isMobile)
+      }, [setMobile]);
 
     useEffect(() => {
         getPositions();
@@ -82,18 +94,21 @@ export const Web3StakingInterface = () => {
        
     }
 
+    const copyToClipboardClickFunction = () => {
+        navigator.clipboard.writeText(tokenAddress).then(() => {toast.success('Copied to clipboard, please import token into MetaMask'); setCopied(true)}).catch(() => {toast.error('unable to copy address, please manually select and copy'); setCopied(false)});
+    }
+
    return !ShowStakingInterface ? (
     <>
-    <div className="mx-auto mb-4 lg:w-6/12">
-        <div className="convertInput text-center p-5">
-        <p className="descriptionCopy"><b>What is staking?</b> Similar to the bonding event, a user can transfer their TST during limited time periods. This means that there will be one or multiple campaigns throughout the year where staking is possible with varying interest rates. If the user decides to participate then, at the end of the period, the initial amount of TST is returned to the user and an interest payment on top of it, paid in sEURO.</p>
-        </div>
-    </div>
+    <DescriptionContainer>
+        <b>What is staking?</b> Similar to the bonding event, a user can transfer their TST during limited time periods. This means that there will be one or multiple campaigns throughout the year where staking is possible with varying interest rates. If the user decides to participate then, at the end of the period, the initial amount of TST is returned to the user and an interest payment on top of it, paid in sEURO.
+    </DescriptionContainer>
 
     <div className="mx-auto lg:w-6/12">
-        <div className="lg:flex supplyContainer mb-10 mr-6 px-5 py-3 w-full ">
-            <h2>{tokenSymbol} Address:</h2> <p className="ml-20 addressHolder">{tokenAddress}</p>
-        </div>
+        <StyledSupplyContainer>
+            <h2>{tokenSymbol} Address:</h2> <StyledAddressHolderP>{tokenAddress}</StyledAddressHolderP>
+            { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <Copy size={20} onClick={copyToClipboardClickFunction} className='copyButton' />}
+        </StyledSupplyContainer>
 
         <div className="w-full p-5 p-0 my-4 grid grid-cols-5 gap-1">
             <span>Staking Period</span>

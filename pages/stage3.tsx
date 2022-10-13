@@ -4,22 +4,24 @@ import Footer from '../components/shared/footer'
 import ConnectNav from '../components/shared/navigation/ConnectNav'
 import SubNavigation from '../components/shared/navigation/SubNavigation'
 import NextHeadComponent from '../components/shared/NextHeadComponent'
+import { StyledGlobalContainer } from '../components/shared/uiElements/styles/SharedStylesGlobal'
+import { StyledMainContainer } from '../components/StageComponents/StakeStage/Styles'
 
 const Stage3: NextPage = () => {
 
   return (
-    <div>
+    <StyledGlobalContainer>
       <NextHeadComponent title="The Standard | TST Staking" description='TST Staking' />
 
       <ConnectNav />
       <SubNavigation />
 
-      <main>
+      <StyledMainContainer>
         <Web3StakingInterface />
-      </main>
+      </StyledMainContainer>
       
       <Footer />
-    </div>
+    </StyledGlobalContainer>
   )
 }
 

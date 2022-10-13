@@ -1,3 +1,14 @@
-import styled from 'styled-components';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 
-export const StyledContainer = styled.div``;
+import styled from 'styled-components';
+import media from '../../../styles/media';
+
+export const StyledMainContainer = styled.main`
+    margin: 0 auto;
+    width: 100%;
+
+    ${media.desktop`
+        width: 46%;
+    `}
+`;

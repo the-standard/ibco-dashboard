@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/router";
 import { TOKENS } from "../../../Utils";
-import { StyledSubNav, StyledSubNavContainer, StyledSubNavIndicatorContainer, StyledSubNavIndicatorInnerPip, StyledSubNavIndicatorOuterPip, StyledSubNavIndicatorPip } from "./styles/SubNavStyles";
+import { StyledSubNav, StyledSubNavContainer, StyledSubNavIndicatorContainer, StyledSubNavIndicatorInnerPip, StyledSubNavIndicatorOuterPip } from "./styles/SubNavStyles";
 
 const subNavigation = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
