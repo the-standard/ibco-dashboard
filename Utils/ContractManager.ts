@@ -63,7 +63,8 @@ export const Web3Manager = () => {
  * @returns {object} A contract object from Web3
  */
 export const TokenContractManager = async (token:string) => {
-    const web3Interface = new Web3(Web3.givenProvider);
+    
+    const web3Interface = Web3Manager();
     //@ts-ignore
     const _network = await web3Interface.eth.net.getNetworkType() || 'goerli';
     // @ts-ignore
@@ -90,7 +91,7 @@ export const TokenContractManager = async (token:string) => {
  * @returns {object} A contract object from Web3
  */
  export const TokenContractManagerNoHooks = async (token:string) => {
-    const web3Interface = new Web3(Web3.givenProvider);
+    const web3Interface = Web3Manager();
     //@ts-ignore
     const _network = await web3Interface.eth.net.getNetworkType() || 'goerli';
     // @ts-ignore
@@ -116,7 +117,7 @@ export const TokenContractManager = async (token:string) => {
  * @returns {object} A contract object from Web3
  */
 export const SmartContractManager = async (contract:Contract) => {
-    const web3Interface = new Web3(Web3.givenProvider);
+    const web3Interface = Web3Manager();
     const _network = await web3Interface.eth.net.getNetworkType() || 'goerli';
 
     return await getContractABI(contract)
@@ -140,7 +141,7 @@ export const SmartContractManager = async (contract:Contract) => {
  * @returns {object} A contract object from Web3
  */
 export const StakingContractManager = async (contractAddress:string) => {
-    const web3Interface = new Web3(Web3.givenProvider);
+    const web3Interface = Web3Manager();
 
         return await getContractABI('Staking')
                         .then(async (data) => {

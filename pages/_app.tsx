@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { AppProps } from 'next/app'
 import { Web3ContextProvider } from '../context'
 import { ToastContainer } from 'react-toastify'
@@ -18,6 +19,14 @@ function getInitialProps() {
 const theme = {
   colors: GlobalColors
 }
+//@ts-ignore
+function SafeHydrate({ children }) {
+  return (
+    <div suppressHydrationWarning>
+      {typeof window === 'undefined' ? null : children}
+    </div>
+  )
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
   //const {web3Provider} = useWeb3Context();
@@ -27,26 +36,28 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <Web3ContextProvider>
-      <ThemeProvider theme={theme}>
-      <GlobalCSS />
-      {/* {
-        !web3Provider && <div className="connectModal mx-auto">
-            <p className="mb-4">You must connect your wallet to continue</p>
-          <div>
-            <Web3Button />
-          </div>
-          </div>
-      } */}
-      <StyledGlobalBetaBanner>BETA Release! Testnet Only. Design to be updated soon. Report bugs <a href="https://bit.ly/ibco-bugs">here</a>!</StyledGlobalBetaBanner>
-        <Component {...pageProps} />
-        <ToastContainer
-          hideProgressBar
-          position="top-right"
-          autoClose={2000}
-        />
-      </ThemeProvider>
-    </Web3ContextProvider>
+    <SafeHydrate>
+      <Web3ContextProvider>
+        <ThemeProvider theme={theme}>
+        <GlobalCSS />
+        {/* {
+          !web3Provider && <div className="connectModal mx-auto">
+              <p className="mb-4">You must connect your wallet to continue</p>
+            <div>
+              <Web3Button />
+            </div>
+            </div>
+        } */}
+        <StyledGlobalBetaBanner>BETA Release! Testnet Only. Design to be updated soon. Report bugs <a href="https://bit.ly/ibco-bugs">here</a>!</StyledGlobalBetaBanner>
+          <Component {...pageProps} />
+          <ToastContainer
+            hideProgressBar
+            position="top-right"
+            autoClose={2000}
+          />
+        </ThemeProvider>
+      </Web3ContextProvider>
+    </SafeHydrate>
   )
 }
 

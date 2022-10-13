@@ -109,7 +109,8 @@ export const Web3StakingInterface = () => {
             <h2>{tokenSymbol} Address:</h2> <StyledAddressHolderP>{tokenAddress}</StyledAddressHolderP>
             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <Copy size={20} onClick={copyToClipboardClickFunction} className='copyButton' />}
         </StyledSupplyContainer>
-
+        {
+        !mobile &&
         <div className="w-full p-5 p-0 my-4 grid grid-cols-5 gap-1">
             <span>Staking Period</span>
             <span>Approx. Reward</span>
@@ -117,7 +118,8 @@ export const Web3StakingInterface = () => {
             <span>Maturity</span>
             <span>Status</span>
         </div>
-        <div className="container mx-auto w-full p-0">
+        }
+        <div>
             {
                 //@ts-ignore
                 stakeAddresses.length > 0 ? <StakingList stakes={stakeAddresses} clickFunction={stakeSelectionClickHandler} /> : `No stakes are available`
