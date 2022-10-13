@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+
 import { createGlobalStyle } from 'styled-components'
 
 export default createGlobalStyle`
@@ -5,7 +8,7 @@ export default createGlobalStyle`
     width: 100%;
     height: 100%;
     background-color: black;
-    font-family: 
+    font-family: 'Poppins', sans-serif;
   }
 
   svg {
@@ -20,6 +23,8 @@ export default createGlobalStyle`
   body {
     height: 100%;
     color: white;
+    margin: 0 auto;
+    font-size: 16px;
   }
 
   button {
@@ -34,6 +39,7 @@ export default createGlobalStyle`
     background: none !important;
     background-color: #282828;
     outline: none;
+    padding: 0.5em;
   }
 
   input::-webkit-outer-spin-button,
@@ -47,6 +53,11 @@ export default createGlobalStyle`
     outline: none;
   }
 
+  input[readOnly] {
+    border-color: ${props => props.theme.colors.superLightGrey} !important;
+    outline: none;
+  }
+
   input:focus {
     outline: none;
   }
@@ -56,17 +67,6 @@ export default createGlobalStyle`
     color: #282828;
     cursor: not-allowed;
     opacity: 60%;
-  }
-
-  p.descriptionCopy {
-    color: #bdbdbd;
-    font-size: 16px;
-    text-align: justify;
-    text-justify: inter-word;
-  }
-
-  .addressHolder {
-    overflow-wrap: anywhere;
   }
 
   .greyText {
@@ -92,10 +92,6 @@ export default createGlobalStyle`
     border-bottom-left-radius: 0;
   }
 
-  .convertInput {
-    background: #272726;
-  }
-
   select {
     padding-right: 0;
     padding-left: 0;
@@ -107,16 +103,25 @@ export default createGlobalStyle`
     border: 1px solid #99f9ff !important;
     position: relative;
     overflow: hidden;
+    padding: 0.5em;
+    width: 100%;
+    text-align: center;
+
+    &.readOnly {
+      border-color: ${props => props.theme.colors.superLightGrey} !important;
+      background: ${props => props.theme.colors.superLightGrey};
+      color: ${props => props.theme.colors.offWhite};
+    }
   }
 
-  .dropdownSelect select {
+  select.dropdownSelect {
     border: 0;
     position: relative;
     z-index: 99;
-    background: none;
+    font-size: 1em;
   }
 
-  .dropdownSelect select:after {
+  select.dropdownSelect:after {
     width: 0;
     height: 0;
     border-left: 6px solid transparent;
@@ -127,22 +132,6 @@ export default createGlobalStyle`
     right: 0;
     content: '';
     z-index: 98;
-  }
-
-  /*
-    walletAddress-container
-  */
-
-  .walletAddress-container {
-    background-color: #5e5e5e;
-    padding: 10px;
-  }
-
-  .walletNetwork-container {
-    background-color: #5e5e5e;
-    padding: 10px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
   }
 
   /*
@@ -205,29 +194,6 @@ export default createGlobalStyle`
   /*
     Supply container token information
   */
-
-  .supplyContainer {
-    background-color: #272726;
-  }
-
-  .supplyContainer > h2,
-  .supplyContainer > div > h2 {
-    color: #99f9ff;
-    font-size: 19px;
-    font-weight: bold;
-    line-height: normal;
-  }
-
-  /*
-    FOOTER NAV
-  */
-
-  .footerNav a {
-    text-decoration: none;
-    color: #fff;
-    font-size: 14px;
-    line-height: normal;
-  }
 
   .warning {
     color: #ffc658;

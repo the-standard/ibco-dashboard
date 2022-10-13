@@ -2,34 +2,56 @@
 import React, { useEffect, useState } from "react";
 import { Web3Button } from "../../../components/shared/uiElements/Web3Button";
 import { isMobile } from "react-device-detect";
+import { StyledConnectNavContainer, StyledLogoContainer, StyledMobileConnectNavContainer, StyledMobileConnectNavDropdownContainer, StyledMobileLinksContainer } from "./styles/ConnectNavStyles";
+import { Menu, X } from 'react-feather';
+import { FooterLinks } from "../footerLinks";
 
 const ConnectNav = () => {
     const [mobile, setMobile] = useState();
+    const [openState, setOpenState] = useState(false);
 
     useEffect(() => {
       //@ts-ignore
       setMobile(isMobile)
-    }, [setMobile])
+    }, [setMobile]);
+
+    const mobileOpenClickHandler = () => {
+      setOpenState(!openState);
+    }
 
     return (
-      <>
-        <div className="w-full grid md:grid-cols-2 gap-2 mb-20">
+      <StyledConnectNavContainer>
 
-            <div className="grid justify-items-start p-4 lg:w-4/12 md:w-1/12">
-              <img src={mobile ? '/Images/theStandardLogoIcon.svg' : '/Images/theStandardLogo.svg'} alt='The Standard' width='100%' />
-            </div>
+          <StyledLogoContainer>
+            <img src={mobile ? '/Images/theStandardLogoIcon.svg' : '/Images/theStandardLogo.svg'} alt='The Standard' width='100%' />
+          </StyledLogoContainer>
 
-          {!mobile ?  
-          <nav className="grid justify-items-end p-4">
-            <Web3Button />
-          </nav>
-          :
-          <nav className="grid justify-items-end p-4">
-            mobile view
-          </nav>
-          }
-        </div>
-      </>
+        {!mobile ?  
+        <nav className="grid justify-items-end p-4">
+          <Web3Button />
+        </nav>
+        :
+        <nav className="grid justify-items-end p-4">
+          <StyledMobileConnectNavContainer>
+            <a className="mobileMenuClickHandler" onClick={mobileOpenClickHandler}>{!openState ? <Menu size={30} /> : <X size={30}/>}</a>
+
+            {
+              openState && (
+                <StyledMobileConnectNavDropdownContainer>
+                  <Web3Button />
+
+                  <StyledMobileLinksContainer>
+                    <FooterLinks />
+                  </StyledMobileLinksContainer>
+                </StyledMobileConnectNavDropdownContainer>
+              )
+            }
+            
+          </StyledMobileConnectNavContainer>
+          
+        </nav>
+        }
+      </StyledConnectNavContainer>
     )
 }
 

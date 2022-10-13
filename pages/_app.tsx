@@ -4,12 +4,19 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import TagManager from 'react-gtm-module';
 import { useEffect } from 'react';
+import { ThemeProvider } from 'styled-components';
+import { GlobalColors } from '../styles/globalColors';
 import GlobalCSS from '../styles/globalStyles';
 import 'react-toastify/scss/main.scss'
+import { StyledGlobalBetaBanner } from '../components/shared/uiElements/styles/SharedStylesGlobal';
 // import { Web3Button } from '../components'
 
 function getInitialProps() {
   return {};  
+}
+
+const theme = {
+  colors: GlobalColors
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -21,7 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Web3ContextProvider>
-      <>
+      <ThemeProvider theme={theme}>
       <GlobalCSS />
       {/* {
         !web3Provider && <div className="connectModal mx-auto">
@@ -31,14 +38,14 @@ function MyApp({ Component, pageProps }: AppProps) {
           </div>
           </div>
       } */}
-      <div className="w-full p-2 mx-auto betaBanner text-center">BETA Release! Testnet Only. Design to be updated soon. Report bugs <a href="https://bit.ly/ibco-bugs">here</a>!</div>
+      <StyledGlobalBetaBanner>BETA Release! Testnet Only. Design to be updated soon. Report bugs <a href="https://bit.ly/ibco-bugs">here</a>!</StyledGlobalBetaBanner>
         <Component {...pageProps} />
         <ToastContainer
           hideProgressBar
           position="top-right"
           autoClose={2000}
         />
-      </>
+      </ThemeProvider>
     </Web3ContextProvider>
   )
 }

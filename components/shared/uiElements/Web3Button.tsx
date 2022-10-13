@@ -2,6 +2,7 @@ import React from 'react'
 import { useWeb3Context } from '../../../context/'
 import { Web3Address } from './Web3Address';
 import { CreditCard } from 'react-feather';
+import { StyledWeb3ButtonContainer, StyledDisconnectButton } from './styles/Web3ButtonStyles';
 
 interface ConnectProps {
   connect: (() => Promise<void>) | null
@@ -20,10 +21,10 @@ interface DisconnectProps {
 
 const DisconnectButton = ({ disconnect }: DisconnectProps) => {
   return disconnect ? (
-    <div className="flex flex-row justify-between">
+    <StyledWeb3ButtonContainer>
       <Web3Address />
-      <button className="px-3 py-2 disconnectButton" onClick={disconnect}>Disconnect</button>
-    </div>
+      <StyledDisconnectButton onClick={disconnect}>Disconnect</StyledDisconnectButton>
+    </StyledWeb3ButtonContainer>
     
   ) : (
     <button className="px-3 py-2">Loading...</button>

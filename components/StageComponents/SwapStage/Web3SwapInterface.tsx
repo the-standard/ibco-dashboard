@@ -17,6 +17,7 @@ import {
   Web3Manager} from '../../../Utils';
 import Dropdown from '../../shared/uiElements/Dropdown/Dropdown';
 import { GetJsonAddresses } from '../../../Utils/ContractManager';
+import { StyledInputContainers, StyledPContainer, StyledSwapButton, StyledSwapInterfaceContainer } from './Styles';
 
 export function Web3SwapInterface() {
   const { address, network, web3Provider } = useWeb3Context();
@@ -219,40 +220,35 @@ export function Web3SwapInterface() {
   }
 
   return (
-    //TODO: Finish styling for all devices
-    <div className="convertInput grid grid-flow-row auto-rows-max p-5 py-8 w-full">
+    <StyledSwapInterfaceContainer>
         <>
-            <p className="p-0 m-0 text-sm">Converting from</p>
-            <div className="container w-full">
-              <div className="mb-8 mt-1 flex flex-rows w-full">
-                <input className="w-9/12 from" type='number' step="any" min={0} maxLength={5} onInput={checkMaxLength} onChange={e => setValueChangeHandler(e.currentTarget.value)} onFocus={(event) => onFocusEvent(event)} id="from" placeholder='converting from' value={from} />
-              <div className="w-3/12">
-                {
-                  // @ts-ignore
-                <Dropdown ddElements={ddTokens} changeHandler={changeTokenClickHandler} defaultValue={TOKENS.HUMAN_READABLE.ETH} />
-                }
-              </div>
-              </div>
-            </div>
+            <StyledPContainer>Converting from</StyledPContainer>
+              <StyledInputContainers>
+                <input type='number' step="any" min={0} maxLength={5} onInput={checkMaxLength} onChange={e => setValueChangeHandler(e.currentTarget.value)} onFocus={(event) => onFocusEvent(event)} id="from" placeholder='converting from' value={from} />
+                  {
+                    // @ts-ignore
+                  <Dropdown ddElements={ddTokens} changeHandler={changeTokenClickHandler} defaultValue={TOKENS.HUMAN_READABLE.ETH} />
+                  }
+              </StyledInputContainers>
 
-            <p className="p-0 m-0 text-sm">Converting to</p>
-            <div className="mb-8 mt-1 flex flex-rows w-full">
-              <input className="w-9/12 px-3 py-2" type='string' readOnly={true} placeholder="Converting to" value={to > 0 ? to.toLocaleString( undefined, { minimumFractionDigits: 2 }) : ''} /> 
-              <div className="dropdownSelect p-2 w-3/12 text-center">
-                SEURO
-              </div>
-            </div>
+              <StyledPContainer>Converting to</StyledPContainer>
+              <StyledInputContainers>
+                <input type='string' readOnly={true} placeholder="Converting to" value={to > 0 ? to.toLocaleString( undefined, { minimumFractionDigits: 2 }) : ''} /> 
+                <div className="dropdownSelect readOnly">
+                  SEURO
+                </div>
+              </StyledInputContainers>
             {
-              isTokenNotEth(token.token) ? from !== '0' && from !== '' && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledCheck} onClick={() => confirmCurrency()}>{loading ? 'loading...' : 'Approve'} {token.token}</button> : ''
+              isTokenNotEth(token.token) ? from !== '0' && from !== '' && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <StyledSwapButton className="extraMarginTop" disabled={disabledCheck} onClick={() => confirmCurrency()}>{loading ? 'loading...' : 'Approve'} {token.token}</StyledSwapButton> : ''
             }
             
             {            
-            web3Provider && <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledSend} onClick={() => SendTransaction()}>{loading ? 'loading...' : 'Swap'}</button>
+            web3Provider && <StyledSwapButton disabled={disabledSend} onClick={() => SendTransaction()}>{loading ? 'loading...' : 'Swap'}</StyledSwapButton>
             }
             {// @ts-ignore
-            transactionData && <button className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</button>
+            transactionData && <StyledSwapButton onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledSwapButton>
             }
             </>
-    </div>
+    </StyledSwapInterfaceContainer>
   )
 }
