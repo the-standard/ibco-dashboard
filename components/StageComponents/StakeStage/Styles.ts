@@ -12,3 +12,20 @@ export const StyledMainContainer = styled.main`
         width: 46%;
     `}
 `;
+
+export const StyledStakingHistoryContainer = styled.div`
+    h2 {
+        background: #272727;
+        padding: 0.8em 1em;
+        text-align: center; 
+    }
+    
+    ${media.desktop`
+        h2 {
+            background: none;
+            padding: 0;
+            text-align: left;
+            text-align: left;
+        }
+    `}
+`;

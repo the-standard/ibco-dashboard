@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import moment from 'moment';
+import { StyledDurationContainer, StyledInterestRateContainer, StyledMaturityContainer, StyledStakeButton, StyledStakingListContainer, StyledStatusContainer, StyledTitleP, StyledTransactionButtonContainer } from "../styles/StakingListStyles";
 
 type StakingObj = {
     address: string,
@@ -24,6 +25,8 @@ export const StakingSelector = ({stakingObj, clickFunction}:StakeList) => {
 
     const [duration, setDuration] = useState(0);
     const [hasOpened, setHasOpened] = useState(false);
+
+    const isStakeOpen = hasOpened && moment().isAfter(endPeriod);
     
     useEffect(() => {
         setDuration(endPeriod.diff(startPeriod, 'weeks'));
@@ -31,23 +34,48 @@ export const StakingSelector = ({stakingObj, clickFunction}:StakeList) => {
     }, [moment, stakingObj])
 
     return (
-        <div className="w-full px-4 py-2 convertInput grid grid-cols-5 gap-1 mb-4">
-            <div>{ `${duration} ${duration > 1 ? 'weeks' : 'week'}` }</div>
-            <div>{`+${parseInt(stakingObj.interestRate) / 1000}%`}</div>
-            <div>{!hasOpened ? moment().isAfter(endPeriod) ? <span className="closed">Closed</span> : <span className="openSoon">Opening Soon</span>: <span className="openNow">Open Now</span>}</div>
-            <div className="greyText">{maturity.format('ll')}</div>
-            <div>{
-                !hasOpened ? 
-                    !stakingObj.isActive || moment().isAfter(endPeriod) ?
-                    <span className="closed">Closed</span>
-                :
-                    `${startPeriod.format('ll')} - ${startPeriod.format('LT')}` 
-                : 
-                    <button className="px-4 py-2 w-full" onClick={() => {
-                        //@ts-ignore
-                        return clickFunction(stakingObj.address)
-                    }}>Start Staking</button>
-            }</div>
-        </div>
+        <StyledStakingListContainer className={isStakeOpen ? 'stakeOpen' : ''}>
+            <StyledDurationContainer>
+                <StyledTitleP>Staking Period</StyledTitleP>
+                { 
+                    `${duration} ${duration > 1 ? 'weeks' : 'week'}` 
+                }
+            </StyledDurationContainer>
+
+            <StyledInterestRateContainer>
+                <StyledTitleP>Reward</StyledTitleP>
+                {
+                    `+${parseInt(stakingObj.interestRate) / 1000}%`
+                }
+            </StyledInterestRateContainer>
+
+            <StyledStatusContainer>
+                {
+                    !hasOpened ? moment().isAfter(endPeriod) ? <span className="closed">Closed</span> : <span className="openSoon">Opening Soon</span>: <span className="openNow">Open Now</span>
+                }
+            </StyledStatusContainer>
+
+            <StyledMaturityContainer>
+                <StyledTitleP>Maturity</StyledTitleP>
+                {
+                    maturity.format('ll')
+                }
+            </StyledMaturityContainer>
+
+            <StyledTransactionButtonContainer>
+                {
+                    !hasOpened ? 
+                        !stakingObj.isActive || moment().isAfter(endPeriod) ?
+                        <span className="closed">Closed</span>
+                    :
+                        `${startPeriod.format('ll')} - ${startPeriod.format('LT')}` 
+                    : 
+                        <StyledStakeButton onClick={() => {
+                            //@ts-ignore
+                            return clickFunction(stakingObj.address)
+                        }}>Start Staking</StyledStakeButton>
+                }
+            </StyledTransactionButtonContainer>
+        </StyledStakingListContainer>
     )
 };

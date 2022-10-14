@@ -70,8 +70,9 @@ export const TokenContractManager = async (token:string) => {
     // @ts-ignore
     const ERC20ABIItem:AbiItem = ERC20ABI;
     //@ts-ignore
-    const tokenAddressMain = token !== null && token.slice(0,2) !== '0x' && await GetJsonAddresses().then((data) => data[_network]['TOKEN_ADDRESSES'][token]
-    );
+    const tokenAddressMain = token !== null && token.slice(0,2) !== '0x' && await GetJsonAddresses().then((data) => {
+        return data[_network]['TOKEN_ADDRESSES'][token]
+    });
     //@ts-ignore
     const tokenAddress = token !== null && token.slice(0,2) === '0x' ? token : tokenAddressMain !== '' && tokenAddressMain;
 

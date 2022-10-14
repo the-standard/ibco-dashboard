@@ -12,6 +12,8 @@ import DescriptionContainer from "../../shared/uiElements/DescriptionContainer/D
 import { StyledAddressHolderP, StyledCopyButton, StyledSupplyContainer } from "../SwapStage/Styles";
 import { toast } from "react-toastify";
 import { Copy } from "react-feather";
+import { StyledStakingHistoryContainer } from "./Styles";
+import { StyledGridHeaders } from "./styles/StakingListStyles";
 
 export const Web3StakingInterface = () => {
     const { address, web3Provider } = useWeb3Context();
@@ -110,14 +112,16 @@ export const Web3StakingInterface = () => {
             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <Copy size={20} onClick={copyToClipboardClickFunction} className='copyButton' />}
         </StyledSupplyContainer>
         {
-        !mobile &&
-        <div className="w-full p-5 p-0 my-4 grid grid-cols-5 gap-1">
+        !mobile && (
+        <StyledGridHeaders>
             <span>Staking Period</span>
             <span>Approx. Reward</span>
             <span>Opening</span>
             <span>Maturity</span>
             <span>Status</span>
-        </div>
+        </StyledGridHeaders> 
+        )
+        
         }
         <div>
             {
@@ -127,20 +131,23 @@ export const Web3StakingInterface = () => {
         </div>
     </div>
 
-    <div className="mx-auto lg:w-6/12 mt-10">
-        <h2>History</h2>
-        <div className="w-full p-4 my-4 grid grid-cols-4 gap-2 convertInput">
-            <span>Your Staking Positions</span>
-            <span>Approx. Reward</span>
-            <span>Staked Until</span>
-        </div>
+    <StyledStakingHistoryContainer>
+        <h2>Staking History</h2>
+        {
+            !mobile &&
+            <StyledGridHeaders>
+                <span>Your Staking Positions</span>
+                <span>Approx. Reward</span>
+                <span>Staked Until</span>
+            </StyledGridHeaders>
+        }
         <div className="container mx-auto w-full px-4">
             {
                 //@ts-ignore
                 stakeFilteredHistory.length > 0 ? <StakingHistoryList stakeHistoryArray={stakeFilteredHistory} /> : `You have not staked anything yet, please select from some of the staking options above`
             }
         </div>
-    </div>
+    </StyledStakingHistoryContainer>
     </>
     )
 
