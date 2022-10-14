@@ -59,7 +59,6 @@ function Web3BondInterface() {
     otherTokenDecimal
   };
 
-
   // MAIN UPDATE FUNCTIONS
   useEffect(() => {
     getBondingLengths();
@@ -129,7 +128,7 @@ function Web3BondInterface() {
     getTokenBalance('main');
     getTokenBalance('other');
     
-  }, [otherTokenAddress, otherTokenSymbol, otherTokenDecimal]);
+  }, [address, otherTokenAddress, otherTokenSymbol, otherTokenDecimal]);
 
   const checkAllowances = async () => {
     const MainToken = await TokenContract_main;
@@ -183,7 +182,7 @@ function Web3BondInterface() {
   const getTokenBalance = async (token:string) => {
     const tokenContract = token === 'other' ? await TokenContract_other : await TokenContract_main;
 
-    if(address && tokenContract) {
+    if(address !== null && tokenContract) {
       //@ts-ignore
       tokenContract.methods.balanceOf(address).call().then((data:never) => {
         token === 'other' ? setBalance(prevState => ({...prevState, other: data})) : setBalance(prevState => ({...prevState, main: data}));
@@ -336,17 +335,17 @@ function Web3BondInterface() {
     <>
     <DescriptionContainer>
       <b>What is sEURO bonding?</b> Earn TST when you bond your {TOKENS.DISPLAY.SEURO} and {otherTokenSymbol}. When your bond expires, you will receive the total EURO value of your bonded assets (paid in TST). Plus a generous reward (also in TST)!
-
-      <StyledBondingHistoryButtonContainer>
-        <StyledBondingHistoryButton onClick={bondingHistoryClickHandler}>View History</StyledBondingHistoryButton>
-      </StyledBondingHistoryButtonContainer>
     </DescriptionContainer>
+
+    <StyledBondingHistoryButtonContainer>
+      <StyledBondingHistoryButton onClick={bondingHistoryClickHandler}>View History</StyledBondingHistoryButton>
+    </StyledBondingHistoryButtonContainer>
 
     <div className="convertInput mx-auto grid grid-flow-row auto-rows-max p-5 py-8 md:w-6/12">
       { web3Provider ? (
         <>
         <span>
-          <StyledPContainer>Bonding asset 1 - <span>(available: {balance.main !== '0' ? `${ConvertFrom(balance.main.toString(), parseInt(mainTokenDecimal.toString())).toFloat().toFixed(2)} ${TOKENS.DISPLAY.SEURO}`: `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`})</span></StyledPContainer>
+          <StyledPContainer>Bonding asset 1 - <span>(available: {balance.main !== '0' ? `${balance.main} ${TOKENS.DISPLAY.SEURO}`: `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`})</span></StyledPContainer>
           <div>
             <StyledInputContainers>
               <input type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${TOKENS.DISPLAY.SEURO} amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />

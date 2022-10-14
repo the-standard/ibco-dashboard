@@ -75,7 +75,6 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
     };
 
     const getTstSeuroPrice = async () => {
-        console.log('await StandardTokenContract', await StandardTokenContract);
         //@ts-ignore
         await (await StandardTokenContract).methods.priceTstEur().call().then((data:never) => {
                 setTokenInfo(prevState => ({

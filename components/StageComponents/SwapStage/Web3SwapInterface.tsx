@@ -38,11 +38,11 @@ export function Web3SwapInterface() {
   // CONTRACT MANAGER INIT
   const web3Interface = Web3Manager();
   //@ts-ignore
-  const SmartContract = _network !== undefined && SmartContractManager('SEuroOffering' as Contract, _network).then((data) => data);
+  const SmartContract = SmartContractManager('SEuroOffering' as Contract).then((data) => data);
   //@ts-ignore
-  const TokenManager = _network !== undefined && SmartContractManager('TokenManager' as Contract, _network).then((data) => data);
+  const TokenManager = SmartContractManager('TokenManager' as Contract).then((data) => data);
   //@ts-ignore
-  const TokenContract = _network !== undefined && TokenContractManager(token.address, _network).then((data) => data);
+  const TokenContract = TokenContractManager(token.address).then((data) => data);
 
   // PRIVATE HELPERS
   const isTokenNotEth = (token:string) => {
@@ -96,12 +96,12 @@ export function Web3SwapInterface() {
 
   //MAIN FUNCTIONS
   const getUsableTokens = async () => {
-    const tokenManager = await (await TokenManager);
-
+    const tokenManager = await TokenManager;
     // @ts-ignore
-    web3Provider && _network !== undefined && tokenManager.methods.getAcceptedTokens().call().then((data) => {
+    web3Provider !== undefined && tokenManager.methods.getAcceptedTokens().call().then((data) => {
+      console.log('getAcceptedTokens', data)
       setDDTokens(data);
-    });
+    }).catch((err:never) => console.log('error getAceptedTokens', err));
   }
 
   const setValueChangeHandler = (data:string) => {
@@ -131,7 +131,7 @@ export function Web3SwapInterface() {
                           :
                           accounts;
     //@ts-ignore
-    web3Provider && _network !== undefined && await (await TokenManager).methods.getTokenDecimalFor(token).call().then((decimal:never) => {
+    web3Provider !== undefined && await (await TokenManager).methods.getTokenDecimalFor(token).call().then((decimal:never) => {
       const _decimal = parseInt(decimal) === 0 ? 18 : parseInt(decimal);
       setTokenDecimal(_decimal);
     });

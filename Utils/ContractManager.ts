@@ -123,12 +123,10 @@ export const SmartContractManager = async (contract:Contract) => {
 
     return await getContractABI(contract)
                     .then(async (ABIData) => {
-
                         return await GetJsonAddresses()
                             .then(async (contractAddress) => {
-                                
                                 const _contract = new web3Interface.eth.Contract(ABIData['data'].abi, contractAddress[_network]['CONTRACT_ADDRESSES'][contract]);
-                                
+
                                 return _contract
                             })
                     })
