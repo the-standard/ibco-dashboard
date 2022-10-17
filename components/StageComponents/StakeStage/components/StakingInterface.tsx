@@ -15,6 +15,7 @@ import {
   TokenContractManager, 
 } from '../../../../Utils';
 import moment from 'moment';
+import { StyledStakingContainer, StyledStakingInterfaceContainer, StyledBackButtonContainer, StyledBackButton, StyledInputContainer, StyledInput, StyledDropdownContainer, StyledStakingPeriodInfo, StyledP, StyledStakingPeriodP, StyledButton, StyledWarning, StyledWarningP, StyledWarningIconSpan } from '../styles/StakingInterfaceStyles';
 
 type StakingInterfaceType = {
   contractAddress: string,
@@ -133,45 +134,45 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   }
 
   return (
-    <>
+    <StyledStakingContainer>
     {
       // @ts-ignore
-      <div className="mb-4 w-4/12"><a href="#" className="py-1 flex backButton" onClick={backButton}><span className="flex w-5"><ChevronLeft /></span> Back</a></div>
+      <StyledBackButtonContainer><StyledBackButton href="#" onClick={backButton}><span className="flex w-5"><ChevronLeft /></span> Back</StyledBackButton></StyledBackButtonContainer>
     }
     
-    <div className="convertInput grid grid-flow-row auto-rows-max p-5 py-8 w-full">
+    <StyledStakingInterfaceContainer>
       { web3Provider ? (
         <>
-        <div className="mb-3">
+        <StyledStakingPeriodInfo>
           <p className="text-sm">Staking Period</p>
-          <p className="stakingPeriod my-2">{`${moment(parseInt(stakeTerms)*1000).format('ll')} - ${moment(parseInt(stakeTermsEnd)*1000).format('ll')}`}</p>
-        </div>
+          <StyledStakingPeriodP>{`${moment(parseInt(stakeTerms)*1000).format('ll')} - ${moment(parseInt(stakeTermsEnd)*1000).format('ll')}`}</StyledStakingPeriodP>
+        </StyledStakingPeriodInfo>
         <span>
-          <p className="p-0 m-0 text-sm">Staking...</p>
-          <div className="container w-full">
-            <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
-              <input className="w-9/12" type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${tokenSymbol} Staking Amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
-              <div className="dropdownSelect py-2 text-center w-3/12">
+          <StyledP className="p-0 m-0 text-sm">Staking...</StyledP>
+
+          <StyledInputContainer>
+            <StyledInput type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${tokenSymbol} Staking Amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
+            <StyledDropdownContainer className="dropdownSelect">
               <p className="mx-auto">{tokenSymbol}</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-cols m-2 mb-8 warning">
-            <span className="w-2/12"><AlertTriangle /></span><p className="w-10/12">Warning: once you have staked your Standard Token ({tokenSymbol}) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</p>
-          </div>
+            </StyledDropdownContainer>
+          </StyledInputContainer>
+
+          <StyledWarning>
+            <StyledWarningIconSpan><AlertTriangle size={30} /></StyledWarningIconSpan><StyledWarningP>Warning: once you have staked your Standard Token ({tokenSymbol}) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</StyledWarningP>
+          </StyledWarning>
         </span>
-            <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved ? `${tokenSymbol} Approved` : loading ? 'loading...' : `Approve ${tokenSymbol}`}</button>
+            <StyledButton className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved ? `${tokenSymbol} Approved` : loading ? 'loading...' : `Approve ${tokenSymbol}`}</StyledButton>
             
             {            
-            <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledSend} onClick={() => SendStakeTransaction()}>{loading ? 'loading...' : 'Start Staking'}</button>
+            <StyledButton className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledSend} onClick={() => SendStakeTransaction()}>{loading ? 'loading...' : 'Start Staking'}</StyledButton>
             }
             {// @ts-ignore
-            transactionData && <button className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</button>
+            transactionData && <StyledButton className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledButton>
             }
             </>
       ) : <div>Please Connect Wallet...</div>
 }
-    </div>
-    </>
+    </StyledStakingInterfaceContainer>
+    </StyledStakingContainer>
   )
 }

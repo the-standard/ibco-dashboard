@@ -99,7 +99,6 @@ export function Web3SwapInterface() {
     const tokenManager = await TokenManager;
     // @ts-ignore
     web3Provider !== undefined && tokenManager.methods.getAcceptedTokens().call().then((data) => {
-      console.log('getAcceptedTokens', data)
       setDDTokens(data);
     }).catch((err:never) => console.log('error getAceptedTokens', err));
   }

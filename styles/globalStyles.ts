@@ -73,12 +73,6 @@ export default createGlobalStyle`
     color: #7a7a7a;
   }
 
-  .backButton {
-    color: #6c6c6c;
-    font-size: 14px;
-    text-decoration: none;
-  }
-
   .bondingHistoryButton {
     background: none;
     color: #99f9ff;
@@ -195,13 +189,6 @@ export default createGlobalStyle`
     Supply container token information
   */
 
-  .warning {
-    color: #ffc658;
-    font-size: 12px;
-    line-height: normal;
-    font-weight: light;
-  }
-
   .openSoon,
   .openNow,
   .closed {
@@ -220,12 +207,6 @@ export default createGlobalStyle`
 
   .closed {
     color: #7a7a7a;
-  }
-
-  .stakingPeriod {
-    color: #99f9ff;
-    font-weight: bold;
-    font-size: 17px;
   }
 
   /*

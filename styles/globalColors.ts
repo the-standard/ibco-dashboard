@@ -14,4 +14,5 @@ export const GlobalColors = {
     grey: '#252524',
     black: '#000000',
     red: '#cb4464',
+    yellow: '#ffc658',
 };

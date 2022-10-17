@@ -3,7 +3,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useWeb3Context } from "../../../../context";
-import { StakingContractManager, ConvertFrom, TOKENS, TokenContractManagerNoHooks } from "../../../../Utils";
+import { StakingContractManager, ConvertFrom, TOKENS, TokenContractManager } from "../../../../Utils";
 
 const defaultTokenObj = {
     tokenAddress: '',
@@ -79,7 +79,7 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
 
     const getTokenInformation = async (address:string) => {
         //@ts-ignore
-        const tokenContractInit = TokenContractManagerNoHooks(address, _network).then((data:never) => data);
+        const tokenContractInit = TokenContractManager(address, _network).then((data:never) => data);
 
         const tokenInfoObj = {
             decimals: 0,

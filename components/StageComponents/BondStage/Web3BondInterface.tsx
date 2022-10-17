@@ -256,6 +256,8 @@ function Web3BondInterface() {
       //@ts-ignore
       setRates(sortedRates);
     });
+
+    console.log('TokenContractMain', TokenContractMain)
     // @ts-ignore
     web3Provider && await TokenContractMain.methods.decimals().call()
     .then((data:never) => {

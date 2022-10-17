@@ -85,32 +85,6 @@ export const TokenContractManager = async (token:string) => {
 }
 
 /**
- * Initializes a contract with Web3 for a certain token with no useState hooks, suitable for nested functions
- * @constructor
- * @param {Tokens} token - The token you wish to create a contract for
- * @param {string} network - The name of the connected wallet network
- * @returns {object} A contract object from Web3
- */
- export const TokenContractManagerNoHooks = async (token:string) => {
-    const web3Interface = Web3Manager();
-    //@ts-ignore
-    const _network = await web3Interface.eth.net.getNetworkType() || 'goerli';
-    // @ts-ignore
-    const ERC20ABIItem:AbiItem = ERC20ABI; //getTokenAddressFor
-    //@ts-ignore
-    const tokenAddressMain = await GetJsonAddresses().then((data) => data[_network]['TOKEN_ADDRESSES'][token]);
-    //@ts-ignore
-    const tokenAddress = token !== null && token.slice(0,2) === '0x' ? token : tokenAddressMain !== '' && tokenAddressMain;
-
-    if (tokenAddress !== undefined) {
-        // @ts-ignore
-        const contract = new web3Interface.eth.Contract(ERC20ABIItem, tokenAddress);
-
-        return contract
-    }
-}
-
-/**
  * Initializes a contract with Web3 to connect to smart contracts elsewhere
  * @constructor
  * @param {string} contract - The name of the smart contract you want to create a contract for
