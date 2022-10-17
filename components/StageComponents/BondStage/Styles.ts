@@ -20,7 +20,8 @@ export const StyledBondingHistoryButtonContainer = styled.div`
 export const StyledBondingHistoryButton = styled.button`
     padding: 0.5em 3em;
     font-size: 1em;
-    margin: 2em 0 0 0;
+    margin-bottom: 3em;
+    cursor: pointer;
     background: none;
     border: 0.1em solid ${props => props.theme.colors.cyan};
     color: ${props => props.theme.colors.cyan};

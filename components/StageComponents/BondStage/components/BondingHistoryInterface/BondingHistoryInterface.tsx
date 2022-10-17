@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from "react";
+import { isMobile } from "react-device-detect";
 import { ChevronLeft } from 'react-feather';
 import { toast } from "react-toastify";
-import { ClaimRewardContainer } from './styles';
+import { ClaimRewardContainer, StyledBondHistoryContainer, StyledBackButtonContainer, StyledChevronSpan, StyledBondGridContainer } from './styles';
 import { useWeb3Context } from "../../../../../context";
 import { ConvertFrom, SmartContractManager, TokenContractManager } from "../../../../../Utils";
 import { UserBondsHistoryList } from "../UserBondsHistoryList/UserBondsHistoryList";
+import { StyledStakingHistoryContainer } from "../../../StakeStage/Styles";
+import { StyledGridHeaders } from './styles';
 
 type BondingHistoryInterfaceType = {
     backButton: React.MouseEventHandler<string>,
@@ -19,6 +22,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
     const { address, web3Provider } = useWeb3Context();
     const [userBonds, setUserBonds] = useState([]);
     const [claimAmount, setClaimAmount] = useState('0');
+    const [mobile, setMobile] = useState();
     const [tstTokenInfo, setTstTokenInfo] = useState({
         tokenAddress: '',
         tokenSymbol: '',
@@ -27,6 +31,11 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
     const BondStorageContract = SmartContractManager('BondStorage').then((data) => data);
     const TSTTokenInfoContract = SmartContractManager('StandardTokenGateway').then((data) => data);
     const TokenContract_TST = TokenContractManager(tstTokenInfo.tokenAddress).then((data) => data);
+
+    useEffect(() => {
+        //@ts-ignore
+        setMobile(isMobile)
+      }, [setMobile]);
 
     useEffect(() => {
         getUserBonds();
@@ -97,18 +106,23 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
         <>        
             {
                 // @ts-ignore
-                <div className="mb-4 w-full mx-auto"><a href="#" className="py-1 flex backButton" onClick={backButton}><span className="flex w-5"><ChevronLeft /></span> Back</a></div>
+                <StyledBackButtonContainer className="mb-4 w-full mx-auto"><a href="#" className="py-1 flex backButton" onClick={backButton}><StyledChevronSpan><ChevronLeft /></StyledChevronSpan> Back</a></StyledBackButtonContainer>
             }
-            <div className="w-full mx-auto lg:flex md:flex-cols">
-                <div className="lg:w-9/12 md:order-1">
-                    <div className="w-full grid grid-cols-5 gap-2 mb-4 px-4">
-                        <p>Profit</p>
-                        <p>{tstTokenInfo.tokenSymbol} Amount</p>
-                        <p>Bond</p>
-                        <p>Maturity</p>
-                        <p>Status</p>
-                    </div>
-                    <div className="w-full mb-4">
+            <StyledBondHistoryContainer className="w-full mx-auto lg:flex md:flex-cols">
+                <StyledBondGridContainer>
+                    {
+                        !mobile && (
+                        <StyledGridHeaders>
+                            <span>Profit</span>
+                            <span>{tstTokenInfo.tokenSymbol} Amount</span>
+                            <span>Bond</span>
+                            <span>Maturity</span>
+                            <span>Status</span>
+                        </StyledGridHeaders> 
+                        )
+                    }
+                    
+                    <StyledStakingHistoryContainer>
                         {
                             userBonds.length > 0 ?
                             userBonds.map((bond, index) => {
@@ -117,22 +131,22 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
                             :
                             <p>No Bonds have been created yet</p>
                         }
-                    </div>
-                </div>
+                    </StyledStakingHistoryContainer>
+                </StyledBondGridContainer>
                 
-                <ClaimRewardContainer className="lg:w-2/12 ml-2 p-4 md:order-2">
+                <ClaimRewardContainer>
                 {
                 parseInt(claimAmount) > 0 ?
                     <>
                         <p>claimable reward:</p>
                         <p className="mt-3"><strong>{(ConvertFrom(claimAmount, parseInt(tstTokenInfo.tokenDecimal.toString())).toFloat()).toFixed(2)} {tstTokenInfo.tokenSymbol}</strong></p>
-                        <button className="px-3 py-2 mt-3" onClick={activateClaim}>Claim Reward</button>
+                        <button onClick={activateClaim}>Claim Reward</button>
                     </>
                     :
                     <p>No Claimable Rewards Yet, but please check back soon</p>
                 }
                 </ClaimRewardContainer>
-            </div>
+            </StyledBondHistoryContainer>
         </>
 
     )

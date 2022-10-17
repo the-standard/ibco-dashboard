@@ -19,7 +19,7 @@ import { GetJsonAddresses } from '../../../Utils/ContractManager';
 import { RateSelectionButton } from './components/RateSelectionButton/RateSelectionButton';
 import { BondingHistoryInterface } from './components/BondingHistoryInterface/BondingHistoryInterface';
 import DescriptionContainer from '../../shared/uiElements/DescriptionContainer/DescriptionContainer';
-import { StyledBondingHistoryButton, StyledBondingHistoryButtonContainer, StyledInputContainers, StyledNoFormatP, StyledPContainer, StyledRateSelectionContainer, StyledTransactionButton, StyledTransactionButtonContainer } from './Styles';
+import { StyledBondingHistoryButton, StyledBondingHistoryButtonContainer, StyledInputContainers, StyledMainContainer, StyledNoFormatP, StyledPContainer, StyledRateSelectionContainer, StyledTransactionButton, StyledTransactionButtonContainer } from './Styles';
 
 type Rate = {
   duration: string, 
@@ -334,7 +334,7 @@ function Web3BondInterface() {
   }
 
   return !showHistoryInterface ? (
-    <>
+    <StyledMainContainer>
     <DescriptionContainer>
       <b>What is sEURO bonding?</b> Earn TST when you bond your {TOKENS.DISPLAY.SEURO} and {otherTokenSymbol}. When your bond expires, you will receive the total EURO value of your bonded assets (paid in TST). Plus a generous reward (also in TST)!
     </DescriptionContainer>
@@ -343,7 +343,7 @@ function Web3BondInterface() {
       <StyledBondingHistoryButton onClick={bondingHistoryClickHandler}>View History</StyledBondingHistoryButton>
     </StyledBondingHistoryButtonContainer>
 
-    <div className="convertInput mx-auto grid grid-flow-row auto-rows-max p-5 py-8 md:w-6/12">
+    <div>
       { web3Provider ? (
         <>
         <span>
@@ -400,7 +400,7 @@ function Web3BondInterface() {
       ) : <div>Please Connect Wallet...</div>
       }
     </div>
-    </>
+    </StyledMainContainer>
     )
     :
     (

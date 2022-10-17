@@ -29,3 +29,14 @@ export const StyledStakingHistoryContainer = styled.div`
         }
     `}
 `;
+
+export const StyledGridHeaders = styled.div`
+    display: flex;
+    margin-top: 1em;
+
+    ${media.desktop`
+        & > span {
+           flex: 1;
+        }
+    `}
+`;

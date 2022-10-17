@@ -106,7 +106,7 @@ export const Web3StakingInterface = () => {
         <b>What is staking?</b> Similar to the bonding event, a user can transfer their TST during limited time periods. This means that there will be one or multiple campaigns throughout the year where staking is possible with varying interest rates. If the user decides to participate then, at the end of the period, the initial amount of TST is returned to the user and an interest payment on top of it, paid in sEURO.
     </DescriptionContainer>
 
-    <div className="mx-auto lg:w-6/12">
+    <div>
         <StyledSupplyContainer>
             <h2>{tokenSymbol} Address:</h2> <StyledAddressHolderP>{tokenAddress}</StyledAddressHolderP>
             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <Copy size={20} onClick={copyToClipboardClickFunction} className='copyButton' />}
@@ -141,7 +141,7 @@ export const Web3StakingInterface = () => {
                 <span>Staked Until</span>
             </StyledGridHeaders>
         }
-        <div className="container mx-auto w-full px-4">
+        <div className="container">
             {
                 //@ts-ignore
                 stakeFilteredHistory.length > 0 ? <StakingHistoryList stakeHistoryArray={stakeFilteredHistory} /> : `You have not staked anything yet, please select from some of the staking options above`
@@ -154,7 +154,7 @@ export const Web3StakingInterface = () => {
     :
 
     (
-        <div className="container mx-auto lg:w-4/12 p-4">
+        <div className="container">
             {
                 // @ts-ignore
                 <StakingInterface contractAddress={selectedStake} backButton={stakeSelectionClickHandler} />
