@@ -53,9 +53,9 @@ export function Web3SwapInterface() {
   useEffect(() => {
     if (_network === undefined) {
       setNetwork(network?.name === 'homestead' ? 'main' : network?.name)
-    } else {
-      getContractAddresses();
-    }
+    } 
+
+    getContractAddresses();
   }, []);
 
   useEffect(() => {
@@ -71,11 +71,10 @@ export function Web3SwapInterface() {
       const _from:string = from || '0';
       const _deposit:number = ConvertTo(_from, tokenDecimal).toInt();
       //@ts-ignore
-      const contractAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['SEuroOffering'];
-
+      const contractAddress = getSeuroAddress();
       isTokenNotEth(token.token) ? setTokenApprove(_from !== '' && allowance >= _deposit) : setTokenApprove(true);
       //@ts-ignore
-      (isTokenNotEth(token.token) && address && contractAddress) && checkAllowance(address, contractAddress);
+      isTokenNotEth(token.token) && checkAllowance(address, contractAddress);
     }
   }, [from])
 
@@ -92,6 +91,14 @@ export function Web3SwapInterface() {
      Object.keys(contractAddresses).length === 0 ? await GetJsonAddresses().then((data) => {
       setContractAddresses(data);
      }) : contractAddresses
+  }
+
+  const getSeuroAddress = () => {
+    const ContractNetwork = network?.name === 'homestead' ? 'main' : network?.name;
+    //@ts-ignore
+    const contractAddress = contractAddresses[ContractNetwork]['CONTRACT_ADDRESSES']['SEuroOffering'];
+
+    return contractAddress;
   }
 
   //MAIN FUNCTIONS
@@ -146,8 +153,8 @@ export function Web3SwapInterface() {
   const checkAllowance = async (_address:string, _seuroAddress:string) => {
     //@ts-ignore
     await (await TokenContract).methods.allowance(_address, _seuroAddress).call().then((data: React.SetStateAction<number>) => {
-        setAllowance(data)
-      });
+      setAllowance(data)
+    });
   }
 
   const confirmCurrency = async () => {
