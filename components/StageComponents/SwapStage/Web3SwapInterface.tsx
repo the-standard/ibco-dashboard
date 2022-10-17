@@ -97,7 +97,6 @@ export function Web3SwapInterface() {
     const ContractNetwork = network?.name === 'homestead' ? 'main' : network?.name;
     //@ts-ignore
     const contractAddress = contractAddresses[ContractNetwork]['CONTRACT_ADDRESSES']['SEuroOffering'];
-
     return contractAddress;
   }
 

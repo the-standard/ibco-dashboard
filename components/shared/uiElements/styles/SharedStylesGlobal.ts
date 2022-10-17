@@ -8,7 +8,7 @@ export const StyledGlobalContainer = styled.div`
     margin: 0 auto;
     
     ${media.desktop`
-        width: 68%;
+        width: 80%;
     `}
 `;
 

@@ -13,7 +13,6 @@ import {
   SmartContractManager, 
   TokenContractManager, 
   TOKENS,
-  Tokens, 
 } from '../../../Utils';
 import { GetJsonAddresses } from '../../../Utils/ContractManager';
 import { RateSelectionButton } from './components/RateSelectionButton/RateSelectionButton';
@@ -28,6 +27,7 @@ type Rate = {
 
 function Web3BondInterface() {
   const { address, web3Provider, network } = useWeb3Context();
+  const [seuroAddress, setSeuroAddress] = useState();
   const [showHistoryInterface, setShowHistoryInterface] = useState(false);
   const [contractAddresses, setContractAddresses] = useState({});
   const [otherTokenAddress, setOtherTokenAddress] = useState(null);
@@ -52,8 +52,9 @@ function Web3BondInterface() {
   const SmartContract = SmartContractManager('BondingEvent' as Contract).then((data) =>  data);
   //@ts-ignore
   const TokenContract_other = otherTokenAddress !== null && TokenContractManager(otherTokenAddress).then((data) =>  data);
+  const StandardTokenGatewayContract = SmartContractManager('SEuroOffering').then((data) => data);
     //@ts-ignore
-  const TokenContract_main = TokenContractManager(TOKENS.HUMAN_READABLE.SEURO as Tokens).then((data) => data);
+  const TokenContract_main = seuroAddress !== undefined && TokenContractManager(seuroAddress).then((data) => data);
   const otherTokenInfo = {
     otherTokenSymbol, 
     otherTokenDecimal
@@ -61,10 +62,14 @@ function Web3BondInterface() {
 
   // MAIN UPDATE FUNCTIONS
   useEffect(() => {
+    getSeuroAddress();
+  }, []);
+
+  useEffect(() => {
     getBondingLengths();
     getContractAddresses();
     getOtherTokenAddress();
-  }, []);
+  }, [seuroAddress])
 
   useEffect(() => {
     const allowanceOther = ConvertFrom(allowance.other, otherTokenDecimal).toFloat();
@@ -129,6 +134,15 @@ function Web3BondInterface() {
     getTokenBalance('other');
     
   }, [address, otherTokenAddress, otherTokenSymbol, otherTokenDecimal]);
+
+  const getSeuroAddress = async () => {
+    const standardTokenGatewayContract = await StandardTokenGatewayContract;
+    console.log('standardTokenGatewayContract', standardTokenGatewayContract);
+    //@ts-ignore
+    standardTokenGatewayContract.methods.Seuro().call().then((data:never) => {
+      setSeuroAddress(data);
+    });
+  }
 
   const checkAllowances = async () => {
     const MainToken = await TokenContract_main;
@@ -248,23 +262,25 @@ function Web3BondInterface() {
     const TokenContractMain = await TokenContract_main;
     const OperatorStage2 = await OperatorStage2Contract;
 
-    // @ts-ignore
-    web3Provider && await OperatorStage2.methods.showRates().call()
-    .then((data:Rate[]) => {
-      const ArrayCopy = [...data];
-      const sortedRates = ArrayCopy.sort((a,b) => (parseInt(a.duration) > parseInt(b.duration)) ? 1 : ((parseInt(b.duration) > parseInt(a.duration)) ? -1 : 0))
-      //@ts-ignore
-      setRates(sortedRates);
-    });
+    if (TokenContractMain) {
+      console.log('TokenContractMain', TokenContractMain);
+      // @ts-ignore
+      await OperatorStage2.methods.showRates().call()
+      .then((data:Rate[]) => {
+        const ArrayCopy = [...data];
+        const sortedRates = ArrayCopy.sort((a,b) => (parseInt(a.duration) > parseInt(b.duration)) ? 1 : ((parseInt(b.duration) > parseInt(a.duration)) ? -1 : 0))
+        //@ts-ignore
+        setRates(sortedRates);
+      });
 
-    console.log('TokenContractMain', TokenContractMain)
-    // @ts-ignore
-    web3Provider && await TokenContractMain.methods.decimals().call()
-    .then((data:never) => {
-      setmainTokenDecimal(data);
-    }).catch((error:never) => {
-      console.log('error retrieving main token decimal', error);
-    });
+      // @ts-ignore
+      await TokenContractMain.methods.decimals().call()
+      .then((data:never) => {
+        setmainTokenDecimal(data);
+      }).catch((error:never) => {
+        console.log('error retrieving main token decimal', error);
+      });
+    }
   }
 
   const getOtherTokenAddress = async () => {
@@ -347,7 +363,7 @@ function Web3BondInterface() {
       { web3Provider ? (
         <>
         <span>
-          <StyledPContainer>Bonding asset 1 - <span>(available: {balance.main !== '0' ? `${balance.main} ${TOKENS.DISPLAY.SEURO}`: `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`})</span></StyledPContainer>
+          <StyledPContainer>Bonding asset 1 - <span>(available: {balance.main !== '0' ? `${ConvertFrom(balance.main.toString(), mainTokenDecimal).toFloat().toFixed(2)} ${TOKENS.DISPLAY.SEURO}`: `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`})</span></StyledPContainer>
           <div>
             <StyledInputContainers>
               <input type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${TOKENS.DISPLAY.SEURO} amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />

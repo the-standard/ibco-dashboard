@@ -13,7 +13,7 @@ export const StyledSubNavContainer = styled.nav`
     text-align: center;
 
     & a {
-        max-width: 22%;
+        max-width: 30%;
         text-decoration: none;
         color: ${props => props.theme.colors.superLightGrey};
         border: 0.1em solid ${props => props.theme.colors.grey};

@@ -45,7 +45,7 @@ export const StyledInputContainers = styled.div`
     & input {
         color: ${props => props.theme.colors.white};
         font-size: 1em;
-        min-width: 70%;
+        min-width: 60%;
     }
 `;
 

@@ -136,7 +136,15 @@ export const StyledInputContainers = styled.div`
     & input {
         color: ${props => props.theme.colors.white};
         font-size: 1em;
-        min-width: 70%;
+        min-width: 53%;
+    }
+
+    & .dropdownSelect {
+        font-size: 0.8em;
+    }
+
+    & select.dropdownSelect {
+        min-width: 40%;
     }
 `;
 
@@ -144,6 +152,8 @@ export const StyledSwapButton = styled.button`
     width: 100%;
     font-size: 0.9em;
     padding: 1em;
+    margin-top: 1em;
+    cursor: pointer;
     border: 0;
 
     &.extraMarginTop {
