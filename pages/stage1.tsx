@@ -21,7 +21,7 @@ import { Copy } from 'react-feather';
 const Stage1: NextPage = () => {
   const [seuroAddress, setSeuroAddress] = useState('');
   const { network } = useWeb3Context();
-  const _network = network?.name === 'homestead' ? 'main' : network?.name || 'goerli';
+  const _network = network?.name === 'homestead' ? 'main' : network?.name;
   const BondingCurveContract = SmartContractManager('BondingCurve' as Contract).then((data) =>  data);
   const [mobile, setMobile] = useState();
   const [copied, setCopied] = useState(false);
@@ -38,6 +38,7 @@ const Stage1: NextPage = () => {
   const getTokenAddress = async() => {
     //@ts-ignore
     return seuroAddress === '' ? await GetJsonAddresses().then((data:never) => {
+      //@ts-ignore
       setSeuroAddress(data[_network]['TOKEN_ADDRESSES']['SEURO']);
       return seuroAddress;
     })

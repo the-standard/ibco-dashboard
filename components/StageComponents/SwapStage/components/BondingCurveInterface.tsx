@@ -29,8 +29,8 @@ const currentPrice = BigNumber.from('886005893718244220');
 const currentPriceFloat = parseFloat(currentPrice.toString()) / 1000000000000000000;
 
 const customRadius = (context:any) => {
-  let index = context.dataIndex;
-  let value = context.dataset.data[ index ];
+  const index = context.dataIndex;
+  const value = context.dataset.data[ index ];
   return value === currentPriceFloat ? 5 : 0;
 }
 

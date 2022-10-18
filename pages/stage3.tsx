@@ -8,7 +8,6 @@ import { StyledGlobalContainer } from '../components/shared/uiElements/styles/Sh
 import { StyledMainContainer } from '../components/StageComponents/StakeStage/Styles'
 
 const Stage3: NextPage = () => {
-
   return (
     <StyledGlobalContainer>
       <NextHeadComponent title="The Standard | TST Staking" description='TST Staking' />
