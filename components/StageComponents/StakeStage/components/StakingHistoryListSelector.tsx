@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useWeb3Context } from "../../../../context";
 import { StakingContractManager, ConvertFrom, TOKENS, TokenContractManager } from "../../../../Utils";
+import { StyledStakeButton, StyledStakingHistorySelector } from "../styles/StakingListStyles";
 
 const defaultTokenObj = {
     tokenAddress: '',
@@ -115,17 +116,18 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
     }
 
     return (
-        <div className="grid grid-cols-4 gap-2 mb-5">
+        <StyledStakingHistorySelector>
             <span>{ConvertFrom(StakingObj.stake, parseInt(tstTokenInfo.decimal.toString())).toFloat()} {tstTokenInfo.symbol}</span>
             <span>{ConvertFrom(StakingObj.reward, parseInt(seuroTokenInfo.decimal.toString())).toFloat()} {TOKENS.DISPLAY.SEURO}</span>
             <span>{
             //@ts-ignore
             moment(parseInt(stakeInfo.maturity)).format('ll')
             }</span>
+            <span>&nbsp;</span>
             <span>{
                 //@ts-ignore
-                moment().isSameOrAfter(moment(parseInt(stakeInfo.maturity))) ? <button className="px-3 py-1" onClick={() => claimStake()}>{!loading ? 'Claim' : 'Loading...'}</button> : claimed ? <p>Already Claimed</p> : <p>Pending</p>
+                moment().isSameOrAfter(moment(parseInt(stakeInfo.maturity))) ? <StyledStakeButton onClick={() => claimStake()}>{!loading ? 'Claim' : 'Loading...'}</StyledStakeButton> : claimed ? <p>Already Claimed</p> : <p>Pending</p>
             }</span>
-        </div>
+        </StyledStakingHistorySelector>
     )
 }

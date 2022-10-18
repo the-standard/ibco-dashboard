@@ -11,13 +11,16 @@ export const StyledStakingListContainer = styled.div`
     position: relative;
     flex-direction: column;
     border: 0.1em solid ${props => props.theme.colors.borderLightGrey};
-    margin: 1em 0 1em 0;
+    margin: 0.5em 0;
     background-color: ${props => props.theme.colors.backgroundGreyLight};
 
     ${media.desktop`
         border: none;
-        background: none;
+        background: ${props => props.theme.colors.darkGrey};
         flex-direction: row;
+        padding: 0.5em 1em;
+        justify-content: center;
+        align-items: center;
     `}
 `;
 
@@ -44,7 +47,7 @@ export const StyledStatusContainer = styled.div`
         flex: 1;
         order: 0;
         text-align: left;
-        background-color: none;
+        background: none;
         padding: 0;
     `}
 `;
@@ -118,11 +121,26 @@ export const StyledTitleP = styled.p`
 
 export const StyledGridHeaders = styled.div`
     display: flex;
-    margin-top: 1em;
+    margin: 3em 1em 1em;
 
     ${media.desktop`
         & > span {
            flex: 1;
         }
     `}
+`;
+
+export const StyledStakingHistorySelector = styled.div`
+        display: flex;
+
+        & > span {
+            flex: 1;
+        }
+
+        ${media.desktop`
+            background: ${props => props.theme.colors.darkGrey};
+            padding: 0.5em 1em;
+            justify-content: center;
+            align-items: center;
+        `}
 `;

@@ -37,6 +37,7 @@ export const ClaimRewardContainer = styled.div`
     ${media.desktop`
         order: 0;
         width: 20%;
+        margin: 1.5em 0 0 2em;
     `}
 `;
 
@@ -59,7 +60,11 @@ export const StyledGridHeaders = styled.div`
     ${media.desktop`
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
-        width: 90%;
+        margin-bottom: 1em;
+
+        & > span {
+            flex: 1;
+            padding: 0 1em;
+        }
     `}
 `;

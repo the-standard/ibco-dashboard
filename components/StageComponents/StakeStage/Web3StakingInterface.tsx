@@ -136,9 +136,11 @@ export const Web3StakingInterface = () => {
         {
             !mobile &&
             <StyledGridHeaders>
-                <span>Your Staking Positions</span>
+                <span>Staking Positions</span>
                 <span>Approx. Reward</span>
                 <span>Staked Until</span>
+                <span>&nbsp;</span>
+                <span>&nbsp;</span>
             </StyledGridHeaders>
         }
         <div className="container">

@@ -23,8 +23,14 @@ export const StyledBondHistoryItemContainer = styled.div`
         border: 0;
         background: none;
         flex-direction: row;
-        justify-content: space-between;
-        width: 90%;
+        
+        & > div, & > p {
+            flex: 1;
+            padding: 1em;
+            margin: 0;
+            text-align: left;
+            background-color: ${props => props.theme.colors.darkGrey};
+        }
     `}
 `;
 

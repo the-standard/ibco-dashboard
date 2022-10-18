@@ -32,7 +32,7 @@ export const StyledStakingHistoryContainer = styled.div`
 
 export const StyledGridHeaders = styled.div`
     display: flex;
-    margin-top: 1em;
+    margin: 1em;
 
     ${media.desktop`
         & > span {
