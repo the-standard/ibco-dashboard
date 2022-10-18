@@ -92,6 +92,7 @@ export default createGlobalStyle`
   }
 
   .dropdownSelect {
+    display: flex;
     background: #074e53;
     color: #99f9ff;
     border: 1px solid #99f9ff !important;
@@ -100,6 +101,9 @@ export default createGlobalStyle`
     padding: 0.5em;
     width: 100%;
     text-align: center;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
 
     &.readOnly {
       border-color: ${props => props.theme.colors.superLightGrey} !important;

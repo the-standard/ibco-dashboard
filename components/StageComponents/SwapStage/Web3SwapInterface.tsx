@@ -240,7 +240,7 @@ export function Web3SwapInterface() {
               <StyledInputContainers>
                 <input type='string' readOnly={true} placeholder="Converting to" value={to > 0 ? to.toLocaleString( undefined, { minimumFractionDigits: 2 }) : ''} /> 
                 <div className="dropdownSelect readOnly">
-                  SEURO
+                  {TOKENS.DISPLAY.SEURO}
                 </div>
               </StyledInputContainers>
             {

@@ -42,13 +42,13 @@ export const StyledInputContainer = styled.div`
 `;
 
 export const StyledInput = styled.input`
-    width: 75%;
+    width: 100%;
     font-size: 1em;
     color: ${props => props.theme.colors.white};
 `;
 
 export const StyledDropdownContainer = styled.div`
-    width: 25% !important;
+    width: 81px !important;
     font-size: 1em;
 
     & p {

@@ -39,4 +39,6 @@ export const StyledFooterSocialContainer = styled.div`
 
 export const StyledBuildIdContainer = styled.p`
     text-align: center;
+    font-size: 0.8em;
+    color: ${props => props.theme.colors.borderLightGrey};
 `;

@@ -45,7 +45,16 @@ export const StyledInputContainers = styled.div`
     & input {
         color: ${props => props.theme.colors.white};
         font-size: 1em;
-        min-width: 60%;
+        width: 100%;
+    }
+
+    & .dropdownSelect {
+        width: 81px;
+        font-size: 0.8em;
+    }
+
+    & select.dropdownSelect {
+        width: 81px;
     }
 `;
 

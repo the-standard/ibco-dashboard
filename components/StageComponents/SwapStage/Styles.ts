@@ -43,18 +43,18 @@ export const StyledSupplyContainer = styled.div`
 
     ${media.desktop`
         display: flex;
-        justify-content: space-between;
 
         & h2 {
             padding: 0;
-            margin: 0;
+            margin: 0 0.5em 0 0;
         }
 
         & .copyButton {
             cursor: pointer;
             color: ${props => props.theme.colors.cyan};
-            width: 10%;
+            width: auto;
             margin-top: 0.4em;
+            margin-left: auto;
         }
     `}
 `;
@@ -136,15 +136,16 @@ export const StyledInputContainers = styled.div`
     & input {
         color: ${props => props.theme.colors.white};
         font-size: 1em;
-        min-width: 53%;
+        width: 100%;
     }
 
     & .dropdownSelect {
+        width: 81px;
         font-size: 0.8em;
     }
 
     & select.dropdownSelect {
-        min-width: 40%;
+        width: 81px;
     }
 `;
 
