@@ -87,7 +87,7 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
     };
 
     return (
-        <StyledTokenInformationContainer className="grid grid-cols-3 gap-4 content-start mb-4 md:mr-6 p-5 supplyContainer">
+        <StyledTokenInformationContainer className="supplyContainer">
             <div>
                 <h2>Market Cap</h2>
                 <p>&euro;{((tokenInfo.seuroPrice * tokenInfo.ibcoTotalSupply) / 1000000000000000000000000000000000000).toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
