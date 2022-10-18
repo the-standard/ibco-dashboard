@@ -2,14 +2,14 @@ import React from 'react'
 import { useWeb3Context } from '../../../context/'
 import { Web3Address } from './Web3Address';
 import { CreditCard } from 'react-feather';
-import { StyledWeb3ButtonContainer, StyledDisconnectButton } from './styles/Web3ButtonStyles';
+import { StyledWeb3ButtonContainer, StyledDisconnectButton, StyledMainConnectButton } from './styles/Web3ButtonStyles';
 
 interface ConnectProps {
   connect: (() => Promise<void>) | null
 }
 const ConnectButton = ({ connect }: ConnectProps) => {
   return connect ? (
-    <button className="px-3 py-2 connectButton flex" onClick={connect}><span className="pr-2 w-1.5/12"><CreditCard /></span> Connect Wallet</button>
+    <StyledMainConnectButton className="connectButton" onClick={connect}><span><CreditCard size={20} /></span> Connect Wallet</StyledMainConnectButton>
   ) : (
     <button className="px-3 py-2">Loading...</button>
   )

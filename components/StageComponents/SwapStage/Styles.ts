@@ -139,13 +139,19 @@ export const StyledInputContainers = styled.div`
         width: 100%;
     }
 
-    & .dropdownSelect {
-        width: 81px;
+    & div.dropdownSelect {
+        width: 100px;
         font-size: 0.8em;
+        padding: 0;
+        margin: 0;
     }
 
     & select.dropdownSelect {
-        width: 81px;
+        width: auto;
+        min-width: 76px;
+        font-size: 0.8em;
+        padding: 0;
+        margin: 0;
     }
 `;
 

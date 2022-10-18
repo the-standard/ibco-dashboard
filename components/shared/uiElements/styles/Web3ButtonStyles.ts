@@ -58,3 +58,18 @@ export const StyledDisconnectButton = styled.button`
         color: #fff;
     `}
 `;
+
+export const StyledMainConnectButton = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5em 1em;
+    margin: 0;
+    border: 0;
+    border-radius: 0.2em;
+    font-size: 1em;
+
+    & > span {
+        margin-right: 1em;
+    }
+`;

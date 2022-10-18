@@ -1,32 +1,35 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import { Web3Button } from '../components/'
-
-import SubNavigation from '../components/shared/navigation/SubNavigation'
+import { Web3Button } from '../components'
+import Footer from '../components/shared/footer'
+import ConnectNav from '../components/shared/navigation/ConnectNav'
+import NextHeadComponent from '../components/shared/NextHeadComponent'
+import { StyledIndexContainer, StyledIndexDescriptionContainer, StyledTokenInformationContainer } from '../components/shared/uiElements/styles/IndexStyles'
+import { StyledGlobalContainer } from '../components/shared/uiElements/styles/SharedStylesGlobal'
+import { useWeb3Context } from '../context'
 
 const Home: NextPage = () => {
+  const { network } = useWeb3Context();
+  
   return (
-    <div className="flex h-screen flex-col">
-      <Head>
-        <title>The Standard - IBCO Dashboard</title>
-        <meta name="description" content="The Standard - IBCO Dashboard" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <StyledGlobalContainer>
+    <NextHeadComponent title="The Standard" description='The Standard IO DAO' />
+    
+    <ConnectNav />
 
-      <nav className="grid justify-items-end p-4">
-        {/* <Link href="/about">
-          <a className="text-lg font-light">About</a>
-        </Link> */}
-        {/* <Web3Address /> */}
-        <Web3Button />
-      </nav>
+    <StyledIndexContainer>
+      <StyledIndexDescriptionContainer>
+        <h2>Lorem ipsum dolor sit amet</h2>
+        <p>this is some information</p>
+        {!network && <Web3Button />}
+      </StyledIndexDescriptionContainer>
 
-        <SubNavigation />
-
-      <main className="flex flex-row justify-between p-4">
-       information about the coin
+      <main>
+        <StyledTokenInformationContainer>Token information</StyledTokenInformationContainer>
       </main>
-    </div>
+    </StyledIndexContainer>
+
+    <Footer />
+  </StyledGlobalContainer>
   )
 }
 
