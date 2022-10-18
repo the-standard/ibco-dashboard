@@ -97,7 +97,7 @@ export const Web3StakingInterface = () => {
     }
 
     const copyToClipboardClickFunction = () => {
-        navigator.clipboard.writeText(tokenAddress).then(() => {toast.success('Copied to clipboard, please import token into MetaMask'); setCopied(true)}).catch(() => {toast.error('unable to copy address, please manually select and copy'); setCopied(false)});
+        navigator.clipboard.writeText(tokenAddress).then(() => {toast.success('Copied to clipboard, please import token into MetaMask'); setCopied(true)}).catch(() => {toast.error('Unable to copy address, please manually select and copy'); setCopied(false)});
     }
 
    return !ShowStakingInterface ? (

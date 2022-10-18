@@ -70,7 +70,7 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
                 marketCap: marketCap
             }));
         }).catch((error:never) => {
-            toast.error(`unable to obtain currentBucket: ${error}`);
+            toast.error(`Unable to obtain current price: ${error}`);
         });
     };
 
@@ -82,7 +82,7 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
                     tstSeuroPrice: data
                 }))
             }).catch((error:never) => {
-                toast.error(`unable to activate contract interface: ${error}`)
+                toast.error(`Unable to retrieve TST / sEURO price: ${error}`)
             })
     };
 
