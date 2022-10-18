@@ -18,7 +18,7 @@ import { GetJsonAddresses } from '../../../Utils/ContractManager';
 import { RateSelectionButton } from './components/RateSelectionButton/RateSelectionButton';
 import { BondingHistoryInterface } from './components/BondingHistoryInterface/BondingHistoryInterface';
 import DescriptionContainer from '../../shared/uiElements/DescriptionContainer/DescriptionContainer';
-import { StyledBondingHistoryButton, StyledBondingHistoryButtonContainer, StyledInputContainers, StyledMainContainer, StyledNoFormatP, StyledPContainer, StyledRateSelectionContainer, StyledTransactionButton, StyledTransactionButtonContainer } from './Styles';
+import { StyledBondingHistoryButton, StyledBondingHistoryButtonContainer, StyledBondingInterfaceContainer, StyledInputContainers, StyledMainContainer, StyledNoFormatP, StyledPContainer, StyledRateSelectionContainer, StyledTransactionButton, StyledTransactionButtonContainer } from './Styles';
 
 type Rate = {
   duration: string, 
@@ -359,7 +359,7 @@ function Web3BondInterface() {
       <StyledBondingHistoryButton onClick={bondingHistoryClickHandler}>View History</StyledBondingHistoryButton>
     </StyledBondingHistoryButtonContainer>
 
-    <div>
+    <StyledBondingInterfaceContainer>
       { web3Provider ? (
         <>
         <span>
@@ -415,7 +415,7 @@ function Web3BondInterface() {
             </>
       ) : <div>Please Connect Wallet...</div>
       }
-    </div>
+    </StyledBondingInterfaceContainer>
     </StyledMainContainer>
     )
     :
