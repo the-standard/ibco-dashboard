@@ -10,7 +10,6 @@ import { GlobalColors } from '../styles/globalColors';
 import GlobalCSS from '../styles/globalStyles';
 import 'react-toastify/scss/main.scss'
 import { StyledGlobalBetaBanner } from '../components/shared/uiElements/styles/SharedStylesGlobal';
-// import { Web3Button } from '../components'
 
 function getInitialProps() {
   return {};  
@@ -29,8 +28,6 @@ function SafeHydrate({ children }) {
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
-  //const {web3Provider} = useWeb3Context();
-
   useEffect(() => {
       TagManager.initialize({ gtmId: 'GTM-5G25J82' });
   }, []);
@@ -40,14 +37,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Web3ContextProvider>
         <ThemeProvider theme={theme}>
         <GlobalCSS />
-        {/* {
-          !web3Provider && <div className="connectModal mx-auto">
-              <p className="mb-4">You must connect your wallet to continue</p>
-            <div>
-              <Web3Button />
-            </div>
-            </div>
-        } */}
         <StyledGlobalBetaBanner>BETA Release! Testnet Only. Design to be updated soon. Report bugs <a href="https://bit.ly/ibco-bugs">here</a>!</StyledGlobalBetaBanner>
           <Component {...pageProps} />
           <ToastContainer

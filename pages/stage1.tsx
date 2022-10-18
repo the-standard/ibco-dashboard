@@ -21,12 +21,17 @@ import { Copy } from 'react-feather';
 const Stage1: NextPage = () => {
   const [seuroAddress, setSeuroAddress] = useState('');
   const { network } = useWeb3Context();
-  const _network = network?.name === 'homestead' ? 'main' : network?.name;
+  const _network = network?.name === 'homestead' ? 'main' : network?.name || 'goerli';
   const BondingCurveContract = SmartContractManager('BondingCurve' as Contract).then((data) =>  data);
   const [mobile, setMobile] = useState();
   const [copied, setCopied] = useState(false);
+  const [loadCalls, setLoadCalls] = useState(1);
 
   useEffect(() => {
+    if (loadCalls === 2) {
+      if (network === null) window.location.href = '/';
+    }
+    setLoadCalls(loadCalls+1);
     getTokenAddress();
   }, [network]);
 

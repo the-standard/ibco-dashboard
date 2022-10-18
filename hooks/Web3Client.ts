@@ -36,7 +36,9 @@ export const useWeb3 = () => {
         const signer = web3Provider.getSigner()
         const address = await signer.getAddress()
         const network = await web3Provider.getNetwork()
-          toast.success(`Connected to Wallet: ${address.substring(0, 5)}...${address.slice(-4)}`)
+
+        toast.success(`Connected to Wallet: ${address.substring(0, 5)}...${address.slice(-4)}`);
+        if (!window.location.href.includes('/stage')) window.location.href = '/stage1';
 
         dispatch({
           type: 'SET_WEB3_PROVIDER',
@@ -50,8 +52,6 @@ export const useWeb3 = () => {
       } catch (e) {
         toast.error(`Wallet Connect Error: ${e}`)
       }
-    } else {
-      toast.error('No Web3Modal')
     }
   }, [])
 
@@ -59,8 +59,11 @@ export const useWeb3 = () => {
     if (web3Modal) {
       web3Modal.clearCachedProvider()
       if (provider?.disconnect && typeof provider.disconnect === 'function') {
-        await provider.disconnect()
+        await provider.disconnect();
       }
+
+      if (window.location.href.includes('/stage')) window.location.href = '/';
+
       toast.error('Disconnected from Wallet')
       dispatch({
         type: 'RESET_WEB3_PROVIDER',
@@ -80,6 +83,8 @@ export const useWeb3 = () => {
   // EIP-1193 events
   useEffect(() => {
     if (provider?.on) {
+      console.log('provider.on', provider.on);
+      //window.location.href = '/stage1';
       const handleAccountsChanged = (accounts: string[]) => {
         toast.info('Changed wallet Account')
         dispatch({
@@ -117,7 +122,7 @@ export const useWeb3 = () => {
           provider.removeListener('disconnect', handleDisconnect)
         }
       }
-    }
+    } 
   }, [provider, disconnect])
 
   return {
