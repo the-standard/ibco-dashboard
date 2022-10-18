@@ -27,7 +27,7 @@ const ConnectNav = () => {
               !mobile ? 
                 <img src='/Images/theStandardLogo.svg' alt='The Standard' width='100%' />
               :
-                <img src='/Images/theStandardLogoIcon.svg' alt='The Standard Icon' width='100%' />
+                <img src='/Images/StandardLogo-Icon.svg' alt='The Standard Icon' width='100%' />
             }
           </StyledLogoContainer>
 
