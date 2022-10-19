@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
 export const StyledButton = styled.button`
-    padding: 10px 5px;
+    padding: 0;
     background: none;
     border: 1px solid #727272;
     border-radius: 2px;
-    min-width: 18%;
+    min-width: 83px;
 
     &.selected {
         border: 1px solid #99f9ff;

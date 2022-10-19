@@ -10,9 +10,10 @@ export const StyledBondHistoryItemContainer = styled.div`
     position: relative;
     border:0.1em solid ${props => props.theme.colors.borderLightGrey};
     border-radius: 0.2em;
-    margin-bottom: 1em;
+    margin-bottom: 8px;
     width: 100%;
     background-color: ${props => props.theme.colors.darkGrey};
+    font-size: 17px;
 
     & p {
         margin: 0 0 0.5em 1em;

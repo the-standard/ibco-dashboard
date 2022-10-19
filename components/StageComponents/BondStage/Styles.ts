@@ -9,13 +9,18 @@ export const StyledMainContainer = styled.main`
     width: 100%;
 
     ${media.desktop`
-        width: 46%;
+        width: 35%;
     `}
 `;
 
 export const StyledBondingInterfaceContainer = styled.div`
     background-color: ${props => props.theme.colors.darkGrey};
-    padding: 1.5em 3em;
+    padding: 2.5em 3.5em;
+
+    ${media.desktop`
+        position: relative;
+        top: -5px;
+    `}
 `;
 
 export const StyledBondingHistoryButtonContainer = styled.div`
@@ -52,7 +57,7 @@ export const StyledPContainer = styled.p`
 
 export const StyledNoFormatP = styled.p`
     padding: 0;
-    margin: 0 auto;
+    margin: 0 1.5em;
 `;
 
 export const StyledInputContainers = styled.div`
@@ -68,7 +73,8 @@ export const StyledInputContainers = styled.div`
 
     & .dropdownSelect {
         width: 81px;
-        font-size: 0.8em;
+        ma
+        font-size: 16px;
     }
 
     & select.dropdownSelect {
@@ -84,18 +90,23 @@ export const StyledRateSelectionContainer = styled.div`
 export const StyledTransactionButtonContainer = styled.div`
     display: flex;
     justify-content: space-between;
-    margin: 2em 0;
+    margin: 4em 0 8px 0;
 `;
 
 export const StyledTransactionButton = styled.button`
     width: 100%;
-    margin: 0 auto;
+    margin: 0 4px 0 0;
     font-size: 0.9em;
     padding: 1em;
     border: 0;
 
     &.halfWidth {
-        width: 48%;
+        width: 50%;
+    }
+
+    &.noRightMargin {
+        margin-right: 0;
+        margin-left: 4px;
     }
 
     &.extraMarginTop {

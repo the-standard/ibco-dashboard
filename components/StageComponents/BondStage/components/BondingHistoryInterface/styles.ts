@@ -11,6 +11,7 @@ export const StyledBondHistoryContainer = styled.div`
     ${media.desktop`
         flex-direction: row;
         align-items: flex-start;
+        margin-top: 2em;
     `}
 `;
 
@@ -37,7 +38,7 @@ export const ClaimRewardContainer = styled.div`
     ${media.desktop`
         order: 0;
         width: 20%;
-        margin: 1.5em 0 0 2em;
+        margin: 2.6em 0 0 8px;
     `}
 `;
 

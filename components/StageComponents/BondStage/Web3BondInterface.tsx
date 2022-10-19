@@ -384,6 +384,7 @@ function Web3BondInterface() {
           </div>
         </span>
         
+        <StyledPContainer>Select Bond Period</StyledPContainer>
         <StyledRateSelectionContainer>
           {
             rates.length > 0 ? rates.map((rate:Rate, index) => {
@@ -400,7 +401,7 @@ function Web3BondInterface() {
                 {
                   <>
                   <StyledTransactionButton className="halfWidth" disabled={disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${TOKENS.DISPLAY.SEURO} Approved` : loading ? 'loading...' : `Approve ${TOKENS.DISPLAY.SEURO}`}</StyledTransactionButton>
-                  <StyledTransactionButton className="halfWidth" disabled={disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${otherTokenSymbol} Approved` : loading ? 'loading...' : `Approve ${otherTokenSymbol}`}</StyledTransactionButton>
+                  <StyledTransactionButton className="halfWidth noRightMargin" disabled={disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${otherTokenSymbol} Approved` : loading ? 'loading...' : `Approve ${otherTokenSymbol}`}</StyledTransactionButton>
                   </>
                 }
               </StyledTransactionButtonContainer>
