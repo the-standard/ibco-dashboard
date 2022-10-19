@@ -96,7 +96,7 @@ export const StyledTransactionButtonContainer = styled.div`
 export const StyledTransactionButton = styled.button`
     width: 100%;
     margin: 0 4px 0 0;
-    font-size: 0.9em;
+    font-size: 14px;
     padding: 1em;
     border: 0;
 
@@ -111,5 +111,9 @@ export const StyledTransactionButton = styled.button`
 
     &.extraMarginTop {
         margin-top: 2em;
+    }
+
+    &.marginTop {
+        margin-top: 8px;
     }
 `;

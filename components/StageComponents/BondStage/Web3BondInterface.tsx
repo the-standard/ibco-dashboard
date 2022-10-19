@@ -418,7 +418,7 @@ function Web3BondInterface() {
             <StyledTransactionButton disabled={disabledSend} onClick={() => SendBondTransaction()}>{loading ? 'loading...' : transactionData ? 'Start Another Bond' : 'Start Bond'}</StyledTransactionButton>
             }
             {// @ts-ignore
-            transactionData && <button className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</button>
+            transactionData && <StyledTransactionButton className='marginTop' onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledTransactionButton>
             }
             </>
       ) : <div>Please Connect Wallet...</div>
