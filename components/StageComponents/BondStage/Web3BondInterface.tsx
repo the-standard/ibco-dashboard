@@ -46,8 +46,9 @@ function Web3BondInterface() {
   const [disabledApprovalButton, setDisabledApprovalButton] = useState({main: true, other: true});
   const [loading, setLoading] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
+  const [_network, setNetwork] = useState<string>();
+  const [etherscanUrl, setEtherscanUrl] = useState<string>();
   // CONTRACT MANAGER INIT
-  const _network = network?.name === 'homestead' ? 'main' : network?.name || 'goerli';
   const OperatorStage2Contract = SmartContractManager('OperatorStage2' as Contract).then((data) =>  data);
   const SmartContract = SmartContractManager('BondingEvent' as Contract).then((data) =>  data);
   //@ts-ignore
@@ -61,6 +62,12 @@ function Web3BondInterface() {
   };
 
   // MAIN UPDATE FUNCTIONS
+  useEffect(() => {
+    setNetwork(network?.name === 'homestead' ? 'main' : network?.name);
+    setEtherscanUrl(network?.name === 'homestead' ? 'https://etherscan.io' : `https://${network?.name}.etherscan.io`);
+    getContractAddresses();
+  }, [network]);
+
   useEffect(() => {
     getSeuroAddress();
   }, []);
@@ -216,7 +223,7 @@ function Web3BondInterface() {
     setLoading(true);
     const _depositAmount = token === TOKENS.HUMAN_READABLE.SEURO ? ConvertTo(from, mainTokenDecimal).raw() : ConvertTo(to, otherTokenDecimal).raw();
     //@ts-ignore
-    const bondingEventAddress = contractAddresses[network['name']]['CONTRACT_ADDRESSES']['BondingEvent'];
+    const bondingEventAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['BondingEvent'];
     const TokenContract = token === TOKENS.HUMAN_READABLE.SEURO ? await (await TokenContract_main) : await (await TokenContract_other);
 
     // @ts-ignore
@@ -411,7 +418,7 @@ function Web3BondInterface() {
             <StyledTransactionButton disabled={disabledSend} onClick={() => SendBondTransaction()}>{loading ? 'loading...' : transactionData ? 'Start Another Bond' : 'Start Bond'}</StyledTransactionButton>
             }
             {// @ts-ignore
-            transactionData && <button className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</button>
+            transactionData && <button className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</button>
             }
             </>
       ) : <div>Please Connect Wallet...</div>
