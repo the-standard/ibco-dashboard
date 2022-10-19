@@ -5,8 +5,9 @@ import { createGlobalStyle } from 'styled-components'
 
 export default createGlobalStyle`
   html {
+    position: relative;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     font-family: 'Poppins', sans-serif;
     background-image: linear-gradient(${props => props.theme.colors.darkGrey}, ${props => props.theme.colors.black});
   }
@@ -21,6 +22,7 @@ export default createGlobalStyle`
   }
 
   body {
+    width: 100%;
     height: 100%;
     color: white;
     margin: 0 auto;

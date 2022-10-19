@@ -9,7 +9,7 @@ export const StyledMainContainer = styled.main`
     width: 100%;
 
     ${media.desktop`
-        width: 35%;
+        width: 50%;
     `}
 `;
 

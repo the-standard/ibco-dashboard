@@ -12,7 +12,7 @@ export const StyledSubNavContainer = styled.nav`
     text-align: center;
 
     & a {
-        max-width: 30%;
+        max-width: 48%;
         text-decoration: none;
         color: ${props => props.theme.colors.superLightGrey};
         border: 0.1em solid ${props => props.theme.colors.grey};
@@ -28,7 +28,7 @@ export const StyledSubNavContainer = styled.nav`
     }
 
     ${media.desktop`
-        width:30%;
+        width:48%;
         margin: 1.2em auto 4em;
 
         & a {
@@ -65,7 +65,7 @@ export const StyledSubNavIndicatorContainer = styled.div`
     border-bottom: 0.1em solid ${props => props.theme.colors.superLightGrey};
 
     ${media.desktop`
-        width:25%;
+        width:41%;
         position: relative;
         top: 4em;
     `}
