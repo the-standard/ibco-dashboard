@@ -235,7 +235,7 @@ function Web3BondInterface() {
         ...prevState,
         main: false
       }))
-      toast.error('approval error', error);
+      toast.error('Approval error', error);
     })
     )
     :
@@ -253,7 +253,7 @@ function Web3BondInterface() {
         ...prevState,
         other: false
       }))
-      toast.error('approval error', error);
+      toast.error('Approval error', error);
     })
     )
   }
@@ -338,10 +338,10 @@ function Web3BondInterface() {
         setBondingLength(undefined);
         setDisabledSend(true);
         // @ts-ignore
-        toast.success(`transaction success: ${data['transactionHash']}`);
+        toast.success(`Transaction success: ${data['transactionHash']}`);
       }).catch((error:never) => {
         setLoading(false);
-        toast.error(`Problem with bonding event: ${ error}`);
+        toast.error(`Error creating new bond: ${ error}`);
       });
   }
 

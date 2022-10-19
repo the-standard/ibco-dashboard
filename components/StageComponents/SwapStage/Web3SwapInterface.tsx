@@ -163,7 +163,7 @@ export function Web3SwapInterface() {
     const getUserBalance = isTokenNotEth(token.token) ? await web3Interface.eth.getBalance(address) : await (await TokenContract).methods.balanceOf(address);
     const formatUserBalance = ConvertTo(getUserBalance, tokenDecimal).toInt();
     formatUserBalance < parseInt(_depositAmount.toString()) ? 
-      toast.error('you do not have enough to cover this swap') 
+      toast.error('Insufficient funds for swap') 
     :
       isTokenNotEth(token.token) ? 
         (//@ts-ignore
@@ -207,7 +207,7 @@ export function Web3SwapInterface() {
       setLoading(false);
       setTransactionData(data);
 
-      !data['status'] ? toast.error('Transaction error') : toast.success(`transaction successfull ${data['transactionHash']}`);
+      !data['status'] ? toast.error('Transaction error') : toast.success(`Transaction successful ${data['transactionHash']}`);
     }).catch(() => {
       setLoading(false);
     })
@@ -218,7 +218,7 @@ export function Web3SwapInterface() {
       setLoading(false);
       setTransactionData(data);
 
-      !data['status'] ? toast.error('Transaction error') : toast.success(`transaction successfull ${data['transactionHash']}`);
+      !data['status'] ? toast.error('Transaction error') : toast.success(`Transaction successful ${data['transactionHash']}`);
     }).catch(() => {
       setLoading(false);
     })

@@ -112,7 +112,7 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
     }).catch((error:never) => {
       setLoading(false);
       setAssetApproved(false);
-      toast.error('approval error', error);
+      toast.error('Approval error', error);
     })
   }
 
@@ -126,10 +126,10 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
         setLoading(false);
         setTransactionData(data);
         // @ts-ignore
-        toast.success(`transaction success: ${data['transactionHash']}`);
+        toast.success(`Transaction success: ${data['transactionHash']}`);
       }).catch((error:never) => {
         setLoading(false);
-        toast.error(`Problem with bonding event: ${ error}`);
+        toast.error(`Error when staking: ${ error}`);
       });
   }
 
