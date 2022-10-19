@@ -59,7 +59,7 @@ export function Web3SwapInterface() {
   }, []);
 
   useEffect(() => {
-    const disabledSend = from !== '' && tokenApproved;
+    const disabledSend = from !== '' && from !== '0' && tokenApproved;
     const disabledCheckState = from !== '';
 
     setDisabledSend(!disabledSend);
