@@ -9,7 +9,7 @@ export const StyledMainContainer = styled.main`
     width: 100%;
 
     ${media.desktop`
-        width: 60%;
+        width: 65%;
     `}
 `;
 
@@ -22,6 +22,10 @@ export const StyledStakingHistoryContainer = styled.div`
     
     ${media.desktop`
         h2 {
+            font-size: 16px;
+            font-weight: normal;
+            margin-top: 40px;
+            margin-bottom: 16px;
             background: none;
             padding: 0;
             text-align: left;

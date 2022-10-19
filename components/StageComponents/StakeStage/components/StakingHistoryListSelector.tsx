@@ -118,7 +118,7 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
     return (
         <StyledStakingHistorySelector>
             <span>{ConvertFrom(StakingObj.stake, parseInt(tstTokenInfo.decimal.toString())).toFloat()} {tstTokenInfo.symbol}</span>
-            <span>{ConvertFrom(StakingObj.reward, parseInt(seuroTokenInfo.decimal.toString())).toFloat()} {TOKENS.DISPLAY.SEURO}</span>
+            <span className="reward">{ConvertFrom(StakingObj.reward, parseInt(seuroTokenInfo.decimal.toString())).toFloat()} {TOKENS.DISPLAY.SEURO}</span>
             <span>{
             //@ts-ignore
             moment(parseInt(stakeInfo.maturity)).format('ll')
@@ -126,7 +126,7 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
             <span>&nbsp;</span>
             <span>{
                 //@ts-ignore
-                moment().isSameOrAfter(moment(parseInt(stakeInfo.maturity))) ? <StyledStakeButton onClick={() => claimStake()}>{!loading ? 'Claim' : 'Loading...'}</StyledStakeButton> : claimed ? <p>Already Claimed</p> : <p>Pending</p>
+                moment().isSameOrAfter(moment(parseInt(stakeInfo.maturity))) ? <StyledStakeButton onClick={() => claimStake()}>{!loading ? 'Claim Reward' : 'Loading...'}</StyledStakeButton> : claimed ? <p>Already Claimed</p> : <p>Pending</p>
             }</span>
         </StyledStakingHistorySelector>
     )
