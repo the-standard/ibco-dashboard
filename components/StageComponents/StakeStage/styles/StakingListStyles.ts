@@ -130,6 +130,10 @@ export const StyledGridHeaders = styled.div`
            flex: 2;
         }
 
+        & > span.flex1 {
+            flex: 1;
+         }
+
         &.greyBG {
             padding: 1em;
             margin: 0;
