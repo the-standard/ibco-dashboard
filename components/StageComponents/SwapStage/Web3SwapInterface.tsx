@@ -168,7 +168,7 @@ export function Web3SwapInterface() {
     :
       isTokenNotEth(token.token) ? 
         (//@ts-ignore
-          await (await TokenContract).methods.approve(contractAddresses[network['name']]['CONTRACT_ADDRESSES']['SEuroOffering'], _depositAmount.toString()).send({from: address})
+          await (await TokenContract).methods.approve(contractAddresses[_network]['CONTRACT_ADDRESSES']['SEuroOffering'], _depositAmount.toString()).send({from: address})
         .then((data: { [x: string]: never; }) => {
           setTokenApprove(true);
           toast.success(`Tokens approved for use: ${data['blockHash']}`);
