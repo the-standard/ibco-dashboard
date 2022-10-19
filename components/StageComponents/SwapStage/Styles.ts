@@ -123,6 +123,7 @@ export const StyledSwapInterfaceContainer = styled.div`
     padding 2em 1.5em;
     background-color: ${props => props.theme.colors.darkGrey};
     margin: 1em 0;
+    font-size: 16px;
 
     ${media.desktop`
         margin: 0;
@@ -131,13 +132,14 @@ export const StyledSwapInterfaceContainer = styled.div`
 
 export const StyledPContainer = styled.p`
     padding: 0;
-    margin: 0 0 0.5em 0;
+    font-size: 14px;
+    margin: 0 0 0.3em 0;
 `;
 
 export const StyledInputContainers = styled.div`
     display: flex;
     width: 100%;
-    margin: 0.1em 0 0.8em 0;
+    margin: 0.1em 0 1.5em 0;
 
     & input {
         color: ${props => props.theme.colors.white};
