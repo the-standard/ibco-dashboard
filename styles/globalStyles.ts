@@ -7,8 +7,8 @@ export default createGlobalStyle`
   html {
     width: 100%;
     height: 100%;
-    background-color: black;
     font-family: 'Poppins', sans-serif;
+    background-image: linear-gradient(${props => props.theme.colors.darkGrey}, ${props => props.theme.colors.black});
   }
 
   svg {
@@ -24,7 +24,8 @@ export default createGlobalStyle`
     height: 100%;
     color: white;
     margin: 0 auto;
-    font-size: 16px;
+    font-size: 14px;
+    line-height: normal;
   }
 
   button {

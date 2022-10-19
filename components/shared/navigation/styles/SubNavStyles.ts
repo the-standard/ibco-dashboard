@@ -9,7 +9,6 @@ export const StyledSubNavContainer = styled.nav`
     margin: 1.2em auto 2em;
     width: 100%;
     justify-content: space-between;
-    font-size: 1.2em;
     text-align: center;
 
     & a {
@@ -29,7 +28,7 @@ export const StyledSubNavContainer = styled.nav`
     }
 
     ${media.desktop`
-        width:51%;
+        width:30%;
         margin: 1.2em auto 4em;
 
         & a {
@@ -38,6 +37,7 @@ export const StyledSubNavContainer = styled.nav`
 
             &.active {
                 border: 0;
+                white-space: nowrap;
                 background: none;
             }
         }
@@ -65,9 +65,9 @@ export const StyledSubNavIndicatorContainer = styled.div`
     border-bottom: 0.1em solid ${props => props.theme.colors.superLightGrey};
 
     ${media.desktop`
-        width:42.5%;
+        width:25%;
         position: relative;
-        top: 5em;
+        top: 4em;
     `}
 `;
 

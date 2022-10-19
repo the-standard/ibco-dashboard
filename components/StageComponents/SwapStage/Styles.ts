@@ -21,7 +21,7 @@ export const StyledLeftRightColContainer = styled.div`
 
 export const StyledTokenInfoLeftCol =styled.div`
     ${media.desktop`
-        margin-right: 1em;
+        margin-right: 8px;
         width: 75%;
     `}
 `;
@@ -34,11 +34,12 @@ export const StyledTokenInfoRightCol =styled.div`
 
 export const StyledSupplyContainer = styled.div`
     background-color: ${props => props.theme.colors.darkGrey};
-    padding: 1em;
+    padding: 1em 2.7em;
+    font-size: 16px;
 
     & h2 {
+        font-size: 19px;
         color: ${props => props.theme.colors.cyan};
-        margin-top: 0;
     }
 
     ${media.desktop`
@@ -48,14 +49,6 @@ export const StyledSupplyContainer = styled.div`
             padding: 0;
             margin: 0 0.5em 0 0;
         }
-
-        & .copyButton {
-            cursor: pointer;
-            color: ${props => props.theme.colors.cyan};
-            width: auto;
-            margin-top: 0.4em;
-            margin-left: auto;
-        }
     `}
 `;
 
@@ -63,7 +56,7 @@ export const StyledAddressHolderP = styled.p`
     overflow-wrap: anywhere;
 
     ${media.desktop`
-        margin: 0.4em 0 0 0;
+        margin: 0.2em 0 0 0;
         padding: 0;
     `}
 `;
@@ -74,13 +67,24 @@ export const StyledCopyButton = styled.button`
     padding: 1em 0;
 `;
 
+export const StyledDesktopCopyButton = styled.a`
+    ${media.desktop`
+        margin: 0.2em 0 0 0;
+        color: ${props => props.theme.colors.cyan};
+        text-decoration: none;
+        width: auto;
+        margin-left: auto;
+        cursor: pointer;
+    `}
+`;
+
 export const StyledTokenInformationContainer = styled.div`
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     background-color: ${props => props.theme.colors.darkGrey};
-    padding: 1em;
-    margin: 1em 0;
+    padding: 2em 3em;
+    margin: 8px 0;
 
     & > div {
         min-width: 50%;
@@ -88,19 +92,21 @@ export const StyledTokenInformationContainer = styled.div`
     }
 
     & h2 {
-        font-size: 1.1em;
+        font-size: 19px;
+        font-weight: bold;
         margin: 0;
     }
 
     & p {
+        font-size: 16px;
         margin-top: 0.4em;
+        margin-bottom: 0;
     }
 
     & h2,
     & > div > h2 {
         margin-top: 0;
         color: ${props => props.theme.colors.cyan};
-        font-weight: normal;
         line-height: normal;
     }
 
@@ -114,7 +120,7 @@ export const StyledTokenInformationContainer = styled.div`
 `;
 
 export const StyledSwapInterfaceContainer = styled.div`
-    padding 1em;
+    padding 2em 1.5em;
     background-color: ${props => props.theme.colors.darkGrey};
     margin: 1em 0;
 
@@ -166,4 +172,9 @@ export const StyledSwapButton = styled.button`
     &.extraMarginTop {
         margin-top: 2em;
     }
+`;
+
+export const StyledBondingCurveContainer = styled.div`
+    padding 2em 3em;
+    background-color: ${props => props.theme.colors.darkGrey};
 `;

@@ -31,7 +31,7 @@ export const StyledWalletNetworkContainer = styled.span`
 `;
 
 export const StyledWalletAddressContainer = styled.span`
-    margin: 0 0.5em;
+    margin: 0 0 0 0.7em;
 `;
 
 export const StyledWeb3AddressContainer = styled.div`
@@ -50,12 +50,12 @@ export const StyledDisconnectButton = styled.button`
     background: none;
     color: ${props => props.theme.colors.red};
     border: 0;
-    font-size: 1em;
-    font-weight: bold;
+    font-size: 14px;
 
     ${media.desktop`
         background-color: ${props => props.theme.colors.red};
         color: #fff;
+        padding: 0 1em;
     `}
 `;
 

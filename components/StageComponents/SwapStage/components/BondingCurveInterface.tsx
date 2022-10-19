@@ -14,6 +14,7 @@ import { Line } from 'react-chartjs-2';
 // @ts-ignore
 import { chartArray } from '../../../../public/data/chartData';
 import { BigNumber } from 'ethers';
+import { StyledBondingCurveContainer } from '../Styles';
 
 ChartJS.register(
   CategoryScale,
@@ -79,5 +80,5 @@ export const data = {
 };
 
 export const BondingCurveInterface = () => {
-  return <Line options={options} data={data} />;
+  return <StyledBondingCurveContainer><Line options={options} data={data} /></StyledBondingCurveContainer>;
 }

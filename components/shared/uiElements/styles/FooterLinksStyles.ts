@@ -6,10 +6,11 @@ import media from "../../../../styles/media";
 
 export const StyledFooterNavContainer = styled.div`
     ${media.desktop`
-        width: 54%;
+        width: 36%;
         margin: 0 auto;
         display: flex;
         justify-content: space-between;
+        font-size: 14px;
 
         & a {
             color: ${props => props.theme.colors.white};
@@ -31,8 +32,8 @@ export const StyledFooterSocialContainer = styled.div`
     }
 
     ${media.desktop`
-        width: 54%;
-        margin: 4em auto;
+        width: 10%;
+        margin: 4em auto 2em auto;
     `}
     
 `;

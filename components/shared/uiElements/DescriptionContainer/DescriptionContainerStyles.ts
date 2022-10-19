@@ -5,10 +5,11 @@ export const StyledDescriptionContainer = styled.div`
 `;
 
 export const StyledDescriptionParagraph = styled.p`
-    color: ${props => props.theme.colors.lightGrey};
-    font-size: 1em;
+    color: ${props => props.theme.colors.white};
+    font-size: 16px;
     text-align: justify;
     text-justify: inter-word;
     padding: 1.5em 3em;
     text-align: justified;
+    margin: 16px 0 8px;
 `;

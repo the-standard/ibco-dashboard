@@ -14,9 +14,8 @@ import { GetJsonAddresses } from '../Utils/ContractManager';
 import { useEffect, useState } from 'react';
 import DescriptionContainer from '../components/shared/uiElements/DescriptionContainer/DescriptionContainer';
 import { StyledGlobalContainer } from '../components/shared/uiElements/styles/SharedStylesGlobal';
-import { StyledAddressHolderP, StyledCopyButton, StyledLeftRightColContainer, StyledSupplyContainer, StyledTokenInfoLeftCol, StyledTokenInfoRightCol } from '../components/StageComponents/SwapStage/Styles';
+import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledLeftRightColContainer, StyledSupplyContainer, StyledTokenInfoLeftCol, StyledTokenInfoRightCol } from '../components/StageComponents/SwapStage/Styles';
 import { toast } from 'react-toastify';
-import { Copy } from 'react-feather';
 
 const Stage1: NextPage = () => {
   const [seuroAddress, setSeuroAddress] = useState('');
@@ -71,7 +70,7 @@ const Stage1: NextPage = () => {
           <StyledTokenInfoLeftCol>
             <StyledSupplyContainer>
               <h2>{TOKENS.DISPLAY.SEURO} Address:</h2> <StyledAddressHolderP>{seuroAddress}</StyledAddressHolderP>
-             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <Copy size={20} onClick={copyToClipboardClickFunction} className='copyButton' />}
+             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton>Add to MetaMask</StyledDesktopCopyButton>}
             </StyledSupplyContainer>
             {
               <>
