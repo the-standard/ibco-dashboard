@@ -34,6 +34,7 @@ export function Web3SwapInterface() {
   const [transactionData, setTransactionData] = useState(null);
   const [ddTokens, setDDTokens] = useState({});
   const [_network, setNetwork] = useState<string>();
+  const [etherscanUrl, setEtherscanUrl] = useState<string>();
 
   // CONTRACT MANAGER INIT
   const web3Interface = Web3Manager();
@@ -51,12 +52,11 @@ export function Web3SwapInterface() {
 
   // MAIN UPDATE FUNCTIONS
   useEffect(() => {
-    if (_network === undefined) {
-      setNetwork(network?.name === 'homestead' ? 'main' : network?.name)
-    } 
+    setNetwork(network?.name === 'homestead' ? 'main' : network?.name);
+    setEtherscanUrl(network?.name === 'homestead' ? 'https://etherscan.io' : `https://${network?.name}.etherscan.io`);
 
     getContractAddresses();
-  }, []);
+  }, [network]);
 
   useEffect(() => {
     const disabledSend = from !== '' && from !== '0' && tokenApproved;
@@ -94,9 +94,8 @@ export function Web3SwapInterface() {
   }
 
   const getSeuroAddress = () => {
-    const ContractNetwork = network?.name === 'homestead' ? 'main' : network?.name;
     //@ts-ignore
-    const contractAddress = contractAddresses[ContractNetwork]['CONTRACT_ADDRESSES']['SEuroOffering'];
+    const contractAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['SEuroOffering'];
     return contractAddress;
   }
 
@@ -167,7 +166,7 @@ export function Web3SwapInterface() {
     :
       isTokenNotEth(token.token) ? 
         (//@ts-ignore
-          await (await TokenContract).methods.approve(contractAddresses[network['name']]['CONTRACT_ADDRESSES']['SEuroOffering'], _depositAmount.toString()).send({from: address})
+          await (await TokenContract).methods.approve(contractAddresses[_network]['CONTRACT_ADDRESSES']['SEuroOffering'], _depositAmount.toString()).send({from: address})
         .then((data: { [x: string]: never; }) => {
           setTokenApprove(true);
           toast.success(`Tokens approved for use: ${data['blockHash']}`);
@@ -229,7 +228,7 @@ export function Web3SwapInterface() {
         <>
             <StyledPContainer>Converting from</StyledPContainer>
               <StyledInputContainers>
-                <input type='number' step="any" min={0} maxLength={5} onInput={checkMaxLength} onChange={e => setValueChangeHandler(e.currentTarget.value)} onFocus={(event) => onFocusEvent(event)} id="from" placeholder='converting from' value={from} />
+                <input type='number' step="any" min={0} maxLength={5} onInput={checkMaxLength} onChange={e => setValueChangeHandler(e.currentTarget.value)} onFocus={(event) => onFocusEvent(event)} id="from" placeholder='0' value={from} />
                   {
                     // @ts-ignore
                   <Dropdown ddElements={ddTokens} changeHandler={changeTokenClickHandler} defaultValue={TOKENS.HUMAN_READABLE.ETH} />
@@ -238,7 +237,7 @@ export function Web3SwapInterface() {
 
               <StyledPContainer>Converting to</StyledPContainer>
               <StyledInputContainers>
-                <input type='string' readOnly={true} placeholder="Converting to" value={to > 0 ? to.toLocaleString( undefined, { minimumFractionDigits: 2 }) : ''} /> 
+                <input type='string' readOnly={true} placeholder="0" value={to > 0 ? to.toLocaleString( undefined, { minimumFractionDigits: 2 }) : ''} /> 
                 <div className="dropdownSelect readOnly">
                   {TOKENS.DISPLAY.SEURO}
                 </div>
@@ -251,7 +250,7 @@ export function Web3SwapInterface() {
             web3Provider && <StyledSwapButton disabled={disabledSend} onClick={() => SendTransaction()}>{loading ? 'loading...' : 'Swap'}</StyledSwapButton>
             }
             {// @ts-ignore
-            transactionData && <StyledSwapButton onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledSwapButton>
+            transactionData && <StyledSwapButton onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledSwapButton>
             }
             </>
     </StyledSwapInterfaceContainer>
