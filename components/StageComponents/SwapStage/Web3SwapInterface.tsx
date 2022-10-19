@@ -52,10 +52,8 @@ export function Web3SwapInterface() {
 
   // MAIN UPDATE FUNCTIONS
   useEffect(() => {
-    if (_network === undefined) {
-      setNetwork(network?.name === 'homestead' ? 'main' : network?.name);
-      setEtherscanUrl(network?.name === 'homestead' ? 'https://etherscan.io' : `https://${network?.name}.etherscan.io`);
-    } 
+    setNetwork(network?.name === 'homestead' ? 'main' : network?.name);
+    setEtherscanUrl(network?.name === 'homestead' ? 'https://etherscan.io' : `https://${network?.name}.etherscan.io`);
 
     getContractAddresses();
   }, [network]);
