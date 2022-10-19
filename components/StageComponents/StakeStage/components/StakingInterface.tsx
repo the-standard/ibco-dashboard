@@ -35,6 +35,7 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   const [disabledApprovalButton, setDisabledApprovalButton] = useState(true);
   const [loading, setLoading] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
+  const [etherscanUrl, setEtherscanUrl] = useState<string>();
 
   // CONTRACT MANAGER INIT
   const TokenContract = StakingContractManager(tokenAddress as Contract).then((data) => data);
@@ -64,6 +65,10 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
     getStake();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    setEtherscanUrl(network?.name === 'homestead' ? 'https://etherscan.io' : `https://${network?.name}.etherscan.io`);
+  }, [network]);
 
   //MAIN FUNCTIONS
   const getTokenInformation = async () => {
@@ -167,7 +172,7 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
             <StyledButton className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledSend} onClick={() => SendStakeTransaction()}>{loading ? 'loading...' : 'Start Staking'}</StyledButton>
             }
             {// @ts-ignore
-            transactionData && <StyledButton className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledButton>
+            transactionData && <StyledButton className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledButton>
             }
             </>
       ) : <div>Please Connect Wallet...</div>
