@@ -13,6 +13,7 @@ export const StyledStakingListContainer = styled.div`
     border: 0.1em solid ${props => props.theme.colors.borderLightGrey};
     margin: 0.5em 0;
     background-color: ${props => props.theme.colors.backgroundGreyLight};
+    font-size: 17px;
 
     ${media.desktop`
         border: none;
@@ -27,7 +28,7 @@ export const StyledStakingListContainer = styled.div`
 export const StyledStakeButton = styled.button`
     width: 100%;
     padding: 0.8em 1em;
-    font-size: 1em;
+    font-size: 14px;
     margin: 1.5em 0 0 0;
     border: 0;
 
@@ -44,7 +45,7 @@ export const StyledStatusContainer = styled.div`
     order: -1;
 
     ${media.desktop`
-        flex: 1;
+        flex: 2;
         order: 0;
         text-align: left;
         background: none;
@@ -57,7 +58,7 @@ export const StyledDurationContainer = styled.div`
     padding-top: 1em;
 
     ${media.desktop`
-        flex: 1;
+        flex: 2;
         padding: 0;
     `}
 `;
@@ -124,17 +125,35 @@ export const StyledGridHeaders = styled.div`
     margin: 3em 1em 1em;
 
     ${media.desktop`
+        margin: 3em 0 0.5em 1.3em;
         & > span {
-           flex: 1;
+           flex: 2;
+        }
+
+        & > span.flex1 {
+            flex: 1;
+         }
+
+        &.greyBG {
+            padding: 1em;
+            margin: 0;
+            background: ${props => props.theme.colors.darkGrey};
+            border-bottom: 1px solid ${props => props.theme.colors.borderLightGrey};
         }
     `}
 `;
 
 export const StyledStakingHistorySelector = styled.div`
         display: flex;
+        font-size: 17px;
 
         & > span {
             flex: 1;
+        }
+
+        & .reward {
+            font-weight: bold;
+            color: ${props => props.theme.colors.cyan};
         }
 
         ${media.desktop`

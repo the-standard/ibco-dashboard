@@ -1,4 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+
 import styled from "styled-components";
+import media from "../../../../styles/media";
 
 export const StyledP = styled.p`
     margin: 1.5em 0 0.5em 0;
@@ -12,10 +16,15 @@ export const StyledStakingPeriodP = styled.p`
     margin: 0 0 1em 0;
 `;
 
-export const StyledStakingContainer = styled.div``;
+export const StyledStakingContainer = styled.div`
+    ${media.desktop`
+        width: 80%;
+        margin: 0 auto;
+    `}
+`;
 
 export const StyledStakingInterfaceContainer = styled.div`
-    padding: 1em;
+    padding: 3em 3.5em;
     background: ${props => props.theme.colors.backgroundGreyLight};
 `;
 
@@ -32,6 +41,7 @@ export const StyledBackButton = styled.a`
 
 export const StyledStakingPeriodInfo = styled.div`
     & .text-sm {
+        margin-top: 0;
         margin-bottom: 0.5em;
         font-size: 1em;
     }
@@ -60,7 +70,7 @@ export const StyledDropdownContainer = styled.div`
 export const StyledButton = styled.button`
     width: 100%;
     padding: 0.7em 1em;
-    margin-top: 1em;
+    margin-top: 8px;
     font-size: 1em;
     border: 0;
 `;
@@ -71,7 +81,8 @@ export const StyledWarning = styled.div`
     font-size: 0.8em;
     line-height: normal;
     font-weight: light;
-    margin-top: 1em;
+    margin: 1em auto;
+    justify-content: center;
 `;
 
 export const StyledWarningIconSpan = styled.span`

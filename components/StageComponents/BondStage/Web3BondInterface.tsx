@@ -384,7 +384,7 @@ function Web3BondInterface() {
           <div>
             <StyledInputContainers>
               <input className="w-9/12" type='number' step="any" readOnly={true} placeholder={`${otherTokenSymbol} amount`} value={to !== '0' ? toDisplay : ''} />
-              <div className="dropdownSelect">
+              <div className="dropdownSelect readOnly">
                 <StyledNoFormatP>{otherTokenSymbol ? otherTokenSymbol : 'Loading...'}</StyledNoFormatP>
               </div>
             </StyledInputContainers>

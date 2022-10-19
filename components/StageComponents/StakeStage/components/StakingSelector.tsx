@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
+import { isMobile } from "react-device-detect";
 import moment from 'moment';
-import { StyledDurationContainer, StyledInterestRateContainer, StyledMaturityContainer, StyledStakeButton, StyledStakingListContainer, StyledStatusContainer, StyledTitleP, StyledTransactionButtonContainer } from "../styles/StakingListStyles";
+import { StyledDurationContainer, StyledInterestRateContainer, StyledStakeButton, StyledStakingListContainer, StyledStatusContainer, StyledTitleP, StyledTransactionButtonContainer } from "../styles/StakingListStyles";
 
 type StakingObj = {
     address: string,
@@ -21,46 +22,48 @@ type StakeList = {
 export const StakingSelector = ({stakingObj, clickFunction}:StakeList) => {
     const startPeriod = moment(parseInt(stakingObj.start)*1000);
     const endPeriod = moment(parseInt(stakingObj.end)*1000);
-    const maturity = moment(parseInt(stakingObj.maturity)*1000)
-
-    const [duration, setDuration] = useState(0);
     const [hasOpened, setHasOpened] = useState(false);
 
     const isStakeOpen = hasOpened && moment().isAfter(endPeriod);
+    const [mobile, setMobile] = useState();
     
     useEffect(() => {
-        setDuration(endPeriod.diff(startPeriod, 'weeks'));
+      //@ts-ignore
+      setMobile(isMobile)
+    }, [setMobile]);
+    
+    useEffect(() => {
         setHasOpened(moment().isSameOrBefore(endPeriod) && moment().isSameOrAfter(startPeriod));
     }, [moment, stakingObj])
 
     return (
         <StyledStakingListContainer className={isStakeOpen ? 'stakeOpen' : ''}>
             <StyledDurationContainer>
-                <StyledTitleP>Staking Period</StyledTitleP>
+                <StyledTitleP>Opening</StyledTitleP>
                 { 
-                    `${duration} ${duration > 1 ? 'weeks' : 'week'}` 
+                    startPeriod.format('ll')
                 }
             </StyledDurationContainer>
-
-            <StyledInterestRateContainer>
-                <StyledTitleP>Reward</StyledTitleP>
-                {
-                    `+${parseInt(stakingObj.interestRate) / 1000}%`
-                }
-            </StyledInterestRateContainer>
-
+            {
+             mobile &&  <StyledInterestRateContainer>
+                    <StyledTitleP>Reward</StyledTitleP>
+                    {
+                        `+${parseInt(stakingObj.interestRate) / 1000}%`
+                    }
+                </StyledInterestRateContainer>
+            }
             <StyledStatusContainer>
                 {
                     !hasOpened ? moment().isAfter(endPeriod) ? <span className="closed">Closed</span> : <span className="openSoon">Opening Soon</span>: <span className="openNow">Open Now</span>
                 }
             </StyledStatusContainer>
 
-            <StyledMaturityContainer>
+            {/* <StyledMaturityContainer>
                 <StyledTitleP>Maturity</StyledTitleP>
                 {
                     maturity.format('ll')
                 }
-            </StyledMaturityContainer>
+            </StyledMaturityContainer> */}
 
             <StyledTransactionButtonContainer>
                 {

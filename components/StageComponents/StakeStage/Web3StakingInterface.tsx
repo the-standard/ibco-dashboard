@@ -9,9 +9,8 @@ import { StakingList } from "./components/StakingList";
 import { StakingInterface } from "./components/StakingInterface";
 import { StakingHistoryList } from './components/StakingHistoryList';
 import DescriptionContainer from "../../shared/uiElements/DescriptionContainer/DescriptionContainer";
-import { StyledAddressHolderP, StyledCopyButton, StyledSupplyContainer } from "../SwapStage/Styles";
+import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledSupplyContainer } from "../SwapStage/Styles";
 import { toast } from "react-toastify";
-import { Copy } from "react-feather";
 import { StyledStakingHistoryContainer } from "./Styles";
 import { StyledGridHeaders } from "./styles/StakingListStyles";
 
@@ -108,17 +107,15 @@ export const Web3StakingInterface = () => {
 
     <div>
         <StyledSupplyContainer>
-            <h2>{tokenSymbol} Address:</h2> <StyledAddressHolderP>{tokenAddress}</StyledAddressHolderP>
-            { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <Copy size={20} onClick={copyToClipboardClickFunction} className='copyButton' />}
-        </StyledSupplyContainer>
+              <h2>{tokenSymbol} Address:</h2> <StyledAddressHolderP>{tokenAddress}</StyledAddressHolderP>
+             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
+            </StyledSupplyContainer>
         {
         !mobile && (
         <StyledGridHeaders>
-            <span>Staking Period</span>
-            <span>Approx. Reward</span>
             <span>Opening</span>
-            <span>Maturity</span>
             <span>Status</span>
+            <span className="flex1">&nbsp;</span>
         </StyledGridHeaders> 
         )
         
@@ -135,7 +132,7 @@ export const Web3StakingInterface = () => {
         <h2>Staking History</h2>
         {
             !mobile &&
-            <StyledGridHeaders>
+            <StyledGridHeaders className='greyBG'>
                 <span>Staking Positions</span>
                 <span>Approx. Reward</span>
                 <span>Staked Until</span>
