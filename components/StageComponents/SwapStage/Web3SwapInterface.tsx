@@ -60,7 +60,7 @@ export function Web3SwapInterface() {
 
   useEffect(() => {
     const disabledSend = from !== '' && from !== '0' && tokenApproved;
-    const disabledCheckState = from !== '';
+    const disabledCheckState = from !== '' && from !== '0';
 
     setDisabledSend(!disabledSend);
     setDisabledCheck(!disabledCheckState);
@@ -114,9 +114,6 @@ export function Web3SwapInterface() {
   }
 
   const checkMaxLength = (inputData: { currentTarget: { value: string | never[]; };}) => {
-    // if(inputData.currentTarget.value.slice(0,1) === '-')
-    // inputData.currentTarget.value = '0'
-
     if(inputData.currentTarget.value.length > 8) 
       inputData.currentTarget.value = inputData.currentTarget.value.slice(0, 8);
   }

@@ -49,6 +49,10 @@ export const StyledSupplyContainer = styled.div`
             padding: 0;
             margin: 0 0.5em 0 0;
         }
+
+        &.extraMarginBottom {
+            margin-bottom: 3em;
+        }
     `}
 `;
 

@@ -38,7 +38,7 @@ export const ClaimRewardContainer = styled.div`
     ${media.desktop`
         order: 0;
         width: 20%;
-        margin: 2.6em 0 0 8px;
+        margin: 0 0 0 8px;
     `}
 `;
 

@@ -9,6 +9,7 @@ import { ConvertFrom, SmartContractManager, TokenContractManager } from "../../.
 import { UserBondsHistoryList } from "../UserBondsHistoryList/UserBondsHistoryList";
 import { StyledStakingHistoryContainer } from "../../../StakeStage/Styles";
 import { StyledGridHeaders } from './styles';
+import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledSupplyContainer } from "../../../SwapStage/Styles";
 
 type BondingHistoryInterfaceType = {
     backButton: React.MouseEventHandler<string>,
@@ -21,6 +22,7 @@ type BondingHistoryInterfaceType = {
 export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHistoryInterfaceType) => {
     const { address, web3Provider } = useWeb3Context();
     const [userBonds, setUserBonds] = useState([]);
+    const [copied, setCopied] = useState(false);
     const [claimAmount, setClaimAmount] = useState('0');
     const [mobile, setMobile] = useState();
     const [tstTokenInfo, setTstTokenInfo] = useState({
@@ -102,6 +104,10 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
         })
     };
 
+    const copyToClipboardClickFunction = () => {
+        navigator.clipboard.writeText(tstTokenInfo.tokenAddress).then(() => {toast.success('Copied to clipboard, please import token into MetaMask'); setCopied(true)}).catch(() => {toast.error('Unable to copy address, please manually select and copy'); setCopied(false)});
+      }
+
     return(
         <>        
             {
@@ -110,6 +116,10 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
             }
             <StyledBondHistoryContainer className="w-full mx-auto lg:flex md:flex-cols">
                 <StyledBondGridContainer>
+                <StyledSupplyContainer className="extraMarginBottom">
+                    <h2>{tstTokenInfo.tokenSymbol} Address:</h2> <StyledAddressHolderP>{tstTokenInfo.tokenAddress}</StyledAddressHolderP>
+                    { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
+                </StyledSupplyContainer>
                     {
                         !mobile && (
                         <StyledGridHeaders>
