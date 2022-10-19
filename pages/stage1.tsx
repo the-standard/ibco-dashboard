@@ -70,7 +70,7 @@ const Stage1: NextPage = () => {
           <StyledTokenInfoLeftCol>
             <StyledSupplyContainer>
               <h2>{TOKENS.DISPLAY.SEURO} Address:</h2> <StyledAddressHolderP>{seuroAddress}</StyledAddressHolderP>
-             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton>Add to MetaMask</StyledDesktopCopyButton>}
+             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
             </StyledSupplyContainer>
             {
               <>

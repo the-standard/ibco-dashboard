@@ -108,7 +108,7 @@ export const Web3StakingInterface = () => {
     <div>
         <StyledSupplyContainer>
               <h2>{tokenSymbol} Address:</h2> <StyledAddressHolderP>{tokenAddress}</StyledAddressHolderP>
-             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton>Add to MetaMask</StyledDesktopCopyButton>}
+             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
             </StyledSupplyContainer>
         {
         !mobile && (
