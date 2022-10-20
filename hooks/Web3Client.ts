@@ -83,7 +83,6 @@ export const useWeb3 = () => {
   // EIP-1193 events
   useEffect(() => {
     if (provider?.on) {
-      console.log('provider.on', provider.on);
       //window.location.href = '/stage1';
       const handleAccountsChanged = (accounts: string[]) => {
         toast.info('Changed wallet account')

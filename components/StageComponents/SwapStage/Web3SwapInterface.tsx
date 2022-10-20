@@ -27,10 +27,12 @@ export function Web3SwapInterface() {
   const [token, setToken] = useState({token: TOKENS.HUMAN_READABLE.ETH, address: ''});
   const [tokenDecimal, setTokenDecimal] = useState(0);
   const [allowance, setAllowance] = useState(0);
+  const [balance, setBalance] = useState(0);
   const [disabledSend, setDisabledSend] = useState(true);
   const [disabledCheck, setDisabledCheck] = useState(true);
   const [tokenApproved, setTokenApprove] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
   const [ddTokens, setDDTokens] = useState({});
   const [_network, setNetwork] = useState<string>();
@@ -86,6 +88,20 @@ export function Web3SwapInterface() {
     getUsableTokens();
     changeTokenClickHandler(TOKENS.HUMAN_READABLE.ETH);
   }, [address]);
+
+  useEffect(() => {
+    getUserBalance();
+  }, [address, token])
+
+  const getUserBalance = async() => {
+    if (address !== null) {
+      //@ts-ignore
+      const getUserBalance = token.token === TOKENS.HUMAN_READABLE.ETH ? await web3Interface.eth.getBalance(address) : await (await TokenContract).methods.balanceOf(address).call().then((data) => data);
+      const formatUserBalance = ConvertFrom(getUserBalance, tokenDecimal).toFloat().toFixed(4);
+
+      setBalance(parseFloat(formatUserBalance));
+    }
+  }
 
   const getContractAddresses = async () => {
      Object.keys(contractAddresses).length === 0 ? await GetJsonAddresses().then((data) => {
@@ -153,13 +169,14 @@ export function Web3SwapInterface() {
   }
 
   const confirmCurrency = async () => {
-    setLoading(true);
+    setApproveLoading(true);
     const _depositAmount =  ConvertTo(from, tokenDecimal).raw();
     // @ts-ignore
     const getUserBalance = isTokenNotEth(token.token) ? await web3Interface.eth.getBalance(address) : await (await TokenContract).methods.balanceOf(address);
     const formatUserBalance = ConvertTo(getUserBalance, tokenDecimal).toInt();
+    
     formatUserBalance < parseInt(_depositAmount.toString()) ? 
-      toast.error('Insufficient funds for swap') 
+      toast.error('Insufficient funds for swap or token not imported into your wallet') 
     :
       isTokenNotEth(token.token) ? 
         (//@ts-ignore
@@ -167,11 +184,11 @@ export function Web3SwapInterface() {
         .then((data: { [x: string]: never; }) => {
           setTokenApprove(true);
           toast.success(`Tokens approved for use: ${data['blockHash']}`);
-          setLoading(false);
+          setApproveLoading(false);
           return
         })
         .catch(() => {
-          setLoading(false);
+          setApproveLoading(false);
           setTokenApprove(false);
           return
         }))
@@ -223,7 +240,7 @@ export function Web3SwapInterface() {
   return (
     <StyledSwapInterfaceContainer>
         <>
-            <StyledPContainer>Converting from</StyledPContainer>
+            <StyledPContainer>Converting from - (available: {balance} {token.token})</StyledPContainer>
               <StyledInputContainers>
                 <input type='number' step="any" min={0} maxLength={5} onInput={checkMaxLength} onChange={e => setValueChangeHandler(e.currentTarget.value)} onFocus={(event) => onFocusEvent(event)} id="from" placeholder='0' value={from} />
                   {
@@ -240,11 +257,11 @@ export function Web3SwapInterface() {
                 </div>
               </StyledInputContainers>
             {
-              isTokenNotEth(token.token) ? from !== '0' && from !== '' && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <StyledSwapButton className="extraMarginTop" disabled={disabledCheck} onClick={() => confirmCurrency()}>{loading ? 'loading...' : 'Approve'} {token.token}</StyledSwapButton> : ''
+              isTokenNotEth(token.token) ? from !== '0' && from !== '' && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <StyledSwapButton className="extraMarginTop" disabled={approveLoading || disabledCheck} onClick={() => confirmCurrency()}>{approveLoading ? 'Approving...' : 'Approve'} {token.token}</StyledSwapButton> : ''
             }
             
             {            
-            web3Provider && <StyledSwapButton disabled={disabledSend} onClick={() => SendTransaction()}>{loading ? 'loading...' : `Swap for ${TOKENS.DISPLAY.SEURO}`}</StyledSwapButton>
+            web3Provider && <StyledSwapButton disabled={approveLoading || loading || disabledSend} onClick={() => SendTransaction()}>{loading ? 'Processing swap...' : `Swap for ${TOKENS.DISPLAY.SEURO}`}</StyledSwapButton>
             }
             {// @ts-ignore
             transactionData && <StyledSwapButton onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledSwapButton>

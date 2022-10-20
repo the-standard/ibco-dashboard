@@ -43,6 +43,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             hideProgressBar
             position="top-right"
             autoClose={2000}
+            theme='dark'
           />
         </ThemeProvider>
       </Web3ContextProvider>
