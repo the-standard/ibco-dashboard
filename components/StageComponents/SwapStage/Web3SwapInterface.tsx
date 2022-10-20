@@ -232,7 +232,7 @@ export function Web3SwapInterface() {
                   }
               </StyledInputContainers>
 
-              <StyledPContainer>Converting to</StyledPContainer>
+              <StyledPContainer>Recieving</StyledPContainer>
               <StyledInputContainers>
                 <input type='string' readOnly={true} placeholder="0" value={to > 0 ? to.toLocaleString( undefined, { minimumFractionDigits: 2 }) : ''} /> 
                 <div className="dropdownSelect readOnly">
@@ -244,7 +244,7 @@ export function Web3SwapInterface() {
             }
             
             {            
-            web3Provider && <StyledSwapButton disabled={disabledSend} onClick={() => SendTransaction()}>{loading ? 'loading...' : 'Swap'}</StyledSwapButton>
+            web3Provider && <StyledSwapButton disabled={disabledSend} onClick={() => SendTransaction()}>{loading ? 'loading...' : `Swap for ${TOKENS.DISPLAY.SEURO}`}</StyledSwapButton>
             }
             {// @ts-ignore
             transactionData && <StyledSwapButton onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledSwapButton>

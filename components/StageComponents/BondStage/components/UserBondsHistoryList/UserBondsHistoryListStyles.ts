@@ -95,6 +95,10 @@ export const StyledClaimButton = styled.div`
         text-decoration: none;
     }
 
+    & .claimed {
+        color: ${props => props.theme.colors.textGrey};
+    }
+
     ${media.desktop`
         width: auto;
         order: 0;

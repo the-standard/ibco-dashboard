@@ -22,6 +22,7 @@ export const ClaimRewardContainer = styled.div`
     order: -1;
     margin-bottom: 1em;
     padding: 1em 2.5em;
+    font-size: 17px;
 
     & p {
         padding: 0;
@@ -29,10 +30,14 @@ export const ClaimRewardContainer = styled.div`
     }
 
     & button {
-        font-size: 1em;
+        font-size: 14px;
         width: 100%;
         padding: 0.5em 1em;
         border: 0;
+    }
+
+    & .rewardValue {
+        font-size: 22px;
     }
 
     ${media.desktop`
