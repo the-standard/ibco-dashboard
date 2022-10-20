@@ -27,10 +27,14 @@ ChartJS.register(
   Filler
 );
 
+const stringToFloat = (bnString:string) => {
+  return parseFloat(bnString) / 1000000000000000000
+}
+
 const customRadius = (context:any, currentPrice:BigNumber) => {
   const index = context.dataIndex;
   const value = context.dataset.data[ index ];
-  return value === parseFloat(currentPrice.toString()) / 1000000000000000000 ? 5 : 0;
+  return value === stringToFloat(currentPrice.toString()) ? 5 : 0;
 }
 
 export const options = (currentPrice:BigNumber) => {
@@ -65,12 +69,12 @@ export const data = (currentPrice:BigNumber) => {
     labels,
     datasets: [
       {
-        data: ArrayElem.map((dataPoint:string) => (parseFloat(dataPoint) / 1000000000000000000)),
+        data: ArrayElem.map(stringToFloat),
         borderColor: 'rgb(153, 249, 255)',
         fill: false
       },
       {
-        data: ArrayElem.filter((dataPoint:string) => BigNumber.from(dataPoint).lte(currentPrice)).map((dataPoint:string) => (parseFloat(dataPoint) / 1000000000000000000)),
+        data: ArrayElem.filter((dataPoint:string) => BigNumber.from(dataPoint).lte(currentPrice)).map(stringToFloat),
         backgroundColor: 'rgb(153, 249, 255, 0.6)',
         fill: true,
         point: {
