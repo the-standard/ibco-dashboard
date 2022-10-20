@@ -18,13 +18,13 @@ const Home: NextPage = () => {
 
     <StyledIndexContainer>
       <StyledIndexDescriptionContainer>
-        <h2>Lorem ipsum dolor sit amet</h2>
-        <p>this is some information</p>
+        <h2>Welcome to The Standard Initial Bonding Curve Offering</h2>
+        <p>Please connect your wallet to proceed</p>
         {!network && <Web3Button />}
       </StyledIndexDescriptionContainer>
 
       <main>
-        <StyledTokenInformationContainer>Token information</StyledTokenInformationContainer>
+        <StyledTokenInformationContainer>Token information coming soon</StyledTokenInformationContainer>
       </main>
     </StyledIndexContainer>
 
