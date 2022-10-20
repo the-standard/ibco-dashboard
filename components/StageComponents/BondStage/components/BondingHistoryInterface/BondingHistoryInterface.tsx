@@ -21,6 +21,7 @@ type BondingHistoryInterfaceType = {
 
 export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHistoryInterfaceType) => {
     const { address, web3Provider } = useWeb3Context();
+    //const [time, setTime] = useState(30);
     const [userBonds, setUserBonds] = useState([]);
     const [copied, setCopied] = useState(false);
     const [claimAmount, setClaimAmount] = useState('0');
@@ -45,8 +46,25 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
     }, [address])
 
     useEffect(() => {
+        // if(userBonds.length > 0) {
+        //     refreshIntervalTimer;
+        // } else {
+        //     clearInterval(refreshIntervalTimer);
+        // }
+
         getTSTInfo();
     }, [userBonds, tstTokenInfo.tokenAddress]);
+
+   // const refreshIntervalTimer = setInterval(() => {getUserBonds()}, 30000);
+
+    // const startTimer = () => {
+    //     const timer = setInterval(() => {
+    //         time <= 0 && setTime(30);
+    //         setTime(time - 1);
+    //     }, 1000);
+
+    //     userBonds.length > 0 ? timer : clearInterval(timer);
+    // };
 
     const getUserBonds = async() => {
         const bondStorageContract = await (await BondStorageContract);
@@ -95,9 +113,10 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
 
     const activateClaim = async () => {
         const bondStorageContract = await BondStorageContract;
+        const formattedValue = ConvertFrom(claimAmount, tstTokenInfo.tokenDecimal).toFloat().toFixed(2);
         //@ts-ignore
         await bondStorageContract.methods.claimReward(address).send({from: address}).then(() => {
-            toast.success(`All bonds claimed, you have ${claimAmount} ${tstTokenInfo.tokenSymbol}`)
+            toast.success(`All bonds claimed, you have ${formattedValue} ${tstTokenInfo.tokenSymbol}`)
         })
         .catch((error:never) => {
             console.log('error', error);
@@ -112,9 +131,9 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
         <>        
             {
                 // @ts-ignore
-                <StyledBackButtonContainer className="mb-4 w-full mx-auto"><a href="#" className="py-1 flex backButton" onClick={backButton}><StyledChevronSpan><ChevronLeft /></StyledChevronSpan> Back</a></StyledBackButtonContainer>
+                <StyledBackButtonContainer><a href="#" className="backButton" onClick={backButton}><StyledChevronSpan><ChevronLeft /></StyledChevronSpan> Back</a></StyledBackButtonContainer>
             }
-            <StyledBondHistoryContainer className="w-full mx-auto lg:flex md:flex-cols">
+            <StyledBondHistoryContainer>
                 <StyledBondGridContainer>
                 <StyledSupplyContainer className="extraMarginBottom">
                     <h2>{tstTokenInfo.tokenSymbol} Address:</h2> <StyledAddressHolderP>{tstTokenInfo.tokenAddress}</StyledAddressHolderP>
@@ -142,6 +161,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
                             <p>No Bonds have been created yet</p>
                         }
                     </StyledStakingHistoryContainer>
+                    {/* {userBonds.length > 0 && <p>Time until refresh: {time} {time < 10 ? 'second' : 'seconds'}</p>} */}
                 </StyledBondGridContainer>
                 
                 <ClaimRewardContainer>
