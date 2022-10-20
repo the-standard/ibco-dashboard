@@ -232,7 +232,7 @@ export function Web3SwapInterface() {
                   }
               </StyledInputContainers>
 
-              <StyledPContainer>Recieving</StyledPContainer>
+              <StyledPContainer>Receiving</StyledPContainer>
               <StyledInputContainers>
                 <input type='string' readOnly={true} placeholder="0" value={to > 0 ? to.toLocaleString( undefined, { minimumFractionDigits: 2 }) : ''} /> 
                 <div className="dropdownSelect readOnly">

@@ -147,7 +147,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
                 <ClaimRewardContainer>
                 {
                     <>
-                        <p>claimable reward:</p>
+                        <p>Claimable reward:</p>
                         <p className="rewardValue"><strong>{parseInt(claimAmount) > 0 ? (ConvertFrom(claimAmount, parseInt(tstTokenInfo.tokenDecimal.toString())).toFloat()).toFixed(2) : '0'} {tstTokenInfo.tokenSymbol}</strong></p>
                         {parseInt(claimAmount) > 0 && <button onClick={activateClaim}>Claim Reward</button>}
                     </>
