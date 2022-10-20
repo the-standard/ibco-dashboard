@@ -18,6 +18,7 @@ export const StyledBondHistoryContainer = styled.div`
 export const ClaimRewardContainer = styled.div`
     border: 1px solid #fff;
     border-radius: 5px;
+    background-color: ${props => props.theme.colors.darkGrey};
     text-align: center;
     order: -1;
     margin-bottom: 1em;

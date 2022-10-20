@@ -32,9 +32,9 @@ export const StakingList = ({stakes, clickFunction}:StakeList) => {
         'Loading Stake Options...'
     }, []);
 
-    const sortedStakes = stakeInfo.sort(function(a,b){
+    const sortedStakes = stakeInfo.sort((a,b) => {
         //@ts-ignore
-        return new Date(b.maturity*1000) - new Date(a.maturity*1000);
+        return parseInt(b.maturity)*1000 - parseInt(a.maturity)*1000
       });
       
 

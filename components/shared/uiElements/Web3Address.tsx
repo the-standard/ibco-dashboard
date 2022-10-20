@@ -9,12 +9,12 @@ export function Web3Address() {
 
   return (
     <StyledWeb3AddressContainer>
-          <StyledWalletNetworkContainer>
+          {_network !== 'main' && <StyledWalletNetworkContainer>
           {
             // @ts-ignore
             _network
           }
-          </StyledWalletNetworkContainer>
+          </StyledWalletNetworkContainer>}
           <StyledWalletAddressContainer>
           {
             // @ts-ignore
