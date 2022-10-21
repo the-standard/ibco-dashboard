@@ -16,7 +16,7 @@ import { Line } from 'react-chartjs-2';
 import { chartArray } from '../../../../public/data/chartData';
 import { BigNumber } from 'ethers';
 import { StyledBondingCurveContainer } from '../Styles';
-import { ConvertFrom } from '../../../../Utils';
+import { Contract, ConvertFrom, SmartContractManager } from '../../../../Utils';
 
 ChartJS.register(
   CategoryScale,
@@ -111,14 +111,16 @@ export const data = (priceInfo:PriceInfo) => {
 }
 
 // @ts-ignore
-export const BondingCurveInterface = ({bondingCurveContract}) => {
+export const BondingCurveInterface = () => {
   const defaultPriceInfo = { currentPrice: BigNumber.from(0), maxSupply: BigNumber.from(0) };
-  const [priceInfo, setPriceInfo] = useState<PriceInfo>(defaultPriceInfo)
+  const [priceInfo, setPriceInfo] = useState<PriceInfo>(defaultPriceInfo);
+  const bondingCurveContract = SmartContractManager('BondingCurve' as Contract).then((data) =>  data);
 
   const setPriceFromBondingCurve = async () => {
-
+    //@ts-ignore
     await (await bondingCurveContract).methods.maxSupply().call()
       .then(async (maxSupply: never) => {
+        //@ts-ignore
         await (await bondingCurveContract).methods.currentBucket().call()
           .then((priceData: never) => {
             setPriceInfo({ currentPrice: BigNumber.from(priceData['price']), maxSupply: BigNumber.from(maxSupply) });
@@ -134,10 +136,12 @@ export const BondingCurveInterface = ({bondingCurveContract}) => {
     setPriceFromBondingCurve();
   }, []);
 
-  if (priceInfo && priceInfo.currentPrice.gt(0)) {
-    return <StyledBondingCurveContainer><Line options={options(priceInfo)} data={data(priceInfo)} /></StyledBondingCurveContainer>;
-  } else {
-    return 'Loading Bonding Curve chart ...'
-  }
-
+  return (
+    priceInfo && priceInfo.currentPrice.gt(0) ?
+    <StyledBondingCurveContainer>
+      <Line options={options(priceInfo)} data={data(priceInfo)} />
+    </StyledBondingCurveContainer>
+    :
+    <p>Loading Bonding Curve chart ...</p>
+  );
 }

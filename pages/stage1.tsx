@@ -75,7 +75,7 @@ const Stage1: NextPage = () => {
             {
               <>
                 <TokenInformationInterface bondingCurveContract={BondingCurveContract} />
-                <BondingCurveInterface bondingCurveContract={BondingCurveContract} />
+                <BondingCurveInterface />
               </>
             }
           </StyledTokenInfoLeftCol>
