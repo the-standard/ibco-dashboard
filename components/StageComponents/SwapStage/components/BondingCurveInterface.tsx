@@ -134,10 +134,7 @@ export const BondingCurveInterface = ({bondingCurveContract}) => {
     setPriceFromBondingCurve();
   }, []);
 
-  if (priceInfo && priceInfo.currentPrice.gt(0)) {
-    return <StyledBondingCurveContainer><Line options={options(priceInfo)} data={data(priceInfo)} /></StyledBondingCurveContainer>;
-  } else {
-    return 'Loading Bonding Curve chart ...'
-  }
-
+  return (priceInfo && priceInfo.currentPrice.gt(0)) ?
+    <StyledBondingCurveContainer><Line options={options(priceInfo)} data={data(priceInfo)} /></StyledBondingCurveContainer> :
+    'Loading Bonding Curve chart ...';
 }
