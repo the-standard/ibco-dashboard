@@ -35,6 +35,7 @@ export const ClaimRewardContainer = styled.div`
         width: 100%;
         padding: 0.5em 1em;
         border: 0;
+        cursor: pointer;
     }
 
     & .rewardValue {
