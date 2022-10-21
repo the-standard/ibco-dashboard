@@ -47,9 +47,17 @@ export const options = (priceInfo:PriceInfo) => {
   return {
     responsive: true,
     scales: {
-        x: {
-          ticks: {
-          }
+      x: {
+        title: {
+          display: true,
+          text: 'Supply (sEURO)'
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Price (€)'
+        }
       }
     },
     elements: {
@@ -57,13 +65,13 @@ export const options = (priceInfo:PriceInfo) => {
         tension: 0.4,
       },
       point: {
-        radius : (context:any) => customRadius(context, priceInfo.currentPrice),
+        radius: (context: any) => customRadius(context, priceInfo.currentPrice),
         display: true,
         backgroundColor: 'rgb(153, 249, 255)'
       }
     },
     events: []
-  }
+  };
 };
 
 const ArrayElem = chartArray.splice(0, Math.ceil(chartArray.length));
