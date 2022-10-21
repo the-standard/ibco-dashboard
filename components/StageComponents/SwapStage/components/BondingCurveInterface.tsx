@@ -16,6 +16,7 @@ import { Line } from 'react-chartjs-2';
 import { chartArray } from '../../../../public/data/chartData';
 import { BigNumber } from 'ethers';
 import { StyledBondingCurveContainer } from '../Styles';
+import { ConvertFrom } from '../../../../Utils';
 
 ChartJS.register(
   CategoryScale,
@@ -27,6 +28,11 @@ ChartJS.register(
   Filler
 );
 
+type PriceInfo = {
+  currentPrice: BigNumber,
+  maxSupply: BigNumber
+}
+
 const stringToFloat = (bnString:string) => {
   return parseFloat(bnString) / 1000000000000000000
 }
@@ -37,13 +43,12 @@ const customRadius = (context:any, currentPrice:BigNumber) => {
   return value === stringToFloat(currentPrice.toString()) ? 5 : 0;
 }
 
-export const options = (currentPrice:BigNumber) => {
+export const options = (priceInfo:PriceInfo) => {
   return {
     responsive: true,
     scales: {
         x: {
           ticks: {
-              display: false
           }
       }
     },
@@ -52,7 +57,7 @@ export const options = (currentPrice:BigNumber) => {
         tension: 0.4,
       },
       point: {
-        radius : (context:any) => customRadius(context, currentPrice),
+        radius : (context:any) => customRadius(context, priceInfo.currentPrice),
         display: true,
         backgroundColor: 'rgb(153, 249, 255)'
       }
@@ -61,10 +66,22 @@ export const options = (currentPrice:BigNumber) => {
   }
 };
 
-const labels = new Array(chartArray.length).fill('Current sEuro Price');
 const ArrayElem = chartArray.splice(0, Math.ceil(chartArray.length));
 
-export const data = (currentPrice:BigNumber) => {
+export const data = (priceInfo:PriceInfo) => {
+  const formatForLabel = (bn:BigNumber) => {
+    return ConvertFrom(bn.toString(), 18).toInt().toLocaleString();
+  }
+
+  const bucketLabels = () => {
+    const noBuckets = ArrayElem.length - 2;
+    const bucketSize = priceInfo.maxSupply.div(noBuckets);
+    const labels = new Array(noBuckets).fill(BigNumber.from(0)).map((element, index) => formatForLabel(bucketSize.mul(index).add(bucketSize.div(2))));
+    return labels;
+  }
+
+  const labels = [0, ...bucketLabels(), formatForLabel(priceInfo.maxSupply)];
+
   return {
     labels,
     datasets: [
@@ -74,7 +91,7 @@ export const data = (currentPrice:BigNumber) => {
         fill: false
       },
       {
-        data: ArrayElem.filter((dataPoint:string) => BigNumber.from(dataPoint).lte(currentPrice)).map(stringToFloat),
+        data: ArrayElem.filter((dataPoint:string) => BigNumber.from(dataPoint).lte(priceInfo.currentPrice)).map(stringToFloat),
         backgroundColor: 'rgb(153, 249, 255, 0.6)',
         fill: true,
         point: {
@@ -87,20 +104,32 @@ export const data = (currentPrice:BigNumber) => {
 
 // @ts-ignore
 export const BondingCurveInterface = ({bondingCurveContract}) => {
-  const [currentPrice, setCurrentPrice] = useState<BigNumber>(BigNumber.from(0));
+  const defaultPriceInfo = { currentPrice: BigNumber.from(0), maxSupply: BigNumber.from(0) };
+  const [priceInfo, setPriceInfo] = useState<PriceInfo>(defaultPriceInfo)
 
   const setPriceFromBondingCurve = async () => {
-    await(await bondingCurveContract).methods.currentBucket().call()
-        .then((data:never) => {
-            setCurrentPrice(BigNumber.from(data['price']));
-        }).catch((error:never) => {
+
+    await (await bondingCurveContract).methods.maxSupply().call()
+      .then(async (maxSupply: never) => {
+        await (await bondingCurveContract).methods.currentBucket().call()
+          .then((priceData: never) => {
+            setPriceInfo({ currentPrice: BigNumber.from(priceData['price']), maxSupply: BigNumber.from(maxSupply) });
+          }).catch((error: never) => {
             toast.error(`Unable to obtain current price: ${error}`);
-        });
+          });
+      }).catch((error: never) => {
+        toast.error(`Unable to obtain supply data: ${error}`);
+      });
   }
 
   useEffect(() => {
     setPriceFromBondingCurve();
   }, []);
 
-  return <StyledBondingCurveContainer><Line options={options(currentPrice)} data={data(currentPrice)} /></StyledBondingCurveContainer>;
+  if (priceInfo && priceInfo.currentPrice.gt(0)) {
+    return <StyledBondingCurveContainer><Line options={options(priceInfo)} data={data(priceInfo)} /></StyledBondingCurveContainer>;
+  } else {
+    return 'Loading Bonding Curve chart ...'
+  }
+
 }
