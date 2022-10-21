@@ -18,6 +18,7 @@ import {
 import Dropdown from '../../shared/uiElements/Dropdown/Dropdown';
 import { GetJsonAddresses } from '../../../Utils/ContractManager';
 import { StyledInputContainers, StyledPContainer, StyledSwapButton, StyledSwapInterfaceContainer } from './Styles';
+import SwapSuccessModal from '../../shared/uiElements/Modal/SwapSuccessModal/SwapSuccessModal';
 
 export function Web3SwapInterface() {
   const { address, network, web3Provider } = useWeb3Context();
@@ -37,6 +38,7 @@ export function Web3SwapInterface() {
   const [ddTokens, setDDTokens] = useState({});
   const [_network, setNetwork] = useState<string>();
   const [etherscanUrl, setEtherscanUrl] = useState<string>();
+  const [showModal, setShowModal] = useState(false);
 
   // CONTRACT MANAGER INIT
   const web3Interface = Web3Manager();
@@ -230,14 +232,20 @@ export function Web3SwapInterface() {
     .then((data: never) => {
       setLoading(false);
       setTransactionData(data);
-
       !data['status'] ? toast.error('Transaction error') : toast.success(`Transaction successful ${data['transactionHash']}`);
     }).catch(() => {
       setLoading(false);
     })
   }
 
+  const modalCloseClickHandler = () => {
+    setShowModal(!showModal);
+  }
+
   return (
+    <>
+    {showModal || transactionData && <SwapSuccessModal seuroAmount={to.toLocaleString( undefined, { minimumFractionDigits: 2 })} modalCloseClick={modalCloseClickHandler} />}
+
     <StyledSwapInterfaceContainer>
         <>
             <StyledPContainer>Converting from - (available: {balance} {token.token})</StyledPContainer>
@@ -268,5 +276,6 @@ export function Web3SwapInterface() {
             }
             </>
     </StyledSwapInterfaceContainer>
+    </>
   )
 }
