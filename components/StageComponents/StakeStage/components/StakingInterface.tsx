@@ -10,6 +10,7 @@ import { AlertTriangle, ChevronLeft } from 'react-feather';
 //Util Helpers
 import { 
   Contract, 
+  ConvertFrom, 
   ConvertTo, 
   StakingContractManager,
   TokenContractManager, 
@@ -25,6 +26,8 @@ type StakingInterfaceType = {
 export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceType) => {
   const { address, web3Provider, network } = useWeb3Context();
   const [from, setFrom] = useState(0);
+  const [allowance, setAllowance] = useState(0);
+  const [balance, setBalance] = useState(0);
   const [stakeTerms, setStakeTerms] = useState('');
   const [stakeTermsEnd, setStakeTermsEnd] = useState('');
   const [tokenAddress, setTokenAddress] = useState('');
@@ -33,6 +36,7 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   const [disabledSend, setDisabledSend] = useState(true);
   const [assetApproved, setAssetApproved] = useState(false);
   const [disabledApprovalButton, setDisabledApprovalButton] = useState(true);
+  const [loadingApproval, setLoadingApproval] = useState(false);
   const [loading, setLoading] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
   const [etherscanUrl, setEtherscanUrl] = useState<string>();
@@ -55,6 +59,11 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [from, assetApproved, tokenAddress]);
+
+  useEffect(() => {
+    const allowanceFormatted = ConvertFrom(allowance, parseInt(tokenDecimal)).toInt();
+    from > 0 && from >= allowanceFormatted ? setAssetApproved(true) : setAssetApproved(false);
+  }, [allowance])
 
   useEffect(() => {
     //get token symbol
@@ -81,6 +90,13 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
       //@ts-ignore
       TokenContract.methods.decimals().call()
       .then((data:never) => setTokenDecimal(data));
+
+      TokenContract.methods.allowance(address, contractAddress).call().then((data:never) => setAllowance(parseInt(data)));
+
+      TokenContract.methods.balanceOf(address).call().then((data:never) => {
+        const formattedBalance = ConvertFrom(data, parseInt(tokenDecimal)).toFloat().toFixed(2);
+        setBalance(parseFloat(formattedBalance));
+      });
     }
   }
 
@@ -106,16 +122,16 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   }
 
   const approveCurrency = async () => {
-    setLoading(true);
+    setLoadingApproval(true);
     const _tokenDecimal = parseInt(tokenDecimal.toString())
     const _depositAmount = ConvertTo(from, _tokenDecimal).raw();
 
     // @ts-ignore
     await (await TokenContract).methods.approve(contractAddress, _depositAmount).send({from: address}).then(() => {
-      setLoading(false);
+      setLoadingApproval(false);
       setAssetApproved(true);
     }).catch((error:never) => {
-      setLoading(false);
+      setLoadingApproval(false);
       setAssetApproved(false);
       toast.error('Approval error', error);
     })
@@ -153,7 +169,7 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
           <StyledStakingPeriodP>{`${moment(parseInt(stakeTerms)*1000).format('ll')} - ${moment(parseInt(stakeTermsEnd)*1000).format('ll')}`}</StyledStakingPeriodP>
         </StyledStakingPeriodInfo>
         <span>
-          <StyledP className="p-0 m-0 text-sm">Staking...</StyledP>
+          <StyledP className="p-0 m-0 text-sm">Staking... - (available: {balance} {tokenSymbol})</StyledP>
 
           <StyledInputContainer>
             <StyledInput type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${tokenSymbol} Staking Amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
@@ -166,10 +182,10 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
             <StyledWarningIconSpan><AlertTriangle size={20} /></StyledWarningIconSpan><StyledWarningP>Warning: once you have staked your Standard Token ({tokenSymbol}) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</StyledWarningP>
           </StyledWarning>
         </span>
-            <StyledButton disabled={disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved ? `${tokenSymbol} Approved` : loading ? 'loading...' : `Approve ${tokenSymbol}`}</StyledButton>
+            <StyledButton disabled={loadingApproval || loading || disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved && from > 0 ? `${tokenSymbol} Approved` : loadingApproval ? `Approving ${tokenSymbol}... `: `Approve ${tokenSymbol}`}</StyledButton>
             
             {            
-            <StyledButton disabled={disabledSend} onClick={() => SendStakeTransaction()}>{loading ? 'loading...' : 'Start Staking'}</StyledButton>
+            <StyledButton disabled={loadingApproval || loading || disabledSend} onClick={() => SendStakeTransaction()}>{loading ? 'Processing Stake...' : transactionData ? 'Start Another Stake' : 'Start Staking'}</StyledButton>
             }
             {// @ts-ignore
             transactionData && <StyledButton className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledButton>

@@ -26,6 +26,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
     const [copied, setCopied] = useState(false);
     const [claimAmount, setClaimAmount] = useState('0');
     const [mobile, setMobile] = useState();
+    const [disableClaim, setDisableClaim] = useState(false);
     const [tstTokenInfo, setTstTokenInfo] = useState({
         tokenAddress: '',
         tokenSymbol: '',
@@ -112,13 +113,16 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
     }
 
     const activateClaim = async () => {
+        setDisableClaim(true);
         const bondStorageContract = await BondStorageContract;
         const formattedValue = ConvertFrom(claimAmount, tstTokenInfo.tokenDecimal).toFloat().toFixed(2);
         //@ts-ignore
         await bondStorageContract.methods.claimReward(address).send({from: address}).then(() => {
-            toast.success(`All bonds claimed, you have ${formattedValue} ${tstTokenInfo.tokenSymbol}`)
+            toast.success(`All bonds claimed, you have ${formattedValue} ${tstTokenInfo.tokenSymbol}`);
+            getUserBonds();
         })
         .catch((error:never) => {
+            setDisableClaim(false);
             console.log('error', error);
         })
     };
@@ -169,7 +173,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
                     <>
                         <p>Claimable reward:</p>
                         <p className="rewardValue"><strong>{parseInt(claimAmount) > 0 ? (ConvertFrom(claimAmount, parseInt(tstTokenInfo.tokenDecimal.toString())).toFloat()).toFixed(2) : '0'} {tstTokenInfo.tokenSymbol}</strong></p>
-                        {parseInt(claimAmount) > 0 && <button onClick={activateClaim}>Claim Reward</button>}
+                        {parseInt(claimAmount) > 0 && <button disabled={disableClaim} onClick={activateClaim}>Claim Reward</button>}
                     </>
                 }
                 </ClaimRewardContainer>
