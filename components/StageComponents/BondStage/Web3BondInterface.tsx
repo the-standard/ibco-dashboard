@@ -45,6 +45,9 @@ function Web3BondInterface() {
   const [assetApproved, setAssetApproved] = useState({main: false, other: false});
   const [disabledApprovalButton, setDisabledApprovalButton] = useState({main: true, other: true});
   const [loading, setLoading] = useState(false);
+  const [loadingOther, setLoadingOther] = useState(false);
+  const [loadingMain, setLoadingMain] = useState(false);
+  const [loadingTransaction, setLoadingTransaction] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
   const [_network, setNetwork] = useState<string>();
   const [etherscanUrl, setEtherscanUrl] = useState<string>();
@@ -144,7 +147,6 @@ function Web3BondInterface() {
 
   const getSeuroAddress = async () => {
     const standardTokenGatewayContract = await StandardTokenGatewayContract;
-    console.log('standardTokenGatewayContract', standardTokenGatewayContract);
     //@ts-ignore
     standardTokenGatewayContract.methods.Seuro().call().then((data:never) => {
       setSeuroAddress(data);
@@ -220,7 +222,8 @@ function Web3BondInterface() {
   }
 
   const approveCurrency = async (token:string) => {
-    setLoading(true);
+    setTransactionData(null);
+    token === TOKENS.HUMAN_READABLE.SEURO ? setLoadingMain(true) : setLoadingOther(true);
     const _depositAmount = token === TOKENS.HUMAN_READABLE.SEURO ? ConvertTo(from, mainTokenDecimal).raw() : ConvertTo(to, otherTokenDecimal).raw();
     //@ts-ignore
     const bondingEventAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['BondingEvent'];
@@ -230,14 +233,14 @@ function Web3BondInterface() {
     token === TOKENS.HUMAN_READABLE.SEURO ? (
       //@ts-ignore
       TokenContract.methods.approve(bondingEventAddress, _depositAmount).send({from: address}).then(() => {
-      setLoading(false);
+        token === TOKENS.HUMAN_READABLE.SEURO ? setLoadingMain(false) : setLoadingOther(false);
 
       setAssetApproved(prevState => ({
         ...prevState,
         main: true
       }))
     }).catch((error:never) => {
-      setLoading(false);
+      token === TOKENS.HUMAN_READABLE.SEURO ? setLoadingMain(false) : setLoadingOther(false);
       setAssetApproved(prevState => ({
         ...prevState,
         main: false
@@ -249,13 +252,13 @@ function Web3BondInterface() {
     (
       //@ts-ignore
     TokenContract.methods.approve(bondingEventAddress, _depositAmount).send({from: address}).then(() => {
-      setLoading(false);
+      token === TOKENS.HUMAN_READABLE.SEURO ? setLoadingMain(false) : setLoadingOther(false);
       setAssetApproved(prevState => ({
         ...prevState,
         other: true
       }))
     }).catch((error:never) => {
-      setLoading(false);
+      token === TOKENS.HUMAN_READABLE.SEURO ? setLoadingMain(false) : setLoadingOther(false);
       setAssetApproved(prevState => ({
         ...prevState,
         other: false
@@ -270,14 +273,15 @@ function Web3BondInterface() {
     const OperatorStage2 = await OperatorStage2Contract;
 
     if (TokenContractMain) {
-      console.log('TokenContractMain', TokenContractMain);
       // @ts-ignore
       await OperatorStage2.methods.showRates().call()
       .then((data:Rate[]) => {
         const ArrayCopy = [...data];
-        const sortedRates = ArrayCopy.sort((a,b) => (parseInt(a.duration) > parseInt(b.duration)) ? 1 : ((parseInt(b.duration) > parseInt(a.duration)) ? -1 : 0))
+        const sortedRates = ArrayCopy.sort((a,b) => (parseInt(a.duration) > parseInt(b.duration)) ? 1 : ((parseInt(b.duration) > parseInt(a.duration)) ? -1 : 0));
+        const defaultBondIndex = Math.floor(sortedRates.length/2);
         //@ts-ignore
         setRates(sortedRates);
+        setBondingLength(sortedRates[defaultBondIndex])
       });
 
       // @ts-ignore
@@ -329,25 +333,26 @@ function Web3BondInterface() {
   }
 
   const SendBondTransaction = async () => {
-    setLoading(true);
+    setLoadingTransaction(true);
     const _formatValue = ConvertTo(from, mainTokenDecimal).raw();
     // @ts-ignores
     const _bondingRate = bondingLength['rate'] || 0;
-    console.log()
+    const defaultBondIndex = Math.floor(rates.length/2);
     // @ts-ignore
     await (await OperatorStage2Contract).methods.newBond(_formatValue, _bondingRate).send({from:address})
       .then((data:never) => {
         setLoading(false);
+        setLoadingTransaction(false);
         setTransactionData(data);
         setFrom(0);
         setTo('');
         setToDisplay(0);
-        setBondingLength(undefined);
+        setBondingLength(rates[defaultBondIndex]);
         setDisabledSend(true);
         // @ts-ignore
         toast.success(`Transaction success: ${data['transactionHash']}`);
       }).catch((error:never) => {
-        setLoading(false);
+        setLoadingTransaction(false);
         toast.error(`Error creating new bond: ${ error}`);
       });
   }
@@ -407,15 +412,15 @@ function Web3BondInterface() {
               <StyledTransactionButtonContainer>
                 {
                   <>
-                  <StyledTransactionButton className="halfWidth" disabled={disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${TOKENS.DISPLAY.SEURO} Approved` : loading ? 'loading...' : `Approve ${TOKENS.DISPLAY.SEURO}`}</StyledTransactionButton>
-                  <StyledTransactionButton className="halfWidth noRightMargin" disabled={disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${otherTokenSymbol} Approved` : loading ? 'loading...' : `Approve ${otherTokenSymbol}`}</StyledTransactionButton>
+                  <StyledTransactionButton className="halfWidth" disabled={loadingOther || loadingMain || loading || disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${TOKENS.DISPLAY.SEURO} Approved` : loadingMain ? `Approving ${TOKENS.DISPLAY.SEURO}...` : `Approve ${TOKENS.DISPLAY.SEURO}`}</StyledTransactionButton>
+                  <StyledTransactionButton className="halfWidth noRightMargin" disabled={loadingMain || loadingOther || loading || disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${otherTokenSymbol} Approved` : loadingOther ? `Approving ${otherTokenSymbol}...` : `Approve ${otherTokenSymbol}`}</StyledTransactionButton>
                   </>
                 }
               </StyledTransactionButtonContainer>
             }
             
             {            
-            <StyledTransactionButton disabled={disabledSend} onClick={() => SendBondTransaction()}>{loading ? 'loading...' : transactionData ? 'Start Another Bond' : 'Start Bond'}</StyledTransactionButton>
+            <StyledTransactionButton disabled={loading || loadingTransaction || disabledSend} onClick={() => SendBondTransaction()}>{loadingTransaction ? 'Processing bond...' : transactionData ? 'Start Another Bond' : 'Start Bond'}</StyledTransactionButton>
             }
             {// @ts-ignore
             transactionData && <StyledTransactionButton className='marginTop' onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledTransactionButton>
