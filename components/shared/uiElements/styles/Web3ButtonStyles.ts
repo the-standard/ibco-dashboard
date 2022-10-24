@@ -11,7 +11,7 @@ export const StyledWeb3ButtonContainer = styled.div`
     border: 0.1em solid ${props => props.theme.colors.lighterGrey};
     padding: 1em;
     margin-top: 3em;
-    width: 81.5vw;
+    width: 160px;
     right: 0;
     font-weight: bold;
 
@@ -71,5 +71,6 @@ export const StyledMainConnectButton = styled.button`
 
     & > span {
         margin-right: 1em;
+        width: 20px;
     }
 `;
