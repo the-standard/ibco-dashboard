@@ -15,7 +15,7 @@ export const StyledMainContainer = styled.main`
 
 export const StyledBondingInterfaceContainer = styled.div`
     background-color: ${props => props.theme.colors.darkGrey};
-    padding: 2.5em 3.5em;
+    padding: 2.5em 1.5em;
 
     ${media.desktop`
         position: relative;

@@ -9,7 +9,7 @@ export const StyledDescriptionParagraph = styled.p`
     font-size: 16px;
     text-align: justify;
     text-justify: inter-word;
-    padding: 1.5em 3em;
+    padding: 1.5em;
     text-align: justified;
     margin: 16px 0 8px;
 `;
