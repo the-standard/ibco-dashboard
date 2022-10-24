@@ -22,11 +22,10 @@ type bondInformationType = {
     otherToken: {
         otherTokenSymbol:string,
         otherTokenDecimal:number
-    },
-    clickHandler: React.MouseEventHandler<object>
+    }
 }
 
-export const UserBondsHistoryList = ({bondInformation, rewardTokenObj, otherToken, clickHandler}:bondInformationType) => {
+export const UserBondsHistoryList = ({bondInformation, rewardTokenObj, otherToken}:bondInformationType) => {
     const reward = ConvertFrom(bondInformation.reward, rewardTokenObj.tokenDecimal).toFloat();
     const mainAsset = ConvertFrom(bondInformation.principalSeuro, 18).toInt();
     const otherAsset = ConvertFrom(bondInformation.principalOther, parseInt(otherToken.otherTokenDecimal.toString())).toInt();
@@ -49,8 +48,7 @@ export const UserBondsHistoryList = ({bondInformation, rewardTokenObj, otherToke
             <StyledP>Maturity</StyledP>
             <p>{endDate.format('lll')}</p>
 
-            <StyledClaimButton>{claimButtonShow && !bondInformation.tapped ? <a href='#' onClick={clickHandler}>Claim</a> : bondInformation.tapped ? <span className="claimed">Claimed</span> : 'Pending'}</StyledClaimButton>
+            <StyledClaimButton>{claimButtonShow && !bondInformation.tapped ? <a>Claim</a> : bondInformation.tapped ? <span className="claimed">Claimed</span> : 'Pending'}</StyledClaimButton>
         </StyledBondHistoryItemContainer>
-        
     )
 }
