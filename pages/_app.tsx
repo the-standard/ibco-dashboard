@@ -37,7 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Web3ContextProvider>
         <ThemeProvider theme={theme}>
         <GlobalCSS />
-        <StyledGlobalBetaBanner>BETA Release! Testnet Only. Design to be updated soon. Report bugs <a href="https://bit.ly/ibco-bugs">here</a>!</StyledGlobalBetaBanner>
+        <StyledGlobalBetaBanner>Goerli Testnet Only. Mainnet Launch Coming November 28th.</StyledGlobalBetaBanner>
           <Component {...pageProps} />
           <ToastContainer
             hideProgressBar
