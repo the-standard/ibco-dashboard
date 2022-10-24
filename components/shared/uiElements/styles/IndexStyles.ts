@@ -15,17 +15,13 @@ export const StyledIndexDescriptionContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 60%;
     text-align: center;
     margin-top: 6em;
 
     p {
         padding-top: 0;
+        padding-bottom: 12px;
         margin-top: 0;
-    }
-
-    & button {
-        max-width: 30%;
     }
 
     ${media.desktop`
