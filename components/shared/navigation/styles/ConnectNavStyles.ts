@@ -52,9 +52,7 @@ export const StyledMobileConnectNavDropdownContainer = styled.div`
 `;
 
 export const StyledLogoContainer = styled.div`
-    width: 10%;
+    max-width: 274px;
 
-    ${media.desktop`
-        width: 16%;
-    `}
+        width: 36%;
 `;
