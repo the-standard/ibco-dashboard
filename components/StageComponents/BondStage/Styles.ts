@@ -26,12 +26,12 @@ export const StyledBondingInterfaceContainer = styled.div`
 export const StyledBondingHistoryButtonContainer = styled.div`
     text-align: center;
     background-color: ${props => props.theme.colors.darkGrey};
-    margin-bottom: 1em;
+    margin: -10px 0 1em 0;
+    padding-bottom: 1em;
 
     ${media.desktop`
         position: relative;
         top: -1em;
-        padding-bottom: 1em;
         margin-bottom: 0;
     `}
 `;
@@ -39,15 +39,12 @@ export const StyledBondingHistoryButtonContainer = styled.div`
 export const StyledBondingHistoryButton = styled.button`
     padding: 0.5em 3em;
     font-size: 1em;
-    margin-bottom: 3em;
+    margin-bottom: 1em;
     cursor: pointer;
     background: none;
     border: 0.1em solid ${props => props.theme.colors.cyan};
     color: ${props => props.theme.colors.cyan};
 
-    ${media.desktop`
-        margin-bottom: 0;
-    `}
 `;
 
 export const StyledPContainer = styled.p`
