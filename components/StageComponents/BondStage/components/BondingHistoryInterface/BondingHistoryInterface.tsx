@@ -118,7 +118,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
         const formattedValue = ConvertFrom(claimAmount, tstTokenInfo.tokenDecimal).toFloat().toFixed(2);
         //@ts-ignore
         await bondStorageContract.methods.claimReward(address).send({from: address}).then(() => {
-            toast.success(`All bonds claimed, you have ${formattedValue} ${tstTokenInfo.tokenSymbol}`);
+            toast.success(`Your reward of ${formattedValue} ${tstTokenInfo.tokenSymbol} has successfully been paid out.`);
             getUserBonds();
         })
         .catch((error:never) => {
