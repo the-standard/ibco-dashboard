@@ -2,22 +2,23 @@
 import React, { useEffect, useState } from "react";
 import { Web3Button } from "../../../components/shared/uiElements/Web3Button";
 import { isMobile } from "react-device-detect";
-import { StyledConnectNavContainer, StyledLogoContainer, StyledMobileConnectNavContainer, StyledMobileConnectNavDropdownContainer, StyledMobileLinksContainer } from "./styles/ConnectNavStyles";
-import { Menu, X } from 'react-feather';
-import { FooterLinks } from "../footerLinks";
+import { StyledConnectNavContainer, StyledLogoContainer } from "./styles/ConnectNavStyles";
+// import { StyledConnectNavContainer, StyledLogoContainer, StyledMobileConnectNavContainer, StyledMobileConnectNavDropdownContainer, StyledMobileLinksContainer } from "./styles/ConnectNavStyles";
+// import { Menu, X } from 'react-feather';
+// import { FooterLinks } from "../footerLinks";
 
 const ConnectNav = () => {
     const [mobile, setMobile] = useState();
-    const [openState, setOpenState] = useState(false);
+    // const [openState, setOpenState] = useState(false);
 
     useEffect(() => {
       //@ts-ignore
       setMobile(isMobile)
     }, [setMobile]);
 
-    const mobileOpenClickHandler = () => {
-      setOpenState(!openState);
-    }
+    // const mobileOpenClickHandler = () => {
+    //   setOpenState(!openState);
+    // }
 
     return (
       <StyledConnectNavContainer>
