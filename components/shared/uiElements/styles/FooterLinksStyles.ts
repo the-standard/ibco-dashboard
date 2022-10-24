@@ -5,6 +5,10 @@ import styled from "styled-components";
 import media from "../../../../styles/media";
 
 export const StyledFooterNavContainer = styled.div`
+    & a {
+        color: ${props => props.theme.colors.white};
+        text-decoration: none;
+    }
     ${media.desktop`
         width: 36%;
         margin: 0 auto;
