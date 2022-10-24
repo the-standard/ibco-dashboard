@@ -38,7 +38,7 @@ export const StyledSupplyContainer = styled.div`
     font-size: 16px;
 
     & h2 {
-        font-size: 19px;
+        font-size: 15px;
         color: ${props => props.theme.colors.cyan};
     }
 

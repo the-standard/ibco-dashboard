@@ -11,22 +11,23 @@ export const StyledStakingListContainer = styled.div`
     position: relative;
     flex-direction: column;
     border: 0.1em solid ${props => props.theme.colors.borderLightGrey};
-    margin: 0.5em 0;
+    margin: 0.6em 0;
     background-color: ${props => props.theme.colors.backgroundGreyLight};
-    font-size: 17px;
+    font-size: 15px;
+    height: 36px;
 
     ${media.desktop`
         border: none;
         background: ${props => props.theme.colors.darkGrey};
         flex-direction: row;
-        padding: 0.5em 1em;
+        padding: 0.6em 1em;
         justify-content: center;
         align-items: center;
     `}
 `;
 
 export const StyledStakeButton = styled.button`
-    width: 100%;
+    width: 125px;
     padding: 0.8em 1em;
     font-size: 14px;
     margin: 1.5em 0 0 0;
@@ -104,7 +105,7 @@ export const StyledTransactionButtonContainer = styled.div`
     padding-bottom: 1em;
 
     ${media.desktop`
-        flex: 1;
+        flex: 2;
         padding: 0;
     `}
 `;
@@ -145,7 +146,7 @@ export const StyledGridHeaders = styled.div`
 
 export const StyledStakingHistorySelector = styled.div`
         display: flex;
-        font-size: 17px;
+        font-size: 15px;
 
         & > span {
             flex: 1;

@@ -115,7 +115,7 @@ export const Web3StakingInterface = () => {
         <StyledGridHeaders>
             <span>Opening</span>
             <span>Status</span>
-            <span className="flex1">&nbsp;</span>
+            <span className="flex2">&nbsp;</span>
         </StyledGridHeaders> 
         )
         
@@ -140,7 +140,7 @@ export const Web3StakingInterface = () => {
                 <span>&nbsp;</span>
             </StyledGridHeaders>
         }
-        <div className="container">
+        <div className="container" style={{margin: "20px 0 0 0"}}>
             {
                 //@ts-ignore
                 stakeFilteredHistory.length > 0 ? <StakingHistoryList stakeHistoryArray={stakeFilteredHistory} /> : `You have not staked anything yet, please select from some of the staking options above`
