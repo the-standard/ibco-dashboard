@@ -5,21 +5,19 @@ import styled from "styled-components";
 import media from "../../../../styles/media";
 
 export const StyledFooterNavContainer = styled.div`
+    max-width: 500px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin: 0 auto;
+
     & a {
         color: ${props => props.theme.colors.white};
         text-decoration: none;
     }
-    ${media.desktop`
-        width: 36%;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        font-size: 14px;
 
-        & a {
-            color: ${props => props.theme.colors.white};
-            text-decoration: none;
-        }
+    ${media.tablet`
+        font-size: 14px
     `}
 `;
 
@@ -28,18 +26,15 @@ export const StyledFooterNavContainerMain = styled.footer`
 
 export const StyledFooterSocialContainer = styled.div`
     display: flex;
-    justify-content: space-evenly;
-    margin: 2em 0;
+    justify-content: space-between;
+    margin: 1.5em auto;
+    max-width: 140px;
+    display: flex;
 
     & a {
         color: ${props => props.theme.colors.white};
+        text-decoration: none;
     }
-
-    ${media.desktop`
-        width: 10%;
-        margin: 4em auto 2em auto;
-    `}
-    
 `;
 
 export const StyledBuildIdContainer = styled.p`
