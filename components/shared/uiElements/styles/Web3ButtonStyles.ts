@@ -7,6 +7,7 @@ export const StyledWeb3ButtonContainer = styled.div`
     position: absolute;
     display: flex;
     justify-content: space-between;
+    text-transform: capitalize;
     background-color: ${props => props.theme.colors.grey};
     border: 0.1em solid ${props => props.theme.colors.lighterGrey};
     padding: 1em;
