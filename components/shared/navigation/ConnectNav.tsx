@@ -24,20 +24,20 @@ const ConnectNav = () => {
 
           <StyledLogoContainer>
             {
-              !mobile ? 
+              !mobile ?
                 <img src='/Images/theStandardLogo.svg' alt='The Standard' width='100%' />
               :
                 <img src='/Images/StandardLogo-Icon.svg' alt='The Standard Icon' width='25px' />
             }
           </StyledLogoContainer>
 
-        {!mobile ?  
+        {!mobile ?
         <nav className="grid justify-items-end p-4">
           <Web3Button />
         </nav>
         :
         <nav className="grid justify-items-end p-4">
-          <StyledMobileConnectNavContainer>
+          {/*  <StyledMobileConnectNavContainer>
             <a className="mobileMenuClickHandler" onClick={mobileOpenClickHandler}>{!openState ? <Menu size={30} /> : <X size={30}/>}</a>
 
             {
@@ -51,9 +51,9 @@ const ConnectNav = () => {
                 </StyledMobileConnectNavDropdownContainer>
               )
             }
-            
-          </StyledMobileConnectNavContainer>
-          
+
+          </StyledMobileConnectNavContainer> */}
+
         </nav>
         }
       </StyledConnectNavContainer>
