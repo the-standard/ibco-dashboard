@@ -159,7 +159,7 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
                         {
                             userBonds.length > 0 ?
                             userBonds.map((bond, index) => {
-                                return <UserBondsHistoryList key={index} bondInformation={bond} rewardTokenObj={tstTokenInfo} otherToken={otherTokenData} clickHandler={activateClaim} />
+                                return <UserBondsHistoryList key={index} bondInformation={bond} rewardTokenObj={tstTokenInfo} otherToken={otherTokenData} />
                             })
                             :
                             <p>No Bonds have been created yet</p>
