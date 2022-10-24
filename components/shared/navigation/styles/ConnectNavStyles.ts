@@ -16,6 +16,8 @@ export const StyledMobileConnectNavContainer = styled.div`
     position: relative;
     text-align: right;
     margin-top: 0.5em;
+    height: 30px;
+    width: 30px;
 
     & a.mobileMenuClickHandler {
         color: ${props => props.theme.colors.white};
