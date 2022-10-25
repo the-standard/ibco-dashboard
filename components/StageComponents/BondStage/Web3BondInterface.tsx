@@ -3,6 +3,7 @@ import { useWeb3Context } from '../../../context'
 import React, { 
   useEffect, 
   useState } from 'react'
+import { useRouter } from "next/router";
 import { toast } from 'react-toastify';
 
 //Util Helpers
@@ -26,9 +27,11 @@ type Rate = {
 }
 
 function Web3BondInterface() {
+  const router = useRouter();
   const { address, web3Provider, network } = useWeb3Context();
   const [seuroAddress, setSeuroAddress] = useState();
-  const [showHistoryInterface, setShowHistoryInterface] = useState(false);
+  const showHistory = () => router.query.history === 'true';
+  const [showHistoryInterface, setShowHistoryInterface] = useState(showHistory());
   const [contractAddresses, setContractAddresses] = useState({});
   const [otherTokenAddress, setOtherTokenAddress] = useState(null);
   const [otherTokenSymbol, setOtherTokenSymbol] = useState('');
@@ -144,6 +147,10 @@ function Web3BondInterface() {
     getTokenBalance('other');
     
   }, [address, otherTokenAddress, otherTokenSymbol, otherTokenDecimal]);
+
+  useEffect(() => {
+    setShowHistoryInterface(showHistory());
+  }, [router.query]);
 
   const getSeuroAddress = async () => {
     const standardTokenGatewayContract = await StandardTokenGatewayContract;
@@ -357,9 +364,7 @@ function Web3BondInterface() {
       });
   }
 
-  const bondingHistoryClickHandler = () => {
-      setShowHistoryInterface(!showHistoryInterface)
-  }
+  const bondingHistoryClickHandler = () => router.push({query: {'history': 'true'}});
 
   return !showHistoryInterface ? (
     <StyledMainContainer>
@@ -436,7 +441,7 @@ function Web3BondInterface() {
       <div className="container mx-auto w-full">
             {
                 // @ts-ignore
-                <BondingHistoryInterface backButton={bondingHistoryClickHandler} otherTokenData={otherTokenInfo} />
+                <BondingHistoryInterface otherTokenData={otherTokenInfo} />
             }
       </div>
     )

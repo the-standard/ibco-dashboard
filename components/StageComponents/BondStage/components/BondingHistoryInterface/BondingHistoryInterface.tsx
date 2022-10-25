@@ -5,6 +5,7 @@ import { ChevronLeft } from 'react-feather';
 import { toast } from "react-toastify";
 import { ClaimRewardContainer, StyledBondHistoryContainer, StyledBackButtonContainer, StyledChevronSpan, StyledBondGridContainer } from './styles';
 import { useWeb3Context } from "../../../../../context";
+import { useRouter } from "next/router";
 import { ConvertFrom, SmartContractManager, TokenContractManager } from "../../../../../Utils";
 import { UserBondsHistoryList } from "../UserBondsHistoryList/UserBondsHistoryList";
 import { StyledStakingHistoryContainer } from "../../../StakeStage/Styles";
@@ -12,15 +13,15 @@ import { StyledGridHeaders } from './styles';
 import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledSupplyContainer } from "../../../SwapStage/Styles";
 
 type BondingHistoryInterfaceType = {
-    backButton: React.MouseEventHandler<string>,
     otherTokenData:{
         otherTokenSymbol:string,
         otherTokenDecimal:number
     }
 }
 
-export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHistoryInterfaceType) => {
+export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterfaceType) => {
     const { address, web3Provider } = useWeb3Context();
+    const router = useRouter();
     //const [time, setTime] = useState(30);
     const [userBonds, setUserBonds] = useState([]);
     const [copied, setCopied] = useState(false);
@@ -130,6 +131,8 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
     const copyToClipboardClickFunction = () => {
         navigator.clipboard.writeText(tstTokenInfo.tokenAddress).then(() => {toast.success('Copied to clipboard, please import token into MetaMask'); setCopied(true)}).catch(() => {toast.error('Unable to copy address, please manually select and copy'); setCopied(false)});
       }
+
+    const backButton = () => router.push({query: {}})
 
     return(
         <>        
