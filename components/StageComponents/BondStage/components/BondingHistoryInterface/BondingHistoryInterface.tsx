@@ -149,8 +149,8 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
                     {
                         !mobile && (
                         <StyledGridHeaders>
-                            <span>Profit</span>
-                            <span>{tstTokenInfo.tokenSymbol} Amount</span>
+                            <span style={{maxWidth: "30px"}}>Profit</span>
+                            <span style={{maxWidth: "150px"}}>{tstTokenInfo.tokenSymbol} Amount</span>
                             <span>Bond</span>
                             <span>Maturity</span>
                             <span>Status</span>

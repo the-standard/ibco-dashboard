@@ -125,6 +125,10 @@ export const StyledGridHeaders = styled.div`
     display: flex;
     margin: 3em 1em 1em;
 
+    span:first-of-type {
+      display: none;
+    }
+    
     ${media.desktop`
         margin: 3em 0 0.5em 1.3em;
         & > span {

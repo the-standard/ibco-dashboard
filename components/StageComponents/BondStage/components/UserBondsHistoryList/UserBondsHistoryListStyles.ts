@@ -35,6 +35,10 @@ export const StyledBondHistoryItemContainer = styled.div`
     `}
 `;
 
+export const StyledTangoContainer = styled.div`
+    max-width: 150px;
+`;
+
 export const StyledProfitContainer = styled.div`
     position: absolute;
     right: 1em;
@@ -43,6 +47,7 @@ export const StyledProfitContainer = styled.div`
     border: 0.1em solid ${props => props.theme.colors.cyan};
     border-radius: 0.2em;
     text-align: center;
+    max-width: 30px;
 
     & p.amount {
         padding: 0;

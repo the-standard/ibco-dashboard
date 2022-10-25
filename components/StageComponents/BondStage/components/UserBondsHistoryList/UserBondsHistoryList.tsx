@@ -2,7 +2,7 @@
 import moment from "moment";
 import React from "react";
 import { ConvertFrom, TOKENS } from "../../../../../Utils";
-import { StyledBondHistoryItemContainer, StyledClaimButton, StyledP, StyledProfitContainer, StyledProfitTitleP } from "./UserBondsHistoryListStyles";
+import { StyledBondHistoryItemContainer, StyledClaimButton, StyledP, StyledTangoContainer, StyledProfitContainer, StyledProfitTitleP } from "./UserBondsHistoryListStyles";
 
 type bondInformationType = {
     bondInformation: {
@@ -39,9 +39,11 @@ export const UserBondsHistoryList = ({bondInformation, rewardTokenObj, otherToke
                 <p className="amount">+{parseInt(bondInformation.rate)/1000}%</p>
             </StyledProfitContainer>
 
+            <StyledTangoContainer>
             <StyledP>{rewardTokenObj.tokenSymbol} Amount</StyledP>
             <p>≈{reward.toFixed(2)} {rewardTokenObj.tokenSymbol}</p>
-
+            </StyledTangoContainer>
+      
             <StyledP>Bond</StyledP>
             <p>{mainAsset} {TOKENS.DISPLAY.SEURO} &amp; {otherAsset} {otherToken.otherTokenSymbol}</p>
 
