@@ -181,6 +181,7 @@ export const StyledSwapButton = styled.button`
 `;
 
 export const StyledBondingCurveContainer = styled.div`
-    padding 2em 3em;
+    font-size: 16px;
+    padding 2em 1.5em;
     background-color: ${props => props.theme.colors.darkGrey};
 `;
