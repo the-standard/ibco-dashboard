@@ -33,8 +33,8 @@ const subNavigation = () => {
                     const active = router.pathname === `/${route.route}`;
                     return (
                         // eslint-disable-next-line @next/next/link-passhref
-                        <Link href={`/${route.route}`} key={route.route}>
-                            <StyledSubNav className={`${active ? 'active' : ''}`}>{route.canonical}</StyledSubNav>
+                        <Link href={`/${route.route}`} key={route.route} >
+                            <StyledSubNav style={{minHeight: "50px"}} className={`${active ? 'active' : ''}`}>{route.canonical}</StyledSubNav>
                         </Link>
                     )
                 })}

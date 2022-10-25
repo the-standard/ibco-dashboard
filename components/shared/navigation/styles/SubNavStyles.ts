@@ -29,7 +29,7 @@ export const StyledSubNavContainer = styled.nav`
 
     ${media.desktop`
         width:45%;
-        margin: 1.2em auto 4em;
+        margin: 1.2em auto 2em;
 
         & a {
             border: 0;
@@ -46,6 +46,8 @@ export const StyledSubNavContainer = styled.nav`
 
 export const StyledSubNav = styled.a`
     &.subnav {
+    
+    padding-bottom: 30px;
         text-decoration: none;
         color: #616161;
         font-size: 14px;
