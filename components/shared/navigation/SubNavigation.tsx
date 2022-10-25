@@ -34,7 +34,7 @@ const subNavigation = () => {
                     return (
                         // eslint-disable-next-line @next/next/link-passhref
                         <Link href={`/${route.route}`} key={route.route} >
-                            <StyledSubNav style={{minHeight: "50px"}} className={`${active ? 'active' : ''}`}>{route.canonical}</StyledSubNav>
+                            <StyledSubNav style={{minHeight: "50px", zIndex: 10}} className={`${active ? 'active' : ''}`}>{route.canonical}</StyledSubNav>
                         </Link>
                     )
                 })}
