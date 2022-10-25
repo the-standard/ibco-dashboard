@@ -5,16 +5,15 @@ import { isMobile } from "react-device-detect";
 import Footer from '../components/shared/footer'
 import ConnectNav from '../components/shared/navigation/ConnectNav'
 import NextHeadComponent from '../components/shared/NextHeadComponent'
-import { StyledIndexContainer, StyledIndexDescriptionContainer, StyledTokenInformationContainer } from '../components/shared/uiElements/styles/IndexStyles'
+import { StyledIndexContainer, StyledIndexDescriptionContainer } from '../components/shared/uiElements/styles/IndexStyles'
 import { StyledGlobalContainer } from '../components/shared/uiElements/styles/SharedStylesGlobal'
 import { useWeb3Context } from '../context'
 
 const Home: NextPage = () => {
   const { network } = useWeb3Context();
-  const [mobile, setMobile] = useState();
+  const [mobile, setMobile] = useState<boolean>();
   
   useEffect(() => {
-    //@ts-ignore
     setMobile(isMobile)
   }, [setMobile]);
 
