@@ -27,7 +27,7 @@ export const StyledBondHistoryItemContainer = styled.div`
         
         & > div, & > p {
             flex: 1;
-            padding: 1em;
+            padding: 1em 1em 1em 0.8em;
             margin: 0;
             text-align: left;
             background-color: ${props => props.theme.colors.darkGrey};
@@ -37,6 +37,11 @@ export const StyledBondHistoryItemContainer = styled.div`
 
 export const StyledTangoContainer = styled.div`
     max-width: 150px;
+    padding: 0.5em 1em;
+
+    & p {
+      margin-left: 0px;
+    }
 `;
 
 export const StyledProfitContainer = styled.div`
