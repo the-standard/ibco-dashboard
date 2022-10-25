@@ -23,7 +23,7 @@ export const ClaimRewardContainer = styled.div`
     order: -1;
     margin-bottom: 1em;
     padding: 1em 2.5em;
-    font-size: 17px;
+    font-size: 16px;
 
     & p {
         padding: 0;
@@ -45,7 +45,7 @@ export const ClaimRewardContainer = styled.div`
     ${media.desktop`
         order: 0;
         width: 20%;
-        margin: 0 0 0 8px;
+        margin: 0 0 0 18px;
     `}
 `;
 

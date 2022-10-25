@@ -13,7 +13,7 @@ export const StyledBondHistoryItemContainer = styled.div`
     margin-bottom: 8px;
     width: 100%;
     background-color: ${props => props.theme.colors.darkGrey};
-    font-size: 17px;
+    font-size: 16px;
 
     & p {
         margin: 0 0 0.5em 1em;

@@ -20,7 +20,7 @@ export const StyledRateLengthP = styled.p`
 `;
 
 export const StyledROIP = styled.p`
-    font-size: 17px;
+    font-size: 16px;
     font-weight: normal;
     color: #99f9ff;
     margin-top: 10px;
