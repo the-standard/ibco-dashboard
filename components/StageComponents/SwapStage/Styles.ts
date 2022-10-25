@@ -34,7 +34,7 @@ export const StyledTokenInfoRightCol =styled.div`
 
 export const StyledSupplyContainer = styled.div`
     background-color: ${props => props.theme.colors.darkGrey};
-    padding: 1em;
+    padding: 1em 1.5em;
     font-size: 16px;
 
     & h2 {
@@ -87,7 +87,7 @@ export const StyledTokenInformationContainer = styled.div`
     justify-content: space-between;
     flex-wrap: wrap;
     background-color: ${props => props.theme.colors.darkGrey};
-    padding: 2em 1.2em;
+    padding: 2em 1.5em;
     margin: 8px 0;
 
     & > div {
@@ -96,7 +96,7 @@ export const StyledTokenInformationContainer = styled.div`
     }
 
     & h2 {
-        font-size: 15px;
+        font-size: 16px;
         font-weight: bold;
         margin: 0;
     }

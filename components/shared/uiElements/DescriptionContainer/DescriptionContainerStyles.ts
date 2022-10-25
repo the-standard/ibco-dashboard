@@ -11,5 +11,5 @@ export const StyledDescriptionParagraph = styled.p`
     text-justify: inter-word;
     padding: 1.5em;
     text-align: justified;
-    margin: 16px 0 8px;
+    margin: 16px 0 18px;
 `;

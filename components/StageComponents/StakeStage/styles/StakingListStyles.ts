@@ -70,7 +70,7 @@ export const StyledInterestRateContainer = styled.div`
     right: 1em;
     top: 4em;
     border: 0.1em solid ${props => props.theme.colors.cyan};
-    padding: 1em;
+    padding: 1.5em;
     border-radius: 0.2em;
     text-align: center;
     font-weight: bold;

@@ -26,13 +26,13 @@ export const StyledBondingInterfaceContainer = styled.div`
 export const StyledBondingHistoryButtonContainer = styled.div`
     text-align: center;
     background-color: ${props => props.theme.colors.darkGrey};
-    margin: -10px 0 1em 0;
+    margin: -20px 0 1em 0;
     padding-bottom: 1em;
 
     ${media.desktop`
         position: relative;
         top: -1em;
-        margin-bottom: 0;
+        margin: -10px 0 0 0;
     `}
 `;
 
