@@ -137,7 +137,7 @@ export const Web3StakingInterface = () => {
                 <span>Approx. Reward</span>
                 <span>Staked Until</span>
                 <span>&nbsp;</span>
-                <span>&nbsp;</span>
+                <span>Status</span>
             </StyledGridHeaders>
         }
         <div className="container" style={{margin: "20px 0 0 0"}}>

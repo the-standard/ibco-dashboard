@@ -20,6 +20,7 @@ type StakingObj = {
         open : string,
         stake : string,
         reward : string,
+        burned : string,
     }
 }
 
@@ -126,7 +127,7 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
             <span>&nbsp;</span>
             <span>{
                 //@ts-ignore
-                moment().isSameOrAfter(moment(parseInt(stakeInfo.maturity))) ? <StyledStakeButton onClick={() => claimStake()}>{!loading ? 'Claim Reward' : 'Loading...'}</StyledStakeButton> : claimed ? <p>Already Claimed</p> : <p>Pending</p>
+                moment().isSameOrAfter(moment(parseInt(stakeInfo.maturity))) ? ( !StakingObj.burned ? <StyledStakeButton onClick={() => claimStake()}>{!loading ? 'Claim Reward' : 'Loading...'}</StyledStakeButton> : 'Claimed' ) : claimed ? <p>Already Claimed</p> : <p>Pending</p>
             }</span>
         </StyledStakingHistorySelector>
     )
