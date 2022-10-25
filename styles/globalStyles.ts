@@ -200,7 +200,7 @@ export default createGlobalStyle`
   .openNow,
   .closed {
     font-weight: bold;
-    font-size: 15px;
+    font-size: 19px;
     line-height: normal;
   }
 

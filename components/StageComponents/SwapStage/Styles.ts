@@ -87,8 +87,9 @@ export const StyledTokenInformationContainer = styled.div`
     justify-content: space-between;
     flex-wrap: wrap;
     background-color: ${props => props.theme.colors.darkGrey};
-    padding: 2em 1.5em;
+    padding: 1em 1.5em;
     margin: 8px 0;
+    font-size: 16px;
 
     & > div {
         min-width: 50%;
@@ -136,7 +137,7 @@ export const StyledSwapInterfaceContainer = styled.div`
 
 export const StyledPContainer = styled.p`
     padding: 0;
-    font-size: 14px;
+    font-size: 16px;
     margin: 0 0 0.3em 0;
 `;
 

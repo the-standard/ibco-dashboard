@@ -9,7 +9,8 @@ export const StyledMainContainer = styled.main`
     width: 100%;
 
     ${media.desktop`
-        width: 65%;
+        width: 75%;
+        max-width: 800px;
     `}
 `;
 
@@ -66,6 +67,7 @@ export const StyledInputContainers = styled.div`
         color: ${props => props.theme.colors.white};
         font-size: 1em;
         width: 100%;
+        padding: 1em;
     }
 
     & .dropdownSelect {

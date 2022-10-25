@@ -9,7 +9,8 @@ export const StyledMainContainer = styled.main`
     width: 100%;
 
     ${media.desktop`
-        width: 65%;
+        width: 75%;
+        max-width: 800px;
     `}
 `;
 
