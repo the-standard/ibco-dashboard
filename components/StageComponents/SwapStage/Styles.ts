@@ -138,7 +138,7 @@ export const StyledSwapInterfaceContainer = styled.div`
 export const StyledPContainer = styled.p`
     padding: 0;
     font-size: 14px;
-    margin: 0 0 0.3em 0;
+    margin: 0 0 0.5em 0;
 `;
 
 export const StyledInputContainers = styled.div`

@@ -248,7 +248,7 @@ export function Web3SwapInterface() {
 
     <StyledSwapInterfaceContainer>
         <>
-            <StyledPContainer>Converting from - (available: {balance} {token.token})</StyledPContainer>
+            <StyledPContainer>Converting from</StyledPContainer>
               <StyledInputContainers>
                 <input type='number' step="any" min={0} maxLength={5} onInput={checkMaxLength} onChange={e => setValueChangeHandler(e.currentTarget.value)} onFocus={(event) => onFocusEvent(event)} id="from" placeholder='0' value={from} />
                   {
@@ -256,6 +256,7 @@ export function Web3SwapInterface() {
                   <Dropdown ddElements={ddTokens} changeHandler={changeTokenClickHandler} defaultValue={TOKENS.HUMAN_READABLE.ETH} />
                   }
               </StyledInputContainers>
+              <p style={{margin: '-15px 0 25px 0', color: '#99f9ff', fontSize: '12px'}}>Available: {balance} {token.token}</p>
 
               <StyledPContainer>Receiving</StyledPContainer>
               <StyledInputContainers>
