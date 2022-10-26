@@ -12,7 +12,7 @@ export const StyledP = styled.p`
 export const StyledStakingPeriodP = styled.p`
     color: ${props => props.theme.colors.cyan};
     font-weight: bold;
-    font-size: 1.3em;
+    font-size: 14px;
     margin: 0 0 1em 0;
 `;
 
@@ -81,7 +81,7 @@ export const StyledWarning = styled.div`
     font-size: 0.8em;
     line-height: normal;
     font-weight: light;
-    margin: 1em auto;
+    margin: 1em auto 1em -2em;
     justify-content: center;
 `;
 
@@ -91,6 +91,6 @@ export const StyledWarningIconSpan = styled.span`
 
 export const StyledWarningP = styled.p`
     width: 84%;
-    padding-left: 2em;
+    padding-left: 1em;
     color: ${props => props.theme.colors.lighterGrey};
 `;

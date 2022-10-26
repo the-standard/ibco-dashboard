@@ -165,18 +165,20 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
       { web3Provider ? (
         <>
         <StyledStakingPeriodInfo>
-          <p className="text-sm">Staking Period</p>
+          <p className="text-sm">Staking Period:</p>
           <StyledStakingPeriodP>{`${moment(parseInt(stakeTerms)*1000).format('ll')} - ${moment(parseInt(stakeTermsEnd)*1000).format('ll')}`}</StyledStakingPeriodP>
         </StyledStakingPeriodInfo>
         <span>
-          <StyledP className="p-0 m-0 text-sm">Staking... - (available: {balance} {tokenSymbol})</StyledP>
 
           <StyledInputContainer>
-            <StyledInput type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${tokenSymbol} Staking Amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
+            <StyledInput type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${tokenSymbol} Amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
             <StyledDropdownContainer className="dropdownSelect">
               <p className="mx-auto">{tokenSymbol}</p>
             </StyledDropdownContainer>
-          </StyledInputContainer>
+        </StyledInputContainer>
+        
+        <p style={{margin: '15px 0 0 0', color: '#99f9ff', fontSize: '12px'}}>Available: {balance} {tokenSymbol}</p>
+
 
           <StyledWarning>
             <StyledWarningIconSpan><AlertTriangle size={20} /></StyledWarningIconSpan><StyledWarningP>Warning: once you have staked your Standard Token ({tokenSymbol}) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</StyledWarningP>
