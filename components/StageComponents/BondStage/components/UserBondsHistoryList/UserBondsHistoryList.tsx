@@ -2,6 +2,7 @@
 import moment from "moment";
 import React from "react";
 import { ConvertFrom, TOKENS } from "../../../../../Utils";
+import { StyledBondHistoryItemContainer, StyledClaimButton, StyledP, StyledTangoContainer, StyledProfitContainer, StyledProfitTitleP } from "./UserBondsHistoryListStyles";
 
 type bondInformationType = {
     bondInformation: {
@@ -21,11 +22,10 @@ type bondInformationType = {
     otherToken: {
         otherTokenSymbol:string,
         otherTokenDecimal:number
-    },
-    clickHandler: React.MouseEventHandler<object>
+    }
 }
 
-export const UserBondsHistoryList = ({bondInformation, rewardTokenObj, otherToken, clickHandler}:bondInformationType) => {
+export const UserBondsHistoryList = ({bondInformation, rewardTokenObj, otherToken}:bondInformationType) => {
     const reward = ConvertFrom(bondInformation.reward, rewardTokenObj.tokenDecimal).toFloat();
     const mainAsset = ConvertFrom(bondInformation.principalSeuro, 18).toInt();
     const otherAsset = ConvertFrom(bondInformation.principalOther, parseInt(otherToken.otherTokenDecimal.toString())).toInt();
@@ -33,13 +33,24 @@ export const UserBondsHistoryList = ({bondInformation, rewardTokenObj, otherToke
     const claimButtonShow =moment().isSameOrAfter(endDate);
 
     return(
-        <span className="convertInput grid grid-cols-5 gap-2 px-4 py-3 mb-4">
-            <p>+{parseInt(bondInformation.rate)/1000}%</p>
+        <StyledBondHistoryItemContainer>
+            <StyledProfitContainer>
+                <StyledProfitTitleP>Profit</StyledProfitTitleP>
+                <p className="amount">+{parseInt(bondInformation.rate)/1000}%</p>
+            </StyledProfitContainer>
+
+            <StyledTangoContainer>
+            <StyledP>{rewardTokenObj.tokenSymbol} Amount</StyledP>
             <p>≈{reward.toFixed(2)} {rewardTokenObj.tokenSymbol}</p>
+            </StyledTangoContainer>
+      
+            <StyledP>Bond</StyledP>
             <p>{mainAsset} {TOKENS.DISPLAY.SEURO} &amp; {otherAsset} {otherToken.otherTokenSymbol}</p>
+
+            <StyledP>Maturity</StyledP>
             <p>{endDate.format('lll')}</p>
-            <p>{claimButtonShow && !bondInformation.tapped ? <a href='#' onClick={clickHandler}>Claim</a> : bondInformation.tapped ? <span className="claimed">Claimed</span> : 'Pending'}</p>
-        </span>
-        
+
+            <StyledClaimButton>{claimButtonShow && !bondInformation.tapped ? <a>Claim</a> : bondInformation.tapped ? <span className="claimed">Claimed</span> : 'Pending'}</StyledClaimButton>
+        </StyledBondHistoryItemContainer>
     )
 }

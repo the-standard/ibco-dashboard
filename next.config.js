@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const withBunyan = require("next-bunyan");
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  optimizeFonts: false,
   reactStrictMode: true,
   compiler: {
     styledComponents: true,
   },
 }
 
-module.exports = withBunyan({nextConfig})
+module.exports = nextConfig

@@ -1,0 +1,44 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+
+import styled from "styled-components";
+import media from "../../../../styles/media";
+
+export const StyledFooterNavContainer = styled.div`
+    max-width: 500px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin: 0 auto;
+
+    & a {
+        color: ${props => props.theme.colors.white};
+        text-decoration: none;
+    }
+
+    ${media.tablet`
+        font-size: 14px
+    `}
+`;
+
+export const StyledFooterNavContainerMain = styled.footer`
+`;
+
+export const StyledFooterSocialContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin: 1.5em auto;
+    max-width: 140px;
+    display: flex;
+
+    & a {
+        color: ${props => props.theme.colors.white};
+        text-decoration: none;
+    }
+`;
+
+export const StyledBuildIdContainer = styled.p`
+    text-align: center;
+    font-size: 0.8em;
+    color: ${props => props.theme.colors.borderLightGrey};
+`;

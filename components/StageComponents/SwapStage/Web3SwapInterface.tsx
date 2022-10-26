@@ -17,28 +17,37 @@ import {
   Web3Manager} from '../../../Utils';
 import Dropdown from '../../shared/uiElements/Dropdown/Dropdown';
 import { GetJsonAddresses } from '../../../Utils/ContractManager';
+import { StyledInputContainers, StyledPContainer, StyledSwapButton, StyledSwapInterfaceContainer } from './Styles';
+import SwapSuccessModal from '../../shared/uiElements/Modal/SwapSuccessModal/SwapSuccessModal';
 
 export function Web3SwapInterface() {
-  const { address, network } = useWeb3Context();
+  const { address, network, web3Provider } = useWeb3Context();
   const [contractAddresses, setContractAddresses] = useState({});
   const [from, setFrom] = useState('0');
   const [to, setTo] = useState(0.0);
   const [token, setToken] = useState({token: TOKENS.HUMAN_READABLE.ETH, address: ''});
   const [tokenDecimal, setTokenDecimal] = useState(0);
   const [allowance, setAllowance] = useState(0);
+  const [balance, setBalance] = useState(0);
   const [disabledSend, setDisabledSend] = useState(true);
   const [disabledCheck, setDisabledCheck] = useState(true);
   const [tokenApproved, setTokenApprove] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
   const [ddTokens, setDDTokens] = useState({});
+  const [_network, setNetwork] = useState<string>();
+  const [etherscanUrl, setEtherscanUrl] = useState<string>();
+  const [showModal, setShowModal] = useState(false);
 
   // CONTRACT MANAGER INIT
   const web3Interface = Web3Manager();
-  const _network = network?.name || 'goerli';
-  const SmartContract = SmartContractManager('SEuroOffering' as Contract, _network).then((data) => data);
-  const TokenManager = SmartContractManager('TokenManager' as Contract, _network).then((data) => data);
-  const TokenContract = TokenContractManager(token.address, _network).then((data) => data);
+  //@ts-ignore
+  const SmartContract = SmartContractManager('SEuroOffering' as Contract).then((data) => data);
+  //@ts-ignore
+  const TokenManager = SmartContractManager('TokenManager' as Contract).then((data) => data);
+  //@ts-ignore
+  const TokenContract = TokenContractManager(token.address).then((data) => data);
 
   // PRIVATE HELPERS
   const isTokenNotEth = (token:string) => {
@@ -47,12 +56,15 @@ export function Web3SwapInterface() {
 
   // MAIN UPDATE FUNCTIONS
   useEffect(() => {
+    setNetwork(network?.name === 'homestead' ? 'main' : network?.name);
+    setEtherscanUrl(network?.name === 'homestead' ? 'https://etherscan.io' : `https://${network?.name}.etherscan.io`);
+
     getContractAddresses();
-  }, []);
+  }, [network]);
 
   useEffect(() => {
-    const disabledSend = from !== '' && tokenApproved;
-    const disabledCheckState = from !== '';
+    const disabledSend = from !== '' && from !== '0' && tokenApproved;
+    const disabledCheckState = from !== '' && from !== '0';
 
     setDisabledSend(!disabledSend);
     setDisabledCheck(!disabledCheckState);
@@ -63,13 +75,12 @@ export function Web3SwapInterface() {
       const _from:string = from || '0';
       const _deposit:number = ConvertTo(_from, tokenDecimal).toInt();
       //@ts-ignore
-      const contractAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['SEuroOffering'];
-
+      const contractAddress = getSeuroAddress();
       isTokenNotEth(token.token) ? setTokenApprove(_from !== '' && allowance >= _deposit) : setTokenApprove(true);
       //@ts-ignore
-      (isTokenNotEth(token.token) && address && contractAddress) && checkAllowance(address, contractAddress);
+      isTokenNotEth(token.token) && checkAllowance(address, contractAddress);
     }
-  }, [network, from])
+  }, [from])
 
   useEffect(() => {
     from !== '0' ? getTokenAmount() : setTo(0);
@@ -80,20 +91,39 @@ export function Web3SwapInterface() {
     changeTokenClickHandler(TOKENS.HUMAN_READABLE.ETH);
   }, [address]);
 
+  useEffect(() => {
+    getUserBalance();
+  }, [address, token])
+
+  const getUserBalance = async() => {
+    if (address !== null) {
+      //@ts-ignore
+      const getUserBalance = token.token === TOKENS.HUMAN_READABLE.ETH ? await web3Interface.eth.getBalance(address) : await (await TokenContract).methods.balanceOf(address).call().then((data) => data);
+      const formatUserBalance = ConvertFrom(getUserBalance, tokenDecimal).toFloat().toFixed(4);
+
+      setBalance(parseFloat(formatUserBalance));
+    }
+  }
+
   const getContractAddresses = async () => {
      Object.keys(contractAddresses).length === 0 ? await GetJsonAddresses().then((data) => {
       setContractAddresses(data);
      }) : contractAddresses
   }
 
+  const getSeuroAddress = () => {
+    //@ts-ignore
+    const contractAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['SEuroOffering'];
+    return contractAddress;
+  }
+
   //MAIN FUNCTIONS
   const getUsableTokens = async () => {
-    const tokenManager = await (await TokenManager);
-
+    const tokenManager = await TokenManager;
     // @ts-ignore
-    tokenManager.methods.getAcceptedTokens().call().then((data) => {
+    web3Provider !== undefined && tokenManager.methods.getAcceptedTokens().call().then((data) => {
       setDDTokens(data);
-    }).catch((error:never) => toast.error(`unable to retrieve contract ${error}`));
+    }).catch((err:never) => console.log('error getAceptedTokens', err));
   }
 
   const setValueChangeHandler = (data:string) => {
@@ -101,9 +131,6 @@ export function Web3SwapInterface() {
   }
 
   const checkMaxLength = (inputData: { currentTarget: { value: string | never[]; };}) => {
-    // if(inputData.currentTarget.value.slice(0,1) === '-')
-    // inputData.currentTarget.value = '0'
-
     if(inputData.currentTarget.value.length > 8) 
       inputData.currentTarget.value = inputData.currentTarget.value.slice(0, 8);
   }
@@ -116,17 +143,18 @@ export function Web3SwapInterface() {
   const changeTokenClickHandler = async (token=TOKENS.HUMAN_READABLE.ETH) => {
     const _from = from || 0;
     //@ts-ignore
-    const accounts = await web3Interface.eth.getAccounts().then((data:string[]) => data[0]);
+    const accounts = web3Provider && await web3Interface.eth.getAccounts().then((data:string[]) => data[0]);
     //@ts-ignore
     const tokenAddress = token !== TOKENS.HUMAN_READABLE.ETH ? await (await TokenManager).methods.get(token).call()
                           .then((data:never) => data['addr'])
                           :
                           accounts;
     //@ts-ignore
-    await (await TokenManager).methods.getTokenDecimalFor(token).call().then((decimal:never) => {
+    web3Provider !== undefined && await (await TokenManager).methods.getTokenDecimalFor(token).call().then((decimal:never) => {
       const _decimal = parseInt(decimal) === 0 ? 18 : parseInt(decimal);
       setTokenDecimal(_decimal);
-    }).catch((error:never) => toast.error(`unable to retrieve contract ${error}`));
+    });
+    
 
     setTransactionData(null);
     setFrom('0');
@@ -138,34 +166,32 @@ export function Web3SwapInterface() {
   const checkAllowance = async (_address:string, _seuroAddress:string) => {
     //@ts-ignore
     await (await TokenContract).methods.allowance(_address, _seuroAddress).call().then((data: React.SetStateAction<number>) => {
-        setAllowance(data)
-      }).catch((error: never) => {
-        return error
-      })
+      setAllowance(data)
+    });
   }
 
   const confirmCurrency = async () => {
-    setLoading(true);
+    setApproveLoading(true);
     const _depositAmount =  ConvertTo(from, tokenDecimal).raw();
     // @ts-ignore
     const getUserBalance = isTokenNotEth(token.token) ? await web3Interface.eth.getBalance(address) : await (await TokenContract).methods.balanceOf(address);
     const formatUserBalance = ConvertTo(getUserBalance, tokenDecimal).toInt();
+    
     formatUserBalance < parseInt(_depositAmount.toString()) ? 
-      toast.error('you do not have enough to cover this swap') 
+      toast.error('Insufficient funds for swap or token not imported into your wallet') 
     :
       isTokenNotEth(token.token) ? 
         (//@ts-ignore
-          await (await TokenContract).methods.approve(contractAddresses[network['name']]['CONTRACT_ADDRESSES']['SEuroOffering'], _depositAmount.toString()).send({from: address})
+          await (await TokenContract).methods.approve(contractAddresses[_network]['CONTRACT_ADDRESSES']['SEuroOffering'], _depositAmount.toString()).send({from: address})
         .then((data: { [x: string]: never; }) => {
           setTokenApprove(true);
           toast.success(`Tokens approved for use: ${data['blockHash']}`);
-          setLoading(false);
+          setApproveLoading(false);
           return
         })
-        .catch((error: never) => {
-          setLoading(false);
+        .catch(() => {
+          setApproveLoading(false);
           setTokenApprove(false);
-          toast.error(error);
           return
         }))
     :
@@ -181,9 +207,8 @@ export function Web3SwapInterface() {
         setLoading(false);
         const bigNumberFrom = ConvertFrom(data, 18).toFloat();
         setTo(bigNumberFrom)
-      }).catch((error: never) => {
+      }).catch(() => {
         setLoading(false);
-        toast.error(error);
       });
   }
 
@@ -197,10 +222,9 @@ export function Web3SwapInterface() {
       setLoading(false);
       setTransactionData(data);
 
-      !data['status'] ? toast.error('Transaction error') : toast.success(`transaction successfull ${data['transactionHash']}`);
-    }).catch((error: never) => {
+      !data['status'] ? toast.error('Transaction error') : toast.success(`Transaction successful ${data['transactionHash']}`);
+    }).catch(() => {
       setLoading(false);
-      toast.error(error);
     })
     :
     // @ts-ignore
@@ -208,49 +232,51 @@ export function Web3SwapInterface() {
     .then((data: never) => {
       setLoading(false);
       setTransactionData(data);
-
-      !data['status'] ? toast.error('Transaction error') : toast.success(`transaction successfull ${data['transactionHash']}`);
-    }).catch((error: never) => {
+      !data['status'] ? toast.error('Transaction error') : toast.success(`Transaction successful ${data['transactionHash']}`);
+    }).catch(() => {
       setLoading(false);
-      toast.error(error);
     })
   }
 
-  return (
-    //TODO: Finish styling for all devices
-    <div className="convertInput grid grid-flow-row auto-rows-max p-5 py-8 w-full">
-        <>
-            <p className="p-0 m-0 text-sm">Converting from</p>
-            <div className="container w-full">
-              <div className="mb-8 mt-1 flex flex-rows w-full">
-                <input className="w-9/12 from" type='number' step="any" min={0} maxLength={5} onInput={checkMaxLength} onChange={e => setValueChangeHandler(e.currentTarget.value)} onFocus={(event) => onFocusEvent(event)} id="from" placeholder='converting from' value={from} />
-              <div className="w-3/12">
-                {
-                  // @ts-ignore
-                <Dropdown ddElements={ddTokens} changeHandler={changeTokenClickHandler} defaultValue={TOKENS.HUMAN_READABLE.ETH} />
-                }
-              </div>
-              </div>
-            </div>
+  const modalCloseClickHandler = () => {
+    setShowModal(!showModal);
+  }
 
-            <p className="p-0 m-0 text-sm">Converting to</p>
-            <div className="mb-8 mt-1 flex flex-rows w-full">
-              <input className="w-9/12 px-3 py-2" type='string' readOnly={true} placeholder="Converting to" value={to > 0 ? to.toLocaleString( undefined, { minimumFractionDigits: 2 }) : ''} /> 
-              <div className="dropdownSelect p-2 w-3/12 text-center">
-                SEURO
-              </div>
-            </div>
+  return (
+    <>
+    {showModal || transactionData && <SwapSuccessModal seuroAmount={to.toLocaleString( undefined, { minimumFractionDigits: 2 })} modalCloseClick={modalCloseClickHandler} />}
+
+    <StyledSwapInterfaceContainer>
+        <>
+            <StyledPContainer>Converting from</StyledPContainer>
+              <StyledInputContainers>
+                <input type='number' step="any" min={0} maxLength={5} onInput={checkMaxLength} onChange={e => setValueChangeHandler(e.currentTarget.value)} onFocus={(event) => onFocusEvent(event)} id="from" placeholder='0' value={from} />
+                  {
+                    // @ts-ignore
+                  <Dropdown ddElements={ddTokens} changeHandler={changeTokenClickHandler} defaultValue={TOKENS.HUMAN_READABLE.ETH} />
+                  }
+              </StyledInputContainers>
+              <p style={{margin: '-15px 0 25px 0', color: '#99f9ff', fontSize: '12px'}}>Available: {balance} {token.token}</p>
+
+              <StyledPContainer>Receiving</StyledPContainer>
+              <StyledInputContainers>
+                <input type='string' readOnly={true} placeholder="0" value={to > 0 ? to.toLocaleString( undefined, { minimumFractionDigits: 2 }) : ''} /> 
+                <div className="dropdownSelect readOnly">
+                  {TOKENS.DISPLAY.SEURO}
+                </div>
+              </StyledInputContainers>
             {
-              isTokenNotEth(token.token) ? from !== '0' && from !== '' && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledCheck} onClick={() => confirmCurrency()}>{loading ? 'loading...' : 'Approve'} {token.token}</button> : ''
+              isTokenNotEth(token.token) ? from !== '0' && from !== '' && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <StyledSwapButton className="extraMarginTop" disabled={approveLoading || disabledCheck} onClick={() => confirmCurrency()}>{approveLoading ? 'Approving...' : 'Approve'} {token.token}</StyledSwapButton> : ''
             }
             
             {            
-            <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledSend} onClick={() => SendTransaction()}>{loading ? 'loading...' : 'Swap'}</button>
+            web3Provider && <StyledSwapButton disabled={approveLoading || loading || disabledSend} onClick={() => SendTransaction()}>{loading ? 'Processing swap...' : `Swap for ${TOKENS.DISPLAY.SEURO}`}</StyledSwapButton>
             }
             {// @ts-ignore
-            transactionData && <button className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</button>
+            transactionData && <StyledSwapButton onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledSwapButton>
             }
             </>
-    </div>
+    </StyledSwapInterfaceContainer>
+    </>
   )
 }

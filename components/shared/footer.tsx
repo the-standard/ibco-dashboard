@@ -1,24 +1,30 @@
-import {Twitter, Youtube, Linkedin, Instagram} from 'react-feather'
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import {Twitter, Youtube, Linkedin, Instagram} from 'react-feather';
+import { FooterLinks } from './footerLinks';
+import { isMobile } from "react-device-detect";
+import { useEffect, useState } from 'react';
+import { StyledBuildIdContainer, StyledFooterNavContainerMain, StyledFooterSocialContainer } from './uiElements/styles/FooterLinksStyles';
 
 const Footer = () => {
+    const [mobile, setMobile] = useState();
+    
+    useEffect(() => {
+      //@ts-ignore
+      setMobile(isMobile)
+    }, [setMobile]);
+
+
     return (
-        <footer className="mx-auto text-center mt-10">
-            <div className="footerSocialMedia mb-5 text-center flex flex-cols w-1/12 justify-between mx-auto footerNav">
-                <a href="https://twitter.com/thestandard_io" rel="noreferrer" target="_blank"><Twitter /></a>
-                <a href="https://www.youtube.com/thestandard_io" rel="noreferrer" target="_blank"><Youtube /></a>
-                <a href="https://www.linkedin.com/company/the-standard-io" rel="noreferrer" target="_blank"><Linkedin /></a>
-                <a href="https://www.instagram.com/thestandard.io/" rel="noreferrer" target="_blank"><Instagram /></a>
-            </div>
-            <div className="flex flex-cols w-4/12 justify-between mx-auto text-center footerNav">
-                <a href="https://www.thestandard.io/" rel="noreferrer" target="_blank">The Standard Protocol</a>
-                <a href="https://www.thestandard.io/ecosystem" rel="noreferrer" target="_blank">Ecosystem</a>
-                <a href="https://www.thestandard.io/careers" rel="noreferrer" target="_blank">Careers</a>
-                <a href="https://www.thestandard.io/faq" rel="noreferrer" target="_blank">FAQ</a>
-                <a href="Whitepaper" rel="noreferrer" target="_blank">Whitepaper</a>
-                <a href="Blog" rel="noreferrer" target="_blank">Blog</a>
-            </div>
-            <p>BUILD ID: {process.env.NEXT_PUBLIC_GIT_COMMIT_SHA?.slice(0, 7)}</p>
-        </footer>
+        <StyledFooterNavContainerMain>
+            <StyledFooterSocialContainer>
+                <a href="https://twitter.com/thestandard_io" rel="noreferrer" target="_blank"><Twitter width={20} height={20} /></a>
+                <a href="https://www.youtube.com/thestandard_io" rel="noreferrer" target="_blank"><Youtube width={20} height={20} /></a>
+                <a href="https://www.linkedin.com/company/the-standard-io" rel="noreferrer" target="_blank"><Linkedin width={20} height={20} /></a>
+                <a href="https://www.instagram.com/thestandard.io/" rel="noreferrer" target="_blank"><Instagram width={20} height={20} /></a>
+            </StyledFooterSocialContainer>
+            {!mobile && <FooterLinks />}
+            <StyledBuildIdContainer>BUILD ID: {process.env.NEXT_PUBLIC_GIT_COMMIT_SHA?.slice(0, 7)}</StyledBuildIdContainer>
+        </StyledFooterNavContainerMain>
     )
 }
 

@@ -1,11 +1,15 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 
-@layer base {
+import { createGlobalStyle } from 'styled-components'
+
+export default createGlobalStyle`
   html {
-    height: 100%;
-    background-color: black;
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background-image: linear-gradient(${props => props.theme.colors.darkGrey}, ${props => props.theme.colors.black});
   }
 
   svg {
@@ -17,20 +21,13 @@
     color: #99f9ff;
   }
 
-  a.subnav {
-    text-decoration: none;
-    color: #616161;
-    font-size: 14px;
-  }
-
-  a.subnav.active {
-    font-weight: bold;
-    color: #99f9ff;
-  }
-
   body {
+    width: 100%;
     height: 100%;
     color: white;
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: normal;
   }
 
   button {
@@ -45,6 +42,7 @@
     background: none !important;
     background-color: #282828;
     outline: none;
+    padding: 0.8em;
   }
 
   input::-webkit-outer-spin-button,
@@ -55,6 +53,11 @@
 
   input[type='checkbox']:checked {
     background: #99f9ff !important;
+    outline: none;
+  }
+
+  input[readOnly] {
+    border-color: ${props => props.theme.colors.superLightGrey} !important;
     outline: none;
   }
 
@@ -69,21 +72,8 @@
     opacity: 60%;
   }
 
-  p.descriptionCopy {
-    color: #bdbdbd;
-    font-size: 16px;
-    text-align: justify;
-    text-justify: inter-word;
-  }
-
   .greyText {
     color: #7a7a7a;
-  }
-
-  .backButton {
-    color: #6c6c6c;
-    font-size: 14px;
-    text-decoration: none;
   }
 
   .bondingHistoryButton {
@@ -99,31 +89,40 @@
     border-bottom-left-radius: 0;
   }
 
-  .convertInput {
-    background: #272726;
-  }
-
   select {
     padding-right: 0;
     padding-left: 0;
   }
 
   .dropdownSelect {
+    display: flex;
     background: #074e53;
     color: #99f9ff;
     border: 1px solid #99f9ff !important;
     position: relative;
     overflow: hidden;
+    padding: 0.5em;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+
+    &.readOnly {
+      border-color: ${props => props.theme.colors.superLightGrey} !important;
+      background: ${props => props.theme.colors.superLightGrey};
+      color: ${props => props.theme.colors.offWhite};
+    }
   }
 
-  .dropdownSelect select {
+  select.dropdownSelect {
     border: 0;
     position: relative;
     z-index: 99;
-    background: none;
+    font-size: 1em;
   }
 
-  .dropdownSelect select:after {
+  select.dropdownSelect:after {
     width: 0;
     height: 0;
     border-left: 6px solid transparent;
@@ -134,22 +133,6 @@
     right: 0;
     content: '';
     z-index: 98;
-  }
-
-  /*
-    walletAddress-container
-  */
-
-  .walletAddress-container {
-    background-color: #5e5e5e;
-    padding: 10px;
-  }
-
-  .walletNetwork-container {
-    background-color: #5e5e5e;
-    padding: 10px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
   }
 
   /*
@@ -213,41 +196,11 @@
     Supply container token information
   */
 
-  .supplyContainer {
-    background-color: #272726;
-  }
-
-  .supplyContainer > h2,
-  .supplyContainer > div > h2 {
-    color: #99f9ff;
-    font-size: 19px;
-    font-weight: bold;
-    line-height: normal;
-  }
-
-  /*
-    FOOTER NAV
-  */
-
-  .footerNav a {
-    text-decoration: none;
-    color: #fff;
-    font-size: 14px;
-    line-height: normal;
-  }
-
-  .warning {
-    color: #ffc658;
-    font-size: 12px;
-    line-height: normal;
-    font-weight: light;
-  }
-
   .openSoon,
   .openNow,
   .closed {
     font-weight: bold;
-    font-size: 19px;
+    font-size: 16px;
     line-height: normal;
   }
 
@@ -261,12 +214,6 @@
 
   .closed {
     color: #7a7a7a;
-  }
-
-  .stakingPeriod {
-    color: #99f9ff;
-    font-weight: bold;
-    font-size: 17px;
   }
 
   /*
@@ -283,4 +230,21 @@
   .betaBanner a {
     color: #000;
   }
-}
+
+  /*
+    CONNECT MODAL
+  */
+
+  .connectModal {
+    background-color: rgba(0, 0, 0, 0.75);
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+`

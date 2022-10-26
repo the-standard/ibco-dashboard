@@ -4,6 +4,7 @@ import type { NextPage } from 'next'
 import ConnectNav from '../components/shared/navigation/ConnectNav';
 import SubNavigation from '../components/shared/navigation/SubNavigation';
 import NextHeadComponent from '../components/shared/NextHeadComponent';
+import { isMobile } from "react-device-detect";
 import { Web3SwapInterface } from '../components';
 import { TokenInformationInterface, BondingCurveInterface } from '../components';
 import { Contract, SmartContractManager, TOKENS } from '../Utils';
@@ -11,20 +12,37 @@ import Footer from '../components/shared/footer';
 import { useWeb3Context } from '../context';
 import { GetJsonAddresses } from '../Utils/ContractManager';
 import { useEffect, useState } from 'react';
+import DescriptionContainer from '../components/shared/uiElements/DescriptionContainer/DescriptionContainer';
+import { StyledGlobalContainer } from '../components/shared/uiElements/styles/SharedStylesGlobal';
+import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledLeftRightColContainer, StyledSupplyContainer, StyledTokenInfoLeftCol, StyledTokenInfoRightCol } from '../components/StageComponents/SwapStage/Styles';
+import { toast } from 'react-toastify';
 
 const Stage1: NextPage = () => {
   const [seuroAddress, setSeuroAddress] = useState('');
   const { network } = useWeb3Context();
-  const _network = network?.name || 'goerli';
-  const BondingCurveContract = SmartContractManager('BondingCurve' as Contract, _network).then((data) => { return data });
+  const _network = network?.name === 'homestead' ? 'main' : network?.name || 'goerli';
+  const BondingCurveContract = SmartContractManager('BondingCurve' as Contract).then((data) =>  data);
+  const [mobile, setMobile] = useState();
+  const [copied, setCopied] = useState(false);
+  const [loadCalls, setLoadCalls] = useState(1);
 
   useEffect(() => {
+    if (loadCalls === 2) {
+      if (network === null) window.location.href = '/';
+    }
+    setLoadCalls(loadCalls+1);
     getTokenAddress();
   }, [network]);
+
+  useEffect(() => {
+    //@ts-ignore
+    setMobile(isMobile)
+  }, [setMobile]);
 
   const getTokenAddress = async() => {
     //@ts-ignore
     return seuroAddress === '' ? await GetJsonAddresses().then((data:never) => {
+      //@ts-ignore
       setSeuroAddress(data[_network]['TOKEN_ADDRESSES']['SEURO']);
       return seuroAddress;
     })
@@ -32,41 +50,45 @@ const Stage1: NextPage = () => {
     seuroAddress
   }
 
+  const copyToClipboardClickFunction = () => {
+    navigator.clipboard.writeText(seuroAddress).then(() => {toast.success('Copied to clipboard, please import token into MetaMask'); setCopied(true)}).catch(() => {toast.error('Unable to copy address, please manually select and copy'); setCopied(false)});
+  }
+
   return (
-    <div>
+    <StyledGlobalContainer>
       <NextHeadComponent title="The Standard | Get sEURO" description='Get sEURO' />
       
       <ConnectNav />
       <SubNavigation />
 
       <main>
-        <div className="flex flex-row justify-between p-4 w-full">
-          <div className="convertInput mx-auto text-center p-5">
-            <p className="descriptionCopy"><b>What is Stage 1?</b> The Bonding Curve allows users to swap their collateral for sEURO. Initially, sEURO is discounted by 20% meaning 1 EURO of ETH will be exchanged for 1.25 sEURO. This discount declines until the total supply has been exhausted. </p>
-          </div>
-        </div>
+        <DescriptionContainer>
+          <b>What is Stage 1?</b> The Bonding Curve allows users to swap their collateral for sEURO. Initially, sEURO is discounted by 20% meaning 1 EURO of ETH will be exchanged for 1.25 sEURO. This discount declines until the total supply has been exhausted.
+        </DescriptionContainer>
 
-        <div className="flex flex-row justify-between p-4 pt-0 w-full">
-          <div className="container w-9/12">
-            <div className="supplyContainer mb-4 mr-6 px-5 py-3 flex flex-cols">
-              <h2>{TOKENS.DISPLAY.SEURO} Address:</h2> <p className="ml-20">{seuroAddress}</p>
-            </div>
+        <StyledLeftRightColContainer>
+          <StyledTokenInfoLeftCol>
+            <StyledSupplyContainer>
+              <h2>{TOKENS.DISPLAY.SEURO} Address:</h2> <StyledAddressHolderP>{seuroAddress}</StyledAddressHolderP>
+             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
+            </StyledSupplyContainer>
             {
               <>
                 <TokenInformationInterface bondingCurveContract={BondingCurveContract} />
                 <BondingCurveInterface />
               </>
             }
-          </div>
-          <div className="container w-3/12">
+          </StyledTokenInfoLeftCol>
+          
+          <StyledTokenInfoRightCol>
             <Web3SwapInterface />
-          </div>
-        </div>
+          </StyledTokenInfoRightCol>
+        </StyledLeftRightColContainer>
       </main>
 
       <Footer />
-    </div>
+    </StyledGlobalContainer>
   )
-}
+} 
 
 export default Stage1

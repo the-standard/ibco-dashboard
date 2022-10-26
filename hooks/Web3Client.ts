@@ -36,10 +36,9 @@ export const useWeb3 = () => {
         const signer = web3Provider.getSigner()
         const address = await signer.getAddress()
         const network = await web3Provider.getNetwork()
-        if (network.name !== 'goerli') {
-          throw `Unsupported Network ${network.name}`
-        } else {
-          toast.success(`Connected to Wallet: ${address.substring(0, 5)}...${address.slice(-4)}`)
+
+        toast.success(`Connected to wallet: ${address.substring(0, 5)}...${address.slice(-4)}`);
+        if (!window.location.href.includes('/stage')) window.location.href = '/stage1';
 
         dispatch({
           type: 'SET_WEB3_PROVIDER',
@@ -49,13 +48,10 @@ export const useWeb3 = () => {
           network,
           signer,
         } as Web3Action)
-        }
         
       } catch (e) {
-        toast.error(`Wallet Connect Error: ${e}`)
+        toast.error(`Wallet connect error: ${e}`)
       }
-    } else {
-      toast.error('No Web3Modal')
     }
   }, [])
 
@@ -63,9 +59,12 @@ export const useWeb3 = () => {
     if (web3Modal) {
       web3Modal.clearCachedProvider()
       if (provider?.disconnect && typeof provider.disconnect === 'function') {
-        await provider.disconnect()
+        await provider.disconnect();
       }
-      toast.error('Disconnected from Wallet')
+
+      if (window.location.href.includes('/stage')) window.location.href = '/';
+
+      toast.error('Disconnected from wallet')
       dispatch({
         type: 'RESET_WEB3_PROVIDER',
       } as Web3Action)
@@ -84,8 +83,9 @@ export const useWeb3 = () => {
   // EIP-1193 events
   useEffect(() => {
     if (provider?.on) {
+      //window.location.href = '/stage1';
       const handleAccountsChanged = (accounts: string[]) => {
-        toast.info('Changed wallet Account')
+        toast.info('Changed wallet account')
         dispatch({
           type: 'SET_ADDRESS',
           address: accounts[0],
@@ -96,7 +96,7 @@ export const useWeb3 = () => {
       const handleChainChanged = (_hexChainId: string) => {
         if (typeof window !== 'undefined') {
           console.log('switched to chain...', _hexChainId)
-          toast.info('Wallet Network Changed')
+          toast.info('Wallet network changed')
           window.location.reload()
         } else {
           console.log('window is undefined')
@@ -121,7 +121,7 @@ export const useWeb3 = () => {
           provider.removeListener('disconnect', handleDisconnect)
         }
       }
-    }
+    } 
   }, [provider, disconnect])
 
   return {

@@ -3,7 +3,8 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useWeb3Context } from "../../../../context";
-import { StakingContractManager, ConvertFrom, TOKENS, TokenContractManagerNoHooks } from "../../../../Utils";
+import { StakingContractManager, ConvertFrom, TOKENS, TokenContractManager } from "../../../../Utils";
+import { StyledStakeButton, StyledStakingHistorySelector } from "../styles/StakingListStyles";
 
 const defaultTokenObj = {
     tokenAddress: '',
@@ -19,6 +20,7 @@ type StakingObj = {
         open : string,
         stake : string,
         reward : string,
+        burned : string,
     }
 }
 
@@ -79,7 +81,7 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
 
     const getTokenInformation = async (address:string) => {
         //@ts-ignore
-        const tokenContractInit = TokenContractManagerNoHooks(address, _network).then((data:never) => data);
+        const tokenContractInit = TokenContractManager(address, _network).then((data:never) => data);
 
         const tokenInfoObj = {
             decimals: 0,
@@ -108,25 +110,25 @@ export const StakingHistoryListSelector = (stake:StakingObj) => {
             toast.success(`Successfully claimed ${ConvertFrom(StakingObj.reward, parseInt(seuroTokenInfo.decimal.toString())).toFloat()} ${TOKENS.DISPLAY.SEURO}`);
             setClaimed(true);
         })
-        .catch((error:never) => {
+        .catch(() => {
             setLoading(false);
-            console.log('staking claim error', error);
             setClaimed(false);
         });
     }
 
     return (
-        <div className="grid grid-cols-4 gap-2 mb-5">
+        <StyledStakingHistorySelector>
             <span>{ConvertFrom(StakingObj.stake, parseInt(tstTokenInfo.decimal.toString())).toFloat()} {tstTokenInfo.symbol}</span>
-            <span>{ConvertFrom(StakingObj.reward, parseInt(seuroTokenInfo.decimal.toString())).toFloat()} {TOKENS.DISPLAY.SEURO}</span>
+            <span className="reward">{ConvertFrom(StakingObj.reward, parseInt(seuroTokenInfo.decimal.toString())).toFloat()} {TOKENS.DISPLAY.SEURO}</span>
             <span>{
             //@ts-ignore
             moment(parseInt(stakeInfo.maturity)).format('ll')
             }</span>
+            <span>&nbsp;</span>
             <span>{
                 //@ts-ignore
-                moment().isSameOrAfter(moment(parseInt(stakeInfo.maturity))) ? <button className="px-3 py-1" onClick={() => claimStake()}>{!loading ? 'Claim' : 'Loading...'}</button> : claimed ? <p>Already Claimed</p> : <p>Pending</p>
+                moment().isSameOrAfter(moment(parseInt(stakeInfo.maturity))) ? ( !StakingObj.burned ? <StyledStakeButton onClick={() => claimStake()}>{!loading ? 'Claim Reward' : 'Loading...'}</StyledStakeButton> : 'Claimed' ) : claimed ? <p>Already Claimed</p> : <p>Pending</p>
             }</span>
-        </div>
+        </StyledStakingHistorySelector>
     )
 }

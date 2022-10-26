@@ -1,27 +1,29 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React from 'react'
-import { useWeb3Context } from '../../../context'
+import React from 'react';
+import { useWeb3Context } from '../../../context';
+import { StyledWalletAddressContainer, StyledWalletNetworkContainer, StyledWeb3AddressContainer } from './styles/Web3ButtonStyles';
 
 export function Web3Address() {
   const { address, network } = useWeb3Context();
+  const _network = network?.name === 'homestead' ? 'main' : network?.name;
 
   return (
-    <div className="flex items-center justify-center">
-          <span className="walletNetwork-container pl-4 text-right text-sm font-light">
+    <StyledWeb3AddressContainer>
+          {_network !== 'main' && <StyledWalletNetworkContainer>
           {
             // @ts-ignore
-          network['name']
+            _network
           }
-          </span>
-          <span className="walletAddress-container pl-4 text-right text-sm font-light">
-          🟢 &nbsp;{
+          </StyledWalletNetworkContainer>}
+          <StyledWalletAddressContainer>
+          {
             // @ts-ignore
           address.substring(0, 5)
           }...{
             // @ts-ignore
           address.slice(-4)
           }
-          </span>
-    </div>
+          </StyledWalletAddressContainer>
+    </StyledWeb3AddressContainer>
   )
 }

@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
+import { isMobile } from "react-device-detect";
 import moment from 'moment';
+import { StyledDurationContainer, StyledInterestRateContainer, StyledStakeButton, StyledStakingListContainer, StyledStatusContainer, StyledTitleP, StyledTransactionButtonContainer } from "../styles/StakingListStyles";
 
 type StakingObj = {
     address: string,
@@ -20,34 +22,63 @@ type StakeList = {
 export const StakingSelector = ({stakingObj, clickFunction}:StakeList) => {
     const startPeriod = moment(parseInt(stakingObj.start)*1000);
     const endPeriod = moment(parseInt(stakingObj.end)*1000);
-    const maturity = moment(parseInt(stakingObj.maturity)*1000)
-
-    const [duration, setDuration] = useState(0);
     const [hasOpened, setHasOpened] = useState(false);
+
+    const isStakeOpen = hasOpened && moment().isAfter(endPeriod);
+    const [mobile, setMobile] = useState();
     
     useEffect(() => {
-        setDuration(endPeriod.diff(startPeriod, 'weeks'));
+      //@ts-ignore
+      setMobile(isMobile)
+    }, [setMobile]);
+    
+    useEffect(() => {
         setHasOpened(moment().isSameOrBefore(endPeriod) && moment().isSameOrAfter(startPeriod));
     }, [moment, stakingObj])
 
     return (
-        <div className="w-full px-4 py-2 convertInput grid grid-cols-5 gap-1 mb-4">
-            <div>{ `${duration} ${duration > 1 ? 'weeks' : 'week'}` }</div>
-            <div>{`+${parseInt(stakingObj.interestRate) / 1000}%`}</div>
-            <div>{!hasOpened ? moment().isAfter(endPeriod) ? <span className="closed">Closed</span> : <span className="openSoon">Opening Soon</span>: <span className="openNow">Open Now</span>}</div>
-            <div className="greyText">{maturity.format('ll')}</div>
-            <div>{
-                !hasOpened ? 
-                    !stakingObj.isActive || moment().isAfter(endPeriod) ?
-                    <span className="closed">Closed</span>
-                :
-                    `${startPeriod.format('ll')} - ${startPeriod.format('LT')}` 
-                : 
-                    <button className="px-4 py-2 w-full" onClick={() => {
-                        //@ts-ignore
-                        return clickFunction(stakingObj.address)
-                    }}>Start Staking</button>
-            }</div>
-        </div>
+        <StyledStakingListContainer className={isStakeOpen ? 'stakeOpen' : ''}>
+            <StyledDurationContainer>
+                <StyledTitleP>Opening</StyledTitleP>
+                { 
+                    startPeriod.format('ll')
+                }
+            </StyledDurationContainer>
+            {
+             mobile &&  <StyledInterestRateContainer>
+                    <StyledTitleP>Reward</StyledTitleP>
+                    {
+                        `+${parseInt(stakingObj.interestRate) / 1000}%`
+                    }
+                </StyledInterestRateContainer>
+            }
+            <StyledStatusContainer>
+                {
+                    !hasOpened ? moment().isAfter(endPeriod) ? <span className="closed">Closed</span> : <span className="openSoon">Opening Soon</span>: <span className="openNow">Open Now</span>
+                }
+            </StyledStatusContainer>
+
+            {/* <StyledMaturityContainer>
+                <StyledTitleP>Maturity</StyledTitleP>
+                {
+                    maturity.format('ll')
+                }
+            </StyledMaturityContainer> */}
+
+            <StyledTransactionButtonContainer>
+                {
+                    !hasOpened ? 
+                        !stakingObj.isActive || moment().isAfter(endPeriod) ?
+                        <span className="closed">Closed</span>
+                    :
+                        `${startPeriod.format('ll')} - ${startPeriod.format('LT')}` 
+                    : 
+                        <StyledStakeButton onClick={() => {
+                            //@ts-ignore
+                            return clickFunction(stakingObj.address)
+                        }}>Start Staking</StyledStakeButton>
+                }
+            </StyledTransactionButtonContainer>
+        </StyledStakingListContainer>
     )
 };

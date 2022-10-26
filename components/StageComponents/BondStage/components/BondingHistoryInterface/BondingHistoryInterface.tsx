@@ -1,33 +1,46 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from "react";
+import { isMobile } from "react-device-detect";
 import { ChevronLeft } from 'react-feather';
 import { toast } from "react-toastify";
-import { ClaimRewardContainer } from './styles';
+import { ClaimRewardContainer, StyledBondHistoryContainer, StyledBackButtonContainer, StyledChevronSpan, StyledBondGridContainer } from './styles';
 import { useWeb3Context } from "../../../../../context";
+import { useRouter } from "next/router";
 import { ConvertFrom, SmartContractManager, TokenContractManager } from "../../../../../Utils";
 import { UserBondsHistoryList } from "../UserBondsHistoryList/UserBondsHistoryList";
+import { StyledStakingHistoryContainer } from "../../../StakeStage/Styles";
+import { StyledGridHeaders } from './styles';
+import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledSupplyContainer } from "../../../SwapStage/Styles";
 
 type BondingHistoryInterfaceType = {
-    backButton: React.MouseEventHandler<string>,
     otherTokenData:{
         otherTokenSymbol:string,
         otherTokenDecimal:number
     }
 }
 
-export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHistoryInterfaceType) => {
-    const { address, network } = useWeb3Context();
-    const _network = network?.name || 'goerli';
+export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterfaceType) => {
+    const { address, web3Provider } = useWeb3Context();
+    const router = useRouter();
+    //const [time, setTime] = useState(30);
     const [userBonds, setUserBonds] = useState([]);
+    const [copied, setCopied] = useState(false);
     const [claimAmount, setClaimAmount] = useState('0');
+    const [mobile, setMobile] = useState();
+    const [disableClaim, setDisableClaim] = useState(false);
     const [tstTokenInfo, setTstTokenInfo] = useState({
         tokenAddress: '',
         tokenSymbol: '',
         tokenDecimal: 0
     });
-    const BondStorageContract = SmartContractManager('BondStorage', _network).then((data) => data);
-    const TSTTokenInfoContract = SmartContractManager('StandardTokenGateway', _network).then((data) => data);
-    const TokenContract_TST = TokenContractManager(tstTokenInfo.tokenAddress, _network).then((data) => data);
+    const BondStorageContract = SmartContractManager('BondStorage').then((data) => data);
+    const TSTTokenInfoContract = SmartContractManager('StandardTokenGateway').then((data) => data);
+    const TokenContract_TST = TokenContractManager(tstTokenInfo.tokenAddress).then((data) => data);
+
+    useEffect(() => {
+        //@ts-ignore
+        setMobile(isMobile)
+      }, [setMobile]);
 
     useEffect(() => {
         getUserBonds();
@@ -35,32 +48,43 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
     }, [address])
 
     useEffect(() => {
+        // if(userBonds.length > 0) {
+        //     refreshIntervalTimer;
+        // } else {
+        //     clearInterval(refreshIntervalTimer);
+        // }
+
         getTSTInfo();
     }, [userBonds, tstTokenInfo.tokenAddress]);
+
+   // const refreshIntervalTimer = setInterval(() => {getUserBonds()}, 30000);
+
+    // const startTimer = () => {
+    //     const timer = setInterval(() => {
+    //         time <= 0 && setTime(30);
+    //         setTime(time - 1);
+    //     }, 1000);
+
+    //     userBonds.length > 0 ? timer : clearInterval(timer);
+    // };
 
     const getUserBonds = async() => {
         const bondStorageContract = await (await BondStorageContract);
         //@ts-ignore
-        bondStorageContract.methods.getUserBonds(address).call().then((data:never) => {
+        web3Provider && bondStorageContract.methods.getUserBonds(address).call().then((data:never) => {
             setUserBonds(data);
-        })
-        .catch((error:never) => {
-            toast.error(`Error getting user bonds: ${error}`)
         });
 
         //@ts-ignore
-        bondStorageContract.methods.getClaimAmount(address).call().then((data:never) => {
+        web3Provider && bondStorageContract.methods.getClaimAmount(address).call().then((data:never) => {
             setClaimAmount(data);
-        })
-        .catch((error:never) => {
-            console.log('error retrieving claim amount', error);
-        })
+        });
     }
 
     const getTSTInfo = async() => {
         const tokenContractSM = await (await TSTTokenInfoContract);
         //@ts-ignore
-        tokenContractSM.methods.TOKEN().call().then(async (data:never) => {
+        web3Provider && tokenContractSM.methods.TOKEN().call().then(async (data:never) => {
             const tokenContract = await (await TokenContract_TST);
 
             setTstTokenInfo(prevState => ({
@@ -90,56 +114,73 @@ export const BondingHistoryInterface = ({backButton, otherTokenData}:BondingHist
     }
 
     const activateClaim = async () => {
+        setDisableClaim(true);
         const bondStorageContract = await BondStorageContract;
+        const formattedValue = ConvertFrom(claimAmount, tstTokenInfo.tokenDecimal).toFloat().toFixed(2);
         //@ts-ignore
         await bondStorageContract.methods.claimReward(address).send({from: address}).then(() => {
-            toast.success(`All bonds claimed, you have ${claimAmount} ${tstTokenInfo.tokenSymbol}`)
+            toast.success(`Your reward of ${formattedValue} ${tstTokenInfo.tokenSymbol} has successfully been paid out.`);
+            getUserBonds();
         })
         .catch((error:never) => {
+            setDisableClaim(false);
             console.log('error', error);
         })
     };
+
+    const copyToClipboardClickFunction = () => {
+        navigator.clipboard.writeText(tstTokenInfo.tokenAddress).then(() => {toast.success('Copied to clipboard, please import token into MetaMask'); setCopied(true)}).catch(() => {toast.error('Unable to copy address, please manually select and copy'); setCopied(false)});
+      }
+
+    const backButton = () => router.push({query: {}})
 
     return(
         <>        
             {
                 // @ts-ignore
-                <div className="mb-4 w-full mx-auto"><a href="#" className="py-1 flex backButton" onClick={backButton}><span className="flex w-5"><ChevronLeft /></span> Back</a></div>
+                <StyledBackButtonContainer><a href="#" className="backButton" onClick={backButton}><StyledChevronSpan><ChevronLeft /></StyledChevronSpan> Back</a></StyledBackButtonContainer>
             }
-            <div className="w-full mx-auto flex">
-                <div className="w-9/12">
-                    <div className="w-full grid grid-cols-5 gap-2 mb-4 px-4">
-                        <p>Profit</p>
-                        <p>{tstTokenInfo.tokenSymbol} Amount</p>
-                        <p>Bond</p>
-                        <p>Maturity</p>
-                        <p>Status</p>
-                    </div>
-                    <div className="w-full mb-4">
+            <StyledBondHistoryContainer>
+                <StyledBondGridContainer>
+                <StyledSupplyContainer className="extraMarginBottom">
+                    <h2>{tstTokenInfo.tokenSymbol} Address:</h2> <StyledAddressHolderP>{tstTokenInfo.tokenAddress}</StyledAddressHolderP>
+                    { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
+                </StyledSupplyContainer>
+                    {
+                        !mobile && (
+                        <StyledGridHeaders>
+                            <span style={{maxWidth: "30px"}}>Profit</span>
+                            <span style={{maxWidth: "150px"}}>{tstTokenInfo.tokenSymbol} Amount</span>
+                            <span>Bond</span>
+                            <span>Maturity</span>
+                            <span>Status</span>
+                        </StyledGridHeaders> 
+                        )
+                    }
+                    
+                    <StyledStakingHistoryContainer>
                         {
                             userBonds.length > 0 ?
                             userBonds.map((bond, index) => {
-                                return <UserBondsHistoryList key={index} bondInformation={bond} rewardTokenObj={tstTokenInfo} otherToken={otherTokenData} clickHandler={activateClaim} />
+                                return <UserBondsHistoryList key={index} bondInformation={bond} rewardTokenObj={tstTokenInfo} otherToken={otherTokenData} />
                             })
                             :
                             <p>No Bonds have been created yet</p>
                         }
-                    </div>
-                </div>
+                    </StyledStakingHistoryContainer>
+                    {/* {userBonds.length > 0 && <p>Time until refresh: {time} {time < 10 ? 'second' : 'seconds'}</p>} */}
+                </StyledBondGridContainer>
                 
-                <ClaimRewardContainer className="w-2/12 ml-2 p-4">
+                <ClaimRewardContainer>
                 {
-                parseInt(claimAmount) > 0 ?
                     <>
-                        <p>claimable reward:</p>
-                        <p className="mt-3"><strong>{(ConvertFrom(claimAmount, parseInt(tstTokenInfo.tokenDecimal.toString())).toFloat()).toFixed(2)} {tstTokenInfo.tokenSymbol}</strong></p>
-                        <button className="px-3 py-2 mt-3" onClick={activateClaim}>Claim Reward</button>
+                        <p>Claimable reward:</p>
+                        <p className="rewardValue"><strong>{parseInt(claimAmount) > 0 ? (ConvertFrom(claimAmount, parseInt(tstTokenInfo.tokenDecimal.toString())).toFloat()).toFixed(2) : '0'} {tstTokenInfo.tokenSymbol}</strong></p>
+                        {parseInt(claimAmount) > 0 && <button disabled={disableClaim} onClick={activateClaim}>Claim Reward</button>}
                     </>
-                    :
-                    <p>No Claimable Rewards Yet, but please check back soon</p>
                 }
                 </ClaimRewardContainer>
-            </div>
+            </StyledBondHistoryContainer>
         </>
 
     )

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useWeb3Context } from "../../../../context";
 import { Contract, ConvertFrom, SmartContractManager } from "../../../../Utils";
+import { StyledTokenInformationContainer } from "../Styles";
 //import { Contract, ConvertFrom, SmartContractManager } from "../Utils";
 
 type tokeninfo = {
@@ -16,9 +17,8 @@ type tokeninfo = {
 
 // @ts-ignore
 export const TokenInformationInterface = ({bondingCurveContract}) => {
-    const { web3Provider, network } = useWeb3Context();
-    const _network = network?.name || 'goerli';
-    const StandardTokenContract = SmartContractManager('StandardTokenGateway' as Contract, _network).then((data) => { return data });
+    const { web3Provider } = useWeb3Context();
+    const StandardTokenContract = SmartContractManager('StandardTokenGateway' as Contract).then((data) =>  data);
     const [tokenInfo, setTokenInfo] = useState<tokeninfo>({
         ibcoTotalSupply: 0,
         maxSupply: 0,
@@ -46,8 +46,6 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
                     ...prevState,
                     ibcoTotalSupply: data
                 }));
-            }).catch((error:never) => {
-                toast.error(`unable to obtain ibcoTotalSupply: ${error}`);
             });
         // @ts-ignore
         await(await bondingCurveContract).methods.maxSupply().call()
@@ -56,8 +54,6 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
                     ...prevState,
                     maxSupply: data
                 }));
-            }).catch((error:never) => {
-                toast.error(`unable to obtain maxSupply: ${error}`);
             });
     };
 
@@ -74,7 +70,7 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
                 marketCap: marketCap
             }));
         }).catch((error:never) => {
-            toast.error(`unable to obtain currentBucket: ${error}`);
+            toast.error(`Unable to obtain current price: ${error}`);
         });
     };
 
@@ -86,24 +82,24 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
                     tstSeuroPrice: data
                 }))
             }).catch((error:never) => {
-                toast.error(`unable to activate contract interface: ${error}`)
+                toast.error(`Unable to retrieve TST / sEURO price: ${error}`)
             })
     };
 
     return (
-        <div className="grid grid-cols-3 gap-4 content-start mb-4 mr-6 p-5 supplyContainer">
+        <StyledTokenInformationContainer className="supplyContainer">
             <div>
                 <h2>Market Cap</h2>
-                <p>&euro; {((tokenInfo.seuroPrice * tokenInfo.ibcoTotalSupply) / 1000000000000000000000000000000000000).toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                <p>&euro;{((tokenInfo.seuroPrice * tokenInfo.ibcoTotalSupply) / 1000000000000000000000000000000000000).toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
             </div>
             <div>
                 <h2>sEURO Price</h2>
-                <p>&euro; {ConvertFrom(tokenInfo.seuroPrice, 18).toFloat().toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                <p>&euro;{ConvertFrom(tokenInfo.seuroPrice, 18).toFloat().toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
             </div>
             <div>
                 <h2>TST/sEURO Price</h2>
-                <p>&euro; {((tokenInfo.tstSeuroPrice / 100000000)).toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+                <p>{((tokenInfo.tstSeuroPrice / 100000000)).toLocaleString(undefined, { minimumFractionDigits: 2 })} sEURO</p>
             </div>
-        </div>
+        </StyledTokenInformationContainer>
     )
 };

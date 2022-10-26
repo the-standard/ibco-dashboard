@@ -1,29 +1,56 @@
-import '../styles/globals.css'
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { AppProps } from 'next/app'
 import { Web3ContextProvider } from '../context'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import TagManager from 'react-gtm-module';
-import { useEffect } from 'react'
+import { useEffect } from 'react';
+import { ThemeProvider } from 'styled-components';
+import { GlobalColors } from '../styles/globalColors';
+import GlobalCSS from '../styles/globalStyles';
+import 'react-toastify/scss/main.scss'
+import { StyledGlobalBetaBanner } from '../components/shared/uiElements/styles/SharedStylesGlobal';
+
+function getInitialProps() {
+  return {};  
+}
+
+const theme = {
+  colors: GlobalColors
+}
+//@ts-ignore
+function SafeHydrate({ children }) {
+  return (
+    <div suppressHydrationWarning>
+      {typeof window === 'undefined' ? null : children}
+    </div>
+  )
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
-    TagManager.initialize({ gtmId: 'GTM-5G25J82' });
-}, []);
+      TagManager.initialize({ gtmId: 'GTM-5G25J82' });
+  }, []);
 
   return (
-    <Web3ContextProvider>
-      <>
-      <div className="w-full p-2 mx-auto betaBanner text-center">BETA Release! Testnet Only. Design to be updated soon. Report bugs <a href="https://bit.ly/ibco-bugs">here</a>!</div>
-        <Component {...pageProps} />
-        <ToastContainer
-          hideProgressBar
-          position="top-right"
-          autoClose={2000}
-        />
-      </>
-    </Web3ContextProvider>
+    <SafeHydrate>
+      <Web3ContextProvider>
+        <ThemeProvider theme={theme}>
+        <GlobalCSS />
+        <StyledGlobalBetaBanner>Goerli Testnet Only. Mainnet Launch Coming November 28th.</StyledGlobalBetaBanner>
+          <Component {...pageProps} />
+          <ToastContainer
+            hideProgressBar
+            position="top-right"
+            autoClose={2000}
+            theme='dark'
+          />
+        </ThemeProvider>
+      </Web3ContextProvider>
+    </SafeHydrate>
   )
 }
+
+MyApp.getInitialProps = getInitialProps;
 
 export default MyApp

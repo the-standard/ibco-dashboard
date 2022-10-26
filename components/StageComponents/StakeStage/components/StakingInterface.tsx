@@ -10,11 +10,13 @@ import { AlertTriangle, ChevronLeft } from 'react-feather';
 //Util Helpers
 import { 
   Contract, 
+  ConvertFrom, 
   ConvertTo, 
   StakingContractManager,
   TokenContractManager, 
 } from '../../../../Utils';
 import moment from 'moment';
+import { StyledStakingContainer, StyledStakingInterfaceContainer, StyledBackButtonContainer, StyledBackButton, StyledInputContainer, StyledInput, StyledDropdownContainer, StyledStakingPeriodInfo, StyledStakingPeriodP, StyledButton, StyledWarning, StyledWarningP, StyledWarningIconSpan } from '../styles/StakingInterfaceStyles';
 
 type StakingInterfaceType = {
   contractAddress: string,
@@ -24,6 +26,8 @@ type StakingInterfaceType = {
 export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceType) => {
   const { address, web3Provider, network } = useWeb3Context();
   const [from, setFrom] = useState(0);
+  const [allowance, setAllowance] = useState(0);
+  const [balance, setBalance] = useState(0);
   const [stakeTerms, setStakeTerms] = useState('');
   const [stakeTermsEnd, setStakeTermsEnd] = useState('');
   const [tokenAddress, setTokenAddress] = useState('');
@@ -32,14 +36,15 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   const [disabledSend, setDisabledSend] = useState(true);
   const [assetApproved, setAssetApproved] = useState(false);
   const [disabledApprovalButton, setDisabledApprovalButton] = useState(true);
+  const [loadingApproval, setLoadingApproval] = useState(false);
   const [loading, setLoading] = useState(false);
   const [transactionData, setTransactionData] = useState(null);
+  const [etherscanUrl, setEtherscanUrl] = useState<string>();
 
   // CONTRACT MANAGER INIT
-  const _network = network?.name || 'goerli';
   const TokenContract = StakingContractManager(tokenAddress as Contract).then((data) => data);
   const stakingContract = StakingContractManager(contractAddress as Contract).then((data) => data);
-  const TokenContract_TST = TokenContractManager(tokenAddress, _network).then((data) => data);
+  const TokenContract_TST = TokenContractManager(tokenAddress).then((data) => data);
 
   // PRIVATE HELPERS
 
@@ -56,6 +61,11 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   }, [from, assetApproved, tokenAddress]);
 
   useEffect(() => {
+    const allowanceFormatted = ConvertFrom(allowance, parseInt(tokenDecimal)).toInt();
+    from > 0 && from >= allowanceFormatted ? setAssetApproved(true) : setAssetApproved(false);
+  }, [allowance])
+
+  useEffect(() => {
     //get token symbol
     getTokenInformation();
   }, [tokenAddress])
@@ -65,6 +75,10 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    setEtherscanUrl(network?.name === 'homestead' ? 'https://etherscan.io' : `https://${network?.name}.etherscan.io`);
+  }, [network]);
+
   //MAIN FUNCTIONS
   const getTokenInformation = async () => {
     const TokenContract = await (await TokenContract_TST);
@@ -72,12 +86,17 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
     if(TokenContract && Object.keys(TokenContract).length !== 0) {
       //@ts-ignore
       TokenContract.methods.symbol().call()
-      .then((data:never) => setTokenSymbol(data))
-      .catch((error:never) => console.log('error getting token symbol', error));
+      .then((data:never) => setTokenSymbol(data));
       //@ts-ignore
       TokenContract.methods.decimals().call()
-      .then((data:never) => setTokenDecimal(data))
-      .catch((error:never) => console.log('error getting token decimal', error));
+      .then((data:never) => setTokenDecimal(data));
+
+      TokenContract.methods.allowance(address, contractAddress).call().then((data:never) => setAllowance(parseInt(data)));
+
+      TokenContract.methods.balanceOf(address).call().then((data:never) => {
+        const formattedBalance = ConvertFrom(data, parseInt(tokenDecimal)).toFloat().toFixed(2);
+        setBalance(parseFloat(formattedBalance));
+      });
     }
   }
 
@@ -87,11 +106,11 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
 
   const getStake = async () => {
     // @ts-ignore
-    await(await stakingContract).methods.windowStart().call().then((data:string) => setStakeTerms(data)).catch((error:never) => console.log('windowStart error', error));
+    await(await stakingContract).methods.windowStart().call().then((data:string) => setStakeTerms(data));
     // @ts-ignore
-    await(await stakingContract).methods.windowEnd().call().then((data:string) => setStakeTermsEnd(data)).catch((error:never) => console.log('windowEnd error', error));
+    await(await stakingContract).methods.windowEnd().call().then((data:string) => setStakeTermsEnd(data));
     //@ts-ignore
-    await (await stakingContract).methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data)).catch((error:never) => console.log('TST_ADDRESS error', error));
+    await (await stakingContract).methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data));
   }
 
   const checkMaxLength = (inputData: { currentTarget: { value: string | never[]; };}) => {
@@ -103,18 +122,18 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
   }
 
   const approveCurrency = async () => {
-    setLoading(true);
+    setLoadingApproval(true);
     const _tokenDecimal = parseInt(tokenDecimal.toString())
     const _depositAmount = ConvertTo(from, _tokenDecimal).raw();
 
     // @ts-ignore
     await (await TokenContract).methods.approve(contractAddress, _depositAmount).send({from: address}).then(() => {
-      setLoading(false);
+      setLoadingApproval(false);
       setAssetApproved(true);
     }).catch((error:never) => {
-      setLoading(false);
+      setLoadingApproval(false);
       setAssetApproved(false);
-      toast.error('approval error', error);
+      toast.error('Approval error', error);
     })
   }
 
@@ -128,53 +147,53 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
         setLoading(false);
         setTransactionData(data);
         // @ts-ignore
-        toast.success(`transaction success: ${data['transactionHash']}`);
+        toast.success(`Transaction success: ${data['transactionHash']}`);
       }).catch((error:never) => {
         setLoading(false);
-        toast.error(`Problem with bonding event: ${ error}`);
+        toast.error(`Error when staking: ${ error}`);
       });
   }
 
   return (
-    <>
+    <StyledStakingContainer>
     {
       // @ts-ignore
-      <div className="mb-4 w-4/12"><a href="#" className="py-1 flex backButton" onClick={backButton}><span className="flex w-5"><ChevronLeft /></span> Back</a></div>
+      <StyledBackButtonContainer><StyledBackButton href="#" onClick={backButton}><span className="flex w-5"><ChevronLeft /></span> Back</StyledBackButton></StyledBackButtonContainer>
     }
     
-    <div className="convertInput grid grid-flow-row auto-rows-max p-5 py-8 w-full">
+    <StyledStakingInterfaceContainer>
       { web3Provider ? (
         <>
-        <div className="mb-3">
-          <p className="text-sm">Staking Period</p>
-          <p className="stakingPeriod my-2">{`${moment(parseInt(stakeTerms)*1000).format('ll')} - ${moment(parseInt(stakeTermsEnd)*1000).format('ll')}`}</p>
-        </div>
+        <StyledStakingPeriodInfo>
+          <p className="text-sm">Staking Period:</p>
+          <StyledStakingPeriodP>{`${moment(parseInt(stakeTerms)*1000).format('ll')} - ${moment(parseInt(stakeTermsEnd)*1000).format('ll')}`}</StyledStakingPeriodP>
+        </StyledStakingPeriodInfo>
         <span>
-          <p className="p-0 m-0 text-sm">Staking...</p>
-          <div className="container w-full">
-            <div className="mb-8 mt-1 mx-auto flex flex-cols w-full">
-              <input className="w-9/12" type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${tokenSymbol} Staking Amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
-              <div className="dropdownSelect py-2 text-center w-3/12">
+          <StyledInputContainer>
+            <StyledInput type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${tokenSymbol} Amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
+            <StyledDropdownContainer className="dropdownSelect">
               <p className="mx-auto">{tokenSymbol}</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-cols m-2 mb-8 warning">
-            <span className="w-2/12"><AlertTriangle /></span><p className="w-10/12">Warning: once you have staked your Standard Token ({tokenSymbol}) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</p>
-          </div>
+            </StyledDropdownContainer>
+        </StyledInputContainer>
+        
+        <p style={{margin: '15px 0 0 0', color: '#99f9ff', fontSize: '12px'}}>Available: {balance} {tokenSymbol}</p>
+
+          <StyledWarning>
+            <StyledWarningIconSpan><AlertTriangle size={20} /></StyledWarningIconSpan><StyledWarningP>Warning: once you have staked your Standard Token ({tokenSymbol}) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</StyledWarningP>
+          </StyledWarning>
         </span>
-            <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved ? `${tokenSymbol} Approved` : loading ? 'loading...' : `Approve ${tokenSymbol}`}</button>
+            <StyledButton disabled={loadingApproval || loading || disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved && from > 0 ? `${tokenSymbol} Approved` : loadingApproval ? `Approving ${tokenSymbol}... `: `Approve ${tokenSymbol}`}</StyledButton>
             
             {            
-            <button className="flex px-2 py-1 mb-4 font-light justify-center" disabled={disabledSend} onClick={() => SendStakeTransaction()}>{loading ? 'loading...' : 'Start Staking'}</button>
+            <StyledButton disabled={loadingApproval || loading || disabledSend} onClick={() => SendStakeTransaction()}>{loading ? 'Processing Stake...' : transactionData ? 'Start Another Stake' : 'Start Staking'}</StyledButton>
             }
             {// @ts-ignore
-            transactionData && <button className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`https://${network['name']}.etherscan.io/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</button>
+            transactionData && <StyledButton className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledButton>
             }
             </>
       ) : <div>Please Connect Wallet...</div>
-}
-    </div>
-    </>
+      }
+    </StyledStakingInterfaceContainer>
+  </StyledStakingContainer>
   )
 }

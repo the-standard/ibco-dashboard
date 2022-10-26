@@ -3,13 +3,13 @@ name: Node.js CI
 on:
   push:
     branches:
-      - main
+      - beta
 
 env:
   PROJECT_NAME: ${{ secrets.GKE_PROJECT }}
   CLUSTER_NAME: cluster-1
   CLOUDSDK_COMPUTE_ZONE: europe-west2-c
-  DEPLOYMENT: ibco
+  DEPLOYMENT: ibco-beta
   NAMESPACE: default
 
 jobs:

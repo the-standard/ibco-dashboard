@@ -2,13 +2,14 @@ import React from 'react'
 import { useWeb3Context } from '../../../context/'
 import { Web3Address } from './Web3Address';
 import { CreditCard } from 'react-feather';
+import { StyledWeb3ButtonContainer, StyledDisconnectButton, StyledMainConnectButton } from './styles/Web3ButtonStyles';
 
 interface ConnectProps {
   connect: (() => Promise<void>) | null
 }
 const ConnectButton = ({ connect }: ConnectProps) => {
   return connect ? (
-    <button className="px-3 py-2 connectButton flex" onClick={connect}><span className="pr-2 w-1.5/12"><CreditCard /></span> Connect to MetaMask</button>
+    <StyledMainConnectButton className="connectButton" onClick={connect}><span><CreditCard size={20} /></span> Connect Wallet</StyledMainConnectButton>
   ) : (
     <button className="px-3 py-2">Loading...</button>
   )
@@ -20,10 +21,10 @@ interface DisconnectProps {
 
 const DisconnectButton = ({ disconnect }: DisconnectProps) => {
   return disconnect ? (
-    <div className="flex flex-row justify-between">
+    <StyledWeb3ButtonContainer>
       <Web3Address />
-      <button className="px-3 py-2 disconnectButton" onClick={disconnect}>Disconnect Wallet</button>
-    </div>
+      <StyledDisconnectButton onClick={disconnect}>Disconnect</StyledDisconnectButton>
+    </StyledWeb3ButtonContainer>
     
   ) : (
     <button className="px-3 py-2">Loading...</button>

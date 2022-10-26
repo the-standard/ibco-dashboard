@@ -19,8 +19,6 @@ type StakeList = {
 
 // @ts-ignore
 export const StakingHistoryList = ({stakeHistoryArray}:StakeList) => {
-    console.log('stakeHistoryArray', stakeHistoryArray);
-
     return (
         <div>
             {

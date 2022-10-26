@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/router";
 import { TOKENS } from "../../../Utils";
+import { StyledSubNav, StyledSubNavContainer, StyledSubNavIndicatorContainer, StyledSubNavIndicatorInnerPip, StyledSubNavIndicatorOuterPip } from "./styles/SubNavStyles";
 
 const subNavigation = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -11,19 +12,35 @@ const subNavigation = () => {
         {route: 'stage2', canonical: `${TOKENS.DISPLAY.SEURO} Bonding`}, 
         {route: 'stage3', canonical: 'TST Staking'}
     ];
-    const baseClasses = 'subnav text-lg font-light m-4';
 
     return (
-        <nav className="flex flex-column justify-center p-4">
-            {routes.map((route) => {
-                const active = router.pathname === `/${route.route}`;
-                return (
-                    <Link href={`/${route.route}`} key={route.route}>
-                        <a className={`${baseClasses} ${active ? 'active' : ''}`}>{route.canonical}</a>
-                    </Link>
-                )
-            })}
-        </nav>
+        <>        
+            <StyledSubNavIndicatorContainer>
+                {
+                    routes.map((route, index) => {
+                        const active = router.pathname === `/${route.route}`;
+
+                        return(
+                            <StyledSubNavIndicatorOuterPip key={index} className={`${active ? 'activePip' : ''}`}>
+                                <StyledSubNavIndicatorInnerPip className={`${active ? 'activePip' : ''}`} />
+                            </StyledSubNavIndicatorOuterPip>
+                        )
+                    })
+                }
+            </StyledSubNavIndicatorContainer>
+            <StyledSubNavContainer>
+                {routes.map((route) => {
+                    const active = router.pathname === `/${route.route}`;
+                    return (
+                        // eslint-disable-next-line @next/next/link-passhref
+                        <Link href={`/${route.route}`} key={route.route} >
+                            <StyledSubNav style={{minHeight: "50px", zIndex: 10}} className={`${active ? 'active' : ''}`}>{route.canonical}</StyledSubNav>
+                        </Link>
+                    )
+                })}
+            </StyledSubNavContainer>
+        </>
+
     )
 }
 

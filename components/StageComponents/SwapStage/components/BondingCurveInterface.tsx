@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { toast } from "react-toastify";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,10 +9,14 @@ import {
   LineElement,
   Title,
   Tooltip,
+  Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 // @ts-ignore
 import { chartArray } from '../../../../public/data/chartData';
+import { BigNumber } from 'ethers';
+import { StyledBondingCurveContainer } from '../Styles';
+import { Contract, ConvertFrom, SmartContractManager } from '../../../../Utils';
 
 ChartJS.register(
   CategoryScale,
@@ -20,38 +25,123 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
+  Filler
 );
 
-export const options = {
-  responsive: true,
-  scales: {
+type PriceInfo = {
+  currentPrice: BigNumber,
+  maxSupply: BigNumber
+}
+
+const stringToFloat = (bnString:string) => {
+  return parseFloat(bnString) / 1000000000000000000
+}
+
+const customRadius = (context:any, currentPrice:BigNumber) => {
+  const index = context.dataIndex;
+  const value = context.dataset.data[ index ];
+  return value === stringToFloat(currentPrice.toString()) ? 5 : 0;
+}
+
+export const options = (priceInfo:PriceInfo) => {
+  return {
+    responsive: true,
+    scales: {
       x: {
-        ticks: {
-            display: false
+        title: {
+          display: true,
+          text: 'Supply (sEURO)'
         }
-    }
-  },
-  elements: {
-    line: {
-      tension: 0.4,
-    }
-  }
-};
-
-const labels = new Array(chartArray.length).fill('Current sEuro Price');
-const ArrayElem = chartArray.splice(0, Math.ceil(chartArray.length))
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      data: ArrayElem.map((dataPoint:string) => (parseFloat(dataPoint) / 1000000000000000000)),
-      borderColor: 'rgb(153, 249, 255)',
-      backgroundColor: 'rgb(153, 249, 255)',
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Price (€)'
+        }
+      }
     },
-  ],
+    elements: {
+      line: {
+        tension: 0.4,
+      },
+      point: {
+        radius: (context: any) => customRadius(context, priceInfo.currentPrice),
+        display: true,
+        backgroundColor: 'rgb(153, 249, 255)'
+      }
+    },
+    events: []
+  };
 };
 
+const ArrayElem = chartArray.splice(0, Math.ceil(chartArray.length));
+
+export const data = (priceInfo:PriceInfo) => {
+  const formatForLabel = (bn:BigNumber) => {
+    return ConvertFrom(bn.toString(), 18).toInt().toLocaleString();
+  }
+
+  const bucketLabels = () => {
+    const noBuckets = ArrayElem.length - 2;
+    const bucketSize = priceInfo.maxSupply.div(noBuckets);
+    const labels = new Array(noBuckets).fill(BigNumber.from(0)).map((element, index) => formatForLabel(bucketSize.mul(index).add(bucketSize.div(2))));
+    return labels;
+  }
+
+  const labels = [0, ...bucketLabels(), formatForLabel(priceInfo.maxSupply)];
+
+  return {
+    labels,
+    datasets: [
+      {
+        data: ArrayElem.map(stringToFloat),
+        borderColor: 'rgb(153, 249, 255)',
+        fill: false
+      },
+      {
+        data: ArrayElem.filter((dataPoint:string) => BigNumber.from(dataPoint).lte(priceInfo.currentPrice)).map(stringToFloat),
+        backgroundColor: 'rgb(153, 249, 255, 0.6)',
+        fill: true,
+        point: {
+          display: false
+        }
+      }
+    ],
+  };
+}
+
+// @ts-ignore
 export const BondingCurveInterface = () => {
-  return <Line options={options} data={data} />;
+  const defaultPriceInfo = { currentPrice: BigNumber.from(0), maxSupply: BigNumber.from(0) };
+  const [priceInfo, setPriceInfo] = useState<PriceInfo>(defaultPriceInfo);
+  const bondingCurveContract = SmartContractManager('BondingCurve' as Contract).then((data) =>  data);
+
+  const setPriceFromBondingCurve = async () => {
+    //@ts-ignore
+    await (await bondingCurveContract).methods.maxSupply().call()
+      .then(async (maxSupply: never) => {
+        //@ts-ignore
+        await (await bondingCurveContract).methods.currentBucket().call()
+          .then((priceData: never) => {
+            setPriceInfo({ currentPrice: BigNumber.from(priceData['price']), maxSupply: BigNumber.from(maxSupply) });
+          }).catch((error: never) => {
+            toast.error(`Unable to obtain current price: ${error}`);
+          });
+      }).catch((error: never) => {
+        toast.error(`Unable to obtain supply data: ${error}`);
+      });
+  }
+
+  useEffect(() => {
+    setPriceFromBondingCurve();
+  }, []);
+
+  return (
+    priceInfo && priceInfo.currentPrice.gt(0) ?
+    <StyledBondingCurveContainer>
+      <Line options={options(priceInfo)} data={data(priceInfo)} />
+    </StyledBondingCurveContainer>
+    :
+    <p>Loading Bonding Curve chart ...</p>
+  );
 }
