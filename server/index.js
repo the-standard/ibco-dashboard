@@ -22,17 +22,9 @@ app.prepare().then(() => {
   const server = express();
 
   server.use(helmet.frameguard({ action: 'sameorigin' }));
-  server.use(logger(config['morgan.debug.level'], {
-    skip: function (req) {
-      if (req.url.includes('_next')) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }));
-  server.use(morgan('combined'));
-  
+
+  server.use(morgan('combined', {skip: (req, res) => {return req.url.includes('_next')}}));
+
   server.get('/_health', (req, res) => {
     res.sendStatus(200);
   })
