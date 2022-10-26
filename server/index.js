@@ -11,11 +11,7 @@ const handle = app.getRequestHandler();
 const port = process.env.NODE_PORT || 8080;
 
 morgan.token('remote-addr', function (req, res) { 
-  if (req.headers['cf-connecting-ip'] !== '') {
-    return req.headers['cf-connecting-ip']
-  } 
-  
-  return req.socket.remoteAddress;
+  return req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 });
 
 app.prepare().then(() => {
