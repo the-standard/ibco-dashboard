@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 7777",
     "build": "next build",
-    "start": "NODE_OPTIONS='-r next-logger/presets/next-only' next start -p 8080",
+    "start": "node server/index.js",
     "lint": "next lint",
     "test": "jest --watch",
     "test:ci": "jest --ci",
