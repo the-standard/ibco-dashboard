@@ -42,7 +42,7 @@ export default createGlobalStyle`
     background: none !important;
     background-color: #282828;
     outline: none;
-    padding: 0.5em;
+    padding: 1em;
   }
 
   input::-webkit-outer-spin-button,
