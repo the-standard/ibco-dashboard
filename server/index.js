@@ -15,6 +15,10 @@ app.prepare()
 
   server.use(morgan('combined'))
   
+  server.get('/_health', (req, res) => {
+    res.sendStatus(200)
+  })
+
   server.get('*', (req, res) => {
     return handle(req, res)
   })
