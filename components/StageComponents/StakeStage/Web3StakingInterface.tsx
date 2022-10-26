@@ -143,7 +143,7 @@ export const Web3StakingInterface = () => {
         <div className="container">
             {
                 //@ts-ignore
-                stakeFilteredHistory.length > 0 ? <StakingHistoryList stakeHistoryArray={stakeFilteredHistory} /> : `You have not staked anything yet, please select from some of the staking options above`
+              stakeFilteredHistory.length > 0 ? <StakingHistoryList stakeHistoryArray={stakeFilteredHistory} /> : <p>You have not staked anything yet, please select from some of the staking options above</p>
             }
         </div>
     </StyledStakingHistoryContainer>
