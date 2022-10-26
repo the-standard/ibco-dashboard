@@ -10,9 +10,13 @@ const handle = app.getRequestHandler();
 
 const port = process.env.NODE_PORT || 8080;
 
-if (process.env.NODE_ENV === 'production') {
-  morgan.token('remote-addr', function (req, res) { return req.headers['cf-connecting-ip'] });
-}
+morgan.token('remote-addr', function (req, res) { 
+  if (req.headers['cf-connecting-ip'] !== '') {
+    return req.headers['cf-connecting-ip']
+  } 
+  
+  return req.socket.remoteAddress;
+});
 
 app.prepare().then(() => {
   const server = express();
