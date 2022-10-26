@@ -16,7 +16,7 @@ import {
   TokenContractManager, 
 } from '../../../../Utils';
 import moment from 'moment';
-import { StyledStakingContainer, StyledStakingInterfaceContainer, StyledBackButtonContainer, StyledBackButton, StyledInputContainer, StyledInput, StyledDropdownContainer, StyledStakingPeriodInfo, StyledP, StyledStakingPeriodP, StyledButton, StyledWarning, StyledWarningP, StyledWarningIconSpan } from '../styles/StakingInterfaceStyles';
+import { StyledStakingContainer, StyledStakingInterfaceContainer, StyledBackButtonContainer, StyledBackButton, StyledInputContainer, StyledInput, StyledDropdownContainer, StyledStakingPeriodInfo, StyledStakingPeriodP, StyledButton, StyledWarning, StyledWarningP, StyledWarningIconSpan } from '../styles/StakingInterfaceStyles';
 
 type StakingInterfaceType = {
   contractAddress: string,
