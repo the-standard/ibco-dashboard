@@ -35,7 +35,6 @@ export const StyledTokenInfoRightCol =styled.div`
 export const StyledSupplyContainer = styled.div`
     background-color: ${props => props.theme.colors.darkGrey};
     padding: 1em 1.5em;
-    font-size: 16px;
 
     & h2 {
         font-size: 16px;
