@@ -169,7 +169,6 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
           <StyledStakingPeriodP>{`${moment(parseInt(stakeTerms)*1000).format('ll')} - ${moment(parseInt(stakeTermsEnd)*1000).format('ll')}`}</StyledStakingPeriodP>
         </StyledStakingPeriodInfo>
         <span>
-
           <StyledInputContainer>
             <StyledInput type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${tokenSymbol} Amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
             <StyledDropdownContainer className="dropdownSelect">
@@ -178,7 +177,6 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
         </StyledInputContainer>
         
         <p style={{margin: '15px 0 0 0', color: '#99f9ff', fontSize: '12px'}}>Available: {balance} {tokenSymbol}</p>
-
 
           <StyledWarning>
             <StyledWarningIconSpan><AlertTriangle size={20} /></StyledWarningIconSpan><StyledWarningP>Warning: once you have staked your Standard Token ({tokenSymbol}) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</StyledWarningP>
@@ -194,8 +192,8 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
             }
             </>
       ) : <div>Please Connect Wallet...</div>
-}
+      }
     </StyledStakingInterfaceContainer>
-    </StyledStakingContainer>
+  </StyledStakingContainer>
   )
 }
