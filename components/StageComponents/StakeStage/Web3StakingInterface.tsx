@@ -134,7 +134,7 @@ export const Web3StakingInterface = () => {
             !mobile &&
             <StyledGridHeaders className='greyBG'>
                 <span>Staking Positions</span>
-                <span>Approx. Reward</span>
+                <span>Reward</span>
                 <span>Staked Until</span>
                 <span>&nbsp;</span>
                 <span>Status</span>
