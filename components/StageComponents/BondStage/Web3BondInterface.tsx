@@ -380,17 +380,24 @@ function Web3BondInterface() {
       { web3Provider ? (
         <>
         <span>
-          <StyledPContainer>Bonding asset 1 - <span>(available: {balance.main !== '0' ? `${ConvertFrom(balance.main.toString(), mainTokenDecimal).toFloat().toFixed(2)} ${TOKENS.DISPLAY.SEURO}`: `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`})</span></StyledPContainer>
+          <StyledPContainer>Bonding Asset 1</StyledPContainer>
+
+        
+
           <div>
             <StyledInputContainers>
               <input type='number' step="any" min={0} maxLength={8} onInput={checkMaxLength} placeholder={`${TOKENS.DISPLAY.SEURO} amount`} onChange={(e) => setTokenValues(parseFloat(e.currentTarget.value))} onFocus={(event) => event.target.select()} value={from > 0 ? from : ''} />
               <div className="dropdownSelect">
                 <StyledNoFormatP>{TOKENS.DISPLAY.SEURO}</StyledNoFormatP>
               </div>
-            </StyledInputContainers>
-          </div>
+        </StyledInputContainers>
 
-          <StyledPContainer>Bonding asset 2 - (available: {balance.other !== '0' ? `${ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2)} ${otherTokenSymbol}` : `Warning: you do not have enough ${otherTokenSymbol}`})</StyledPContainer>
+              <p style={{margin: '-20px 0 25px 0', color: '#99f9ff', fontSize: '12px'}}>Available: {balance.main !== '0' ? `${ConvertFrom(balance.main.toString(), mainTokenDecimal).toFloat().toFixed(2)} ${TOKENS.DISPLAY.SEURO}`: `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`}</p>
+
+          </div>
+        
+
+          <StyledPContainer>Bonding Asset 2</StyledPContainer>
           <div>
             <StyledInputContainers>
               <input className="w-9/12" type='number' step="any" readOnly={true} placeholder={`${otherTokenSymbol} amount`} value={to !== '0' ? toDisplay : ''} />
@@ -398,6 +405,8 @@ function Web3BondInterface() {
                 <StyledNoFormatP>{otherTokenSymbol ? otherTokenSymbol : 'Loading...'}</StyledNoFormatP>
               </div>
             </StyledInputContainers>
+        
+            <p style={{margin: '-20px 0 25px 0', color: '#99f9ff', fontSize: '12px'}}>Available: {balance.other !== '0' ? `${ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2)} ${otherTokenSymbol}` : `Warning: you do not have enough ${otherTokenSymbol}`}</p>
           </div>
         </span>
         
