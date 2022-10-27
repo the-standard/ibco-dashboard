@@ -50,7 +50,7 @@ const Home: NextPage = () => {
 
         { !terms ?
             <StyledSupplyContainer>
-            <span style={{ padding: '20px', weight: 'bold' }}>
+            <span style={{ padding: '20px' }}>
             <label>
               <input
                 type="checkbox"
