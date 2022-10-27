@@ -6,6 +6,8 @@ import Footer from '../components/shared/footer'
 import ConnectNav from '../components/shared/navigation/ConnectNav'
 import NextHeadComponent from '../components/shared/NextHeadComponent'
 import { StyledIndexContainer, StyledIndexDescriptionContainer } from '../components/shared/uiElements/styles/IndexStyles'
+import { StyledSupplyContainer } from "../components/StageComponents/SwapStage/Styles";
+
 import { StyledGlobalContainer } from '../components/shared/uiElements/styles/SharedStylesGlobal'
 import { useWeb3Context } from '../context'
 import Cookies from 'universal-cookie';
@@ -34,7 +36,6 @@ const Home: NextPage = () => {
     const d = Math.floor(new Date() / 1000);
     cookies.set('_ibcotv1', d, { path: '/' });
     setTerms(true);
-    alert('Sweet Jesus, you\'re not from the US of A!')
   };
 
   return (
@@ -48,26 +49,28 @@ const Home: NextPage = () => {
         <h2>Welcome to The Standard Initial Bonding Curve Offering</h2>
 
         { !terms ?
-        <div>
+            <StyledSupplyContainer>
+            <span style={{ padding: '20px', weight: 'bold' }}>
             <label>
               <input
                 type="checkbox"
                 checked={checked}
                 onChange={handleChange}
               />
-              I promise I'm not from the US of A or somewhere like that.
             </label>
-        </div> : '' }
+            &nbsp; I pinky promise I'm not from one of the places that's not allowed to use IBCO.
+            </span>
+        </StyledSupplyContainer> : '' }
 
         { !terms ? '' :
-          <span style={{ textAlign: 'centre '}}>
-        { mobile ?
-            <h4>Not available on mobile right now, please swap to a desktop device.</h4>
-          :
-            <p>Please connect your wallet to proceed</p>
-        }
-        {!network && !mobile && <Web3Button />}
-        </span>
+          <>
+            { mobile ?
+                <h4>Not available on mobile right now, please swap to a desktop device.</h4>
+              :
+                <p>Please connect your wallet to proceed</p>
+            }
+            {!network && !mobile && <Web3Button />}
+        </>
         }
       </StyledIndexDescriptionContainer>
     </StyledIndexContainer>
