@@ -58,7 +58,7 @@ const Home: NextPage = () => {
                 onChange={handleChange}
               />
             </label>
-            &nbsp; I pinky promise I'm not from one of the places that's not allowed to use IBCO.
+            &nbsp; I pinky promise I&apos;m not from one of the places that&apos;s not allowed to use IBCO.
             </span>
         </StyledSupplyContainer> : '' }
 
