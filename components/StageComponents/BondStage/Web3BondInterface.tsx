@@ -39,6 +39,7 @@ function Web3BondInterface() {
   const [mainTokenDecimal, setmainTokenDecimal] = useState(0);
   const [from, setFrom] = useState(0);
   const [to, setTo] = useState('0');
+  const [reward, setReward] = useState(null);
   const [toDisplay, setToDisplay] = useState(0);
   const [rates, setRates] = useState([]);
   const [balance, setBalance] = useState({main: '0', other: '0'});
@@ -57,6 +58,7 @@ function Web3BondInterface() {
   // CONTRACT MANAGER INIT
   const OperatorStage2Contract = SmartContractManager('OperatorStage2' as Contract).then((data) =>  data);
   const SmartContract = SmartContractManager('BondingEvent' as Contract).then((data) =>  data);
+  const Storage = SmartContractManager('BondStorage' as Contract).then((data) => data);
   //@ts-ignore
   const TokenContract_other = otherTokenAddress !== null && TokenContractManager(otherTokenAddress).then((data) =>  data);
   const StandardTokenGatewayContract = SmartContractManager('SEuroOffering').then((data) => data);
@@ -301,6 +303,21 @@ function Web3BondInterface() {
     }
   }
 
+  const getRewardAmount = async (rate:number) => {
+      const storage = await Storage;
+      //@ts-ignore
+      const _formatFrom = ConvertTo(from, mainTokenDecimal).raw();
+      const _formatTo = ConvertTo(to, otherTokenDecimal).raw();
+      // @ts-ignore
+      await storage.methods.calculateBondYield(_formatFrom, _formatTo, rate).call()
+      .then((data) => {
+        console.log('data: ', data);
+        setReward(data);
+      }).catch((error:never) => {
+        console.log('error fetching yield', error);
+      });
+  }
+
   const getOtherTokenAddress = async () => {
     const smartContract = await SmartContract;
     // @ts-ignore
@@ -333,6 +350,10 @@ function Web3BondInterface() {
 
       setToDisplay(convertDisplayTo);
       setTo(bigNumberTo);
+      const chosenRate = bondingLength.rate;
+      console.log('Rate: ', chosenRate);
+      getRewardAmount(chosenRate);
+
     }).catch((error:never) => {
       setLoading(false);
       toast.error(`Get ${otherTokenSymbol} amount error`, error);
@@ -342,7 +363,7 @@ function Web3BondInterface() {
   const SendBondTransaction = async () => {
     setLoadingTransaction(true);
     const _formatValue = ConvertTo(from, mainTokenDecimal).raw();
-    // @ts-ignores
+    // @ts-ignore
     const _bondingRate = bondingLength['rate'] || 0;
     const defaultBondIndex = Math.floor(rates.length/2);
     // @ts-ignore
@@ -422,6 +443,9 @@ function Web3BondInterface() {
             'Loading Rates...'
           }
         </StyledRateSelectionContainer>
+
+        <p style={{margin: 'px 0 25px 0', color: '#99f9ff', fontSize: '12px'}}>Reward: {balance.other !== '0' && balance.main !== '0' ? reward: '0'} </p>
+
             {
               <StyledTransactionButtonContainer>
                 {
