@@ -182,7 +182,7 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
             <StyledWarningIconSpan><AlertTriangle size={20} /></StyledWarningIconSpan><StyledWarningP>Warning: once you have staked your Standard Token ({tokenSymbol}) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</StyledWarningP>
           </StyledWarning>
         </span>
-            <StyledButton disabled={loadingApproval || loading || disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved && from > 0 ? `${tokenSymbol} Approved` : loadingApproval ? `Approving ${tokenSymbol}... `: `Approve ${tokenSymbol}`}</StyledButton>
+            <StyledButton disabled={loadingApproval || loading || disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved && from > 0 ? `${from} ${tokenSymbol} Approved` : loadingApproval ? `Approving ${from} ${tokenSymbol}... `: `Approve ${from} ${tokenSymbol}`}</StyledButton>
             
             {            
             <StyledButton disabled={loadingApproval || loading || disabledSend} onClick={() => SendStakeTransaction()}>{loading ? 'Processing Stake...' : transactionData ? 'Start Another Stake' : 'Start Staking'}</StyledButton>
