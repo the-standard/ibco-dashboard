@@ -37,8 +37,14 @@ function Web3BondInterface() {
   const [otherTokenSymbol, setOtherTokenSymbol] = useState('');
   const [otherTokenDecimal, setOtherTokenDecimal] = useState(0);
   const [mainTokenDecimal, setmainTokenDecimal] = useState(0);
+  const [tstTokenInfo, setTstTokenInfo] = useState({
+    address: '',
+    decimal: 0,
+    symbol: '',
+  });
   const [from, setFrom] = useState(0);
   const [to, setTo] = useState('0');
+  const [reward, setReward] = useState('0');
   const [toDisplay, setToDisplay] = useState(0);
   const [rates, setRates] = useState([]);
   const [balance, setBalance] = useState({main: '0', other: '0'});
@@ -57,9 +63,12 @@ function Web3BondInterface() {
   // CONTRACT MANAGER INIT
   const OperatorStage2Contract = SmartContractManager('OperatorStage2' as Contract).then((data) =>  data);
   const SmartContract = SmartContractManager('BondingEvent' as Contract).then((data) =>  data);
+  const Storage = SmartContractManager('BondStorage' as Contract).then((data) => data);
+  const TstTokenInfo = SmartContractManager('StandardTokenGateway' as Contract).then((data) => data);
   //@ts-ignore
   const TokenContract_other = otherTokenAddress !== null && TokenContractManager(otherTokenAddress).then((data) =>  data);
   const StandardTokenGatewayContract = SmartContractManager('SEuroOffering').then((data) => data);
+  const TokenContract_TST = tstTokenInfo.address !== '' && TokenContractManager(tstTokenInfo.address).then((data) => data);
     //@ts-ignore
   const TokenContract_main = seuroAddress !== undefined && TokenContractManager(seuroAddress).then((data) => data);
   const otherTokenInfo = {
@@ -82,7 +91,12 @@ function Web3BondInterface() {
     getBondingLengths();
     getContractAddresses();
     getOtherTokenAddress();
-  }, [seuroAddress])
+    getTstTokenInfo();
+  }, [seuroAddress]);
+
+  useEffect(() => {
+    getRewardAmount();
+  }, [tstTokenInfo])
 
   useEffect(() => {
     const allowanceOther = ConvertFrom(allowance.other, otherTokenDecimal).toFloat();
@@ -140,12 +154,14 @@ function Web3BondInterface() {
     assetApproved.main && assetApproved.other && bondingLength !== undefined && setDisabledSend(false);
 
     from > 0 ? getTokenAmount() : setTo('0');
+    //@ts-ignore
+    getRewardAmount();
   }, [from, to, assetApproved, bondingLength]);
 
   useEffect(() => {
     getTokenBalance('main');
     getTokenBalance('other');
-    
+    getTokenAmount();
   }, [address, otherTokenAddress, otherTokenSymbol, otherTokenDecimal]);
 
   useEffect(() => {
@@ -154,10 +170,43 @@ function Web3BondInterface() {
 
   const getSeuroAddress = async () => {
     const standardTokenGatewayContract = await StandardTokenGatewayContract;
+    const tstTokenInfoContract = await TstTokenInfo;
+
+    //@ts-ignore
+    tstTokenInfoContract.methods.TOKEN().call()
+    .then(async (data: never) => {
+      setTstTokenInfo(prevState => ({
+        ...prevState,
+        address: data
+    }));
+    });
+
     //@ts-ignore
     standardTokenGatewayContract.methods.Seuro().call().then((data:never) => {
       setSeuroAddress(data);
     });
+  }
+
+  const getTstTokenInfo = async () => {
+    const tokenContract = await TokenContract_TST;
+
+    if(tokenContract) {
+      // @ts-ignore
+           tokenContract.methods.symbol().call().then((data:never) => {
+           setTstTokenInfo(prevState => ({
+               ...prevState,
+               symbol: data
+           }))
+       });
+
+       // @ts-ignore
+       tokenContract.methods.decimals().call().then((data:never) => {
+           setTstTokenInfo(prevState => ({
+               ...prevState,
+               decimal: parseInt(data)
+           }))
+       });
+   }
   }
 
   const checkAllowances = async () => {
@@ -301,6 +350,24 @@ function Web3BondInterface() {
     }
   }
 
+  const getRewardAmount = async () => {
+      const storage = await Storage;
+      //@ts-ignore
+      const _formatFrom = from > 0 ? ConvertTo(from, mainTokenDecimal).raw() : 0;
+      const _formatTo = ConvertTo(to, otherTokenDecimal).raw() || 0;
+      const _rate = bondingLength?.rate || 9000;
+
+      // @ts-ignore
+      storage && await storage.methods.calculateBondYield(_formatFrom, _formatTo, _rate).call()
+      .then((data:never) => {
+        const convertedReward = from > 0 ? ConvertFrom(data['payout'], tstTokenInfo.decimal).toFloat().toFixed(2) : 0;
+        //@ts-ignore
+        setReward(convertedReward);
+      }).catch((error:never) => {
+        console.log('error fetching yield', error);
+      });
+  }
+
   const getOtherTokenAddress = async () => {
     const smartContract = await SmartContract;
     // @ts-ignore
@@ -333,6 +400,7 @@ function Web3BondInterface() {
 
       setToDisplay(convertDisplayTo);
       setTo(bigNumberTo);
+
     }).catch((error:never) => {
       setLoading(false);
       toast.error(`Get ${otherTokenSymbol} amount error`, error);
@@ -342,7 +410,7 @@ function Web3BondInterface() {
   const SendBondTransaction = async () => {
     setLoadingTransaction(true);
     const _formatValue = ConvertTo(from, mainTokenDecimal).raw();
-    // @ts-ignores
+    // @ts-ignore
     const _bondingRate = bondingLength['rate'] || 0;
     const defaultBondIndex = Math.floor(rates.length/2);
     // @ts-ignore
@@ -422,6 +490,9 @@ function Web3BondInterface() {
             'Loading Rates...'
           }
         </StyledRateSelectionContainer>
+
+        <p style={{margin: 'px 0 25px 0', color: '#99f9ff', fontSize: '12px'}}>Reward: {reward} {tstTokenInfo.symbol} </p>
+
             {
               <StyledTransactionButtonContainer>
                 {
