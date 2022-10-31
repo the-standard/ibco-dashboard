@@ -353,14 +353,15 @@ function Web3BondInterface() {
   const getRewardAmount = async () => {
       const storage = await Storage;
       //@ts-ignore
-      const _formatFrom = ConvertTo(from, mainTokenDecimal).raw() || 0;
+      const _formatFrom = from > 0 ? ConvertTo(from, mainTokenDecimal).raw() : 0;
       const _formatTo = ConvertTo(to, otherTokenDecimal).raw() || 0;
       const _rate = bondingLength?.rate || 9000;
 
       // @ts-ignore
       storage && await storage.methods.calculateBondYield(_formatFrom, _formatTo, _rate).call()
       .then((data:never) => {
-        const convertedReward = ConvertFrom(data['payout'], tstTokenInfo.decimal).toFloat().toFixed(2);
+        const convertedReward = from > 0 ? ConvertFrom(data['payout'], tstTokenInfo.decimal).toFloat().toFixed(2) : 0;
+        //@ts-ignore
         setReward(convertedReward);
       }).catch((error:never) => {
         console.log('error fetching yield', error);
