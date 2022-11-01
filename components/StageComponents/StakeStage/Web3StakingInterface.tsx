@@ -4,13 +4,12 @@
 import React, { useEffect, useState } from "react"
 import { useWeb3Context } from "../../../context";
 import { isMobile } from "react-device-detect";
-import { Contract, SmartContractManager, StakingContractManager, TokenContractManager } from "../../../Utils";
+import { AddToMetamaskHelper, Contract, SmartContractManager, StakingContractManager, TokenContractManager } from "../../../Utils";
 import { StakingList } from "./components/StakingList";
 import { StakingInterface } from "./components/StakingInterface";
 import { StakingHistoryList } from './components/StakingHistoryList';
 import DescriptionContainer from "../../shared/uiElements/DescriptionContainer/DescriptionContainer";
 import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledSupplyContainer } from "../SwapStage/Styles";
-import { toast } from "react-toastify";
 import { StyledStakingHistoryContainer } from "./Styles";
 import { StyledGridHeaders } from "./styles/StakingListStyles";
 
@@ -24,7 +23,6 @@ export const Web3StakingInterface = () => {
     const [stakeHistory, setStakeHistory] = useState<string[]>([]);
     const [stakeFilteredHistory, setStakeFilteredHistory] = useState<string[]>([]);
     const [mobile, setMobile] = useState();
-    const [copied, setCopied] = useState(false);
 
     const StakingContract = SmartContractManager('StakingDirectory' as Contract).then((data) => data);
     const TokenContract_TST = TokenContractManager(tokenAddress).then((data) => data);
@@ -96,7 +94,7 @@ export const Web3StakingInterface = () => {
     }
 
     const copyToClipboardClickFunction = () => {
-        navigator.clipboard.writeText(tokenAddress).then(() => {toast.success('Copied to clipboard, please import token into MetaMask'); setCopied(true)}).catch(() => {toast.error('Unable to copy address, please manually select and copy'); setCopied(false)});
+        tokenAddress && AddToMetamaskHelper(tokenAddress);
     }
 
    return !ShowStakingInterface ? (
@@ -108,7 +106,7 @@ export const Web3StakingInterface = () => {
     <div>
         <StyledSupplyContainer>
               <h2>{tokenSymbol} Address:</h2> <StyledAddressHolderP>{tokenAddress}</StyledAddressHolderP>
-             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
+             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
             </StyledSupplyContainer>
         {
         !mobile && (

@@ -1,3 +1,4 @@
+export { AddToMetamaskHelper } from './addToMetamaskHelper';
 export { ToByte32, FromByte32 } from './Byte32Converter';
 export { TOKENS, INTERFACE} from './Constants/Constants';
 export type { Contract, Tokens } from './Types/Types';

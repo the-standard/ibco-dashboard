@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { ClaimRewardContainer, StyledBondHistoryContainer, StyledBackButtonContainer, StyledChevronSpan, StyledBondGridContainer } from './styles';
 import { useWeb3Context } from "../../../../../context";
 import { useRouter } from "next/router";
-import { ConvertFrom, SmartContractManager, TokenContractManager } from "../../../../../Utils";
+import { AddToMetamaskHelper, ConvertFrom, SmartContractManager, TokenContractManager } from "../../../../../Utils";
 import { UserBondsHistoryList } from "../UserBondsHistoryList/UserBondsHistoryList";
 import { StyledStakingHistoryContainer } from "../../../StakeStage/Styles";
 import { StyledGridHeaders } from './styles';
@@ -24,7 +24,6 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
     const router = useRouter();
     //const [time, setTime] = useState(30);
     const [userBonds, setUserBonds] = useState([]);
-    const [copied, setCopied] = useState(false);
     const [claimAmount, setClaimAmount] = useState('0');
     const [mobile, setMobile] = useState();
     const [disableClaim, setDisableClaim] = useState(false);
@@ -129,8 +128,8 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
     };
 
     const copyToClipboardClickFunction = () => {
-        navigator.clipboard.writeText(tstTokenInfo.tokenAddress).then(() => {toast.success('Copied to clipboard, please import token into MetaMask'); setCopied(true)}).catch(() => {toast.error('Unable to copy address, please manually select and copy'); setCopied(false)});
-      }
+        tstTokenInfo.tokenAddress && AddToMetamaskHelper(tstTokenInfo.tokenAddress);
+    }
 
     const backButton = () => router.push({query: {}})
 
@@ -144,7 +143,7 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
                 <StyledBondGridContainer>
                 <StyledSupplyContainer className="extraMarginBottom">
                     <h2>{tstTokenInfo.tokenSymbol} Address:</h2> <StyledAddressHolderP>{tstTokenInfo.tokenAddress}</StyledAddressHolderP>
-                    { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
+                    { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
                 </StyledSupplyContainer>
                     {
                         !mobile && (

@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import DescriptionContainer from '../components/shared/uiElements/DescriptionContainer/DescriptionContainer';
 import { StyledGlobalContainer } from '../components/shared/uiElements/styles/SharedStylesGlobal';
 import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledLeftRightColContainer, StyledSupplyContainer, StyledTokenInfoLeftCol, StyledTokenInfoRightCol } from '../components/StageComponents/SwapStage/Styles';
-import { toast } from 'react-toastify';
+import { AddToMetamaskHelper } from '../Utils';
 
 const Stage1: NextPage = () => {
   const [seuroAddress, setSeuroAddress] = useState('');
@@ -23,7 +23,6 @@ const Stage1: NextPage = () => {
   const _network = network?.name === 'homestead' ? 'main' : network?.name || 'goerli';
   const BondingCurveContract = SmartContractManager('BondingCurve' as Contract).then((data) =>  data);
   const [mobile, setMobile] = useState();
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     getTokenAddress();
@@ -46,7 +45,7 @@ const Stage1: NextPage = () => {
   }
 
   const copyToClipboardClickFunction = () => {
-    navigator.clipboard.writeText(seuroAddress).then(() => {toast.success('Copied to clipboard, please import token into MetaMask'); setCopied(true)}).catch(() => {toast.error('Unable to copy address, please manually select and copy'); setCopied(false)});
+    seuroAddress && AddToMetamaskHelper(seuroAddress);
   }
 
   return (
@@ -65,7 +64,7 @@ const Stage1: NextPage = () => {
           <StyledTokenInfoLeftCol>
             <StyledSupplyContainer>
               <h2>{TOKENS.DISPLAY.SEURO} Address:</h2> <StyledAddressHolderP>{seuroAddress}</StyledAddressHolderP>
-             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
+             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
             </StyledSupplyContainer>
             {
               <>
