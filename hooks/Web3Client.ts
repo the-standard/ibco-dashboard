@@ -55,6 +55,10 @@ export const useWeb3 = () => {
     }
   }, [])
 
+  const redirectIfStagePage = () => {
+    if (window.location.href.includes('/stage')) window.location.href = '/';
+  }
+
   const disconnect = useCallback(async () => {
     if (web3Modal) {
       web3Modal.clearCachedProvider()
@@ -62,7 +66,7 @@ export const useWeb3 = () => {
         await provider.disconnect();
       }
 
-      if (window.location.href.includes('/stage')) window.location.href = '/';
+      redirectIfStagePage();
 
       toast.error('Disconnected from wallet')
       dispatch({
@@ -77,6 +81,8 @@ export const useWeb3 = () => {
   useEffect(() => {
     if (web3Modal && web3Modal.cachedProvider) {
       connect()
+    } else {
+      redirectIfStagePage();
     }
   }, [connect])
 
