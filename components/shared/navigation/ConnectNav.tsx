@@ -17,7 +17,6 @@ const ConnectNav = () => {
 
     useEffect(() => {
       const x = cookies.get('_ibcotv1');
-      console.log(123123, !!x);
       if (!!x) {
         setTerms(true);
       };
