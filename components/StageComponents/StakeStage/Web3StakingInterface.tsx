@@ -100,7 +100,7 @@ export const Web3StakingInterface = () => {
    return !ShowStakingInterface ? (
     <>
     <DescriptionContainer>
-        <b>What is staking?</b> Similar to the bonding event, a user can transfer their TST during limited time periods. This means that there will be one or multiple campaigns throughout the year where staking is possible with varying interest rates. If the user decides to participate then, at the end of the period, the initial amount of TST is returned to the user and an interest payment on top of it, paid in sEURO.
+        <b>What is staking?</b> Stake your TST for a time period and have them returned to you with a staking reward in sEURO. There will be various of staking events throughout the year with varying staking reward rates. Stake now to allow your TST to work for you!
     </DescriptionContainer>
 
     <div>
