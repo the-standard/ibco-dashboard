@@ -34,7 +34,7 @@ const Home: NextPage = () => {
   const handleChange = () => {
     setChecked(!checked);
     const d = Math.floor(Date.now() / 1000);
-    const then = new Date(d + 86400 * 1000);
+    const then = new Date((d + 86400) * 1000);
     cookies.set('_ibcotv1', d, { path: '/', expires: then });
     setTerms(true);
   };
