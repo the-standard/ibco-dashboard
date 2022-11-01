@@ -185,7 +185,7 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
             <StyledButton disabled={loadingApproval || loading || disabledApprovalButton} onClick={() => approveCurrency()}>{assetApproved && from > 0 ? `${from} ${tokenSymbol} Approved` : loadingApproval ? `Approving ${from} ${tokenSymbol}... `: `Approve ${from} ${tokenSymbol}`}</StyledButton>
             
             {            
-            <StyledButton disabled={loadingApproval || loading || disabledSend} onClick={() => SendStakeTransaction()}>{loading ? 'Processing Stake...' : transactionData ? 'Start Another Stake' : 'Start Staking'}</StyledButton>
+            <StyledButton disabled={loadingApproval || loading || disabledSend} onClick={() => SendStakeTransaction()}>{loading ? 'Confirming Stake in MetaMask...' : transactionData ? 'Confirm Another Stake on Metamask' : 'Confirm Stake on Metamask'}</StyledButton>
             }
             {// @ts-ignore
             transactionData && <StyledButton className="flex px-2 py-1 font-light justify-center" onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledButton>
