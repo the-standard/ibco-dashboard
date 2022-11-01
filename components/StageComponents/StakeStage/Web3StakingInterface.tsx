@@ -23,9 +23,17 @@ export const Web3StakingInterface = () => {
     const [stakeHistory, setStakeHistory] = useState<string[]>([]);
     const [stakeFilteredHistory, setStakeFilteredHistory] = useState<string[]>([]);
     const [mobile, setMobile] = useState();
+    const [tstSeuroPrice, setTstSeuroPrice] = useState(0);
 
     const StakingContract = SmartContractManager('StakingDirectory' as Contract).then((data) => data);
+    const StandardTokenContract = SmartContractManager('StandardTokenGateway' as Contract).then((data) =>  data);
     const TokenContract_TST = TokenContractManager(tokenAddress).then((data) => data);
+
+    useEffect(() => {
+        if (web3Provider) {
+            getTstSeuroPrice();
+        }
+    }, [web3Provider]);
 
     useEffect(() => {
         //@ts-ignore
@@ -45,7 +53,15 @@ export const Web3StakingInterface = () => {
         //@ts-ignore
        const newArray = stakeHistory.length > 1 && [...new Map(stakeHistory.map(item => [item['address'], item])).values()];
        newArray && setStakeFilteredHistory(newArray)
-    }, [stakeHistory])
+    }, [stakeHistory]);
+
+    const getTstSeuroPrice = async () => {
+        const standardTokenContractInit = await StandardTokenContract;
+        //@ts-ignore
+        standardTokenContractInit.methods.priceTstEur().call().then((data:never) => {
+            setTstSeuroPrice(data)
+        })
+    };
 
     const getTokenAddress = async (stakeAddress:string) => {
         const StakingContract = StakingContractManager(stakeAddress as Contract).then((data) => data);
@@ -107,7 +123,11 @@ export const Web3StakingInterface = () => {
         <StyledSupplyContainer>
               <h2>{tokenSymbol} Address:</h2> <StyledAddressHolderP>{tokenAddress}</StyledAddressHolderP>
              { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
-            </StyledSupplyContainer>
+        </StyledSupplyContainer>
+
+        <StyledSupplyContainer className="extraMarginTop">
+              <h2>{tokenSymbol} Current Price:</h2> <StyledAddressHolderP>{((tstSeuroPrice / 100000000)).toLocaleString(undefined, { minimumFractionDigits: 2 })} sEURO</StyledAddressHolderP>
+        </StyledSupplyContainer>
         {
         !mobile && (
         <StyledGridHeaders>

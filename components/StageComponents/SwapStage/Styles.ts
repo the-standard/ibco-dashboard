@@ -52,6 +52,10 @@ export const StyledSupplyContainer = styled.div`
         &.extraMarginBottom {
             margin-bottom: 3em;
         }
+
+        &.extraMarginTop {
+            margin-top: 18px;
+        }
     `}
 `;
 
