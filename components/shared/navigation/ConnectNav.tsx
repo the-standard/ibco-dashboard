@@ -3,18 +3,25 @@ import React, { useEffect, useState } from "react";
 import { Web3Button } from "../../../components/shared/uiElements/Web3Button";
 import { isMobile } from "react-device-detect";
 import { StyledConnectNavContainer, StyledLogoContainer } from "./styles/ConnectNavStyles";
-// import { StyledConnectNavContainer, StyledLogoContainer, StyledMobileConnectNavContainer, StyledMobileConnectNavDropdownContainer, StyledMobileLinksContainer } from "./styles/ConnectNavStyles";
-// import { Menu, X } from 'react-feather';
-// import { FooterLinks } from "../footerLinks";
+import Cookies from 'universal-cookie';
 
 const ConnectNav = () => {
+    const cookies = new Cookies();
     const [mobile, setMobile] = useState();
-    // const [openState, setOpenState] = useState(false);
+    const [terms, setTerms] = useState<boolean>();
 
     useEffect(() => {
       //@ts-ignore
       setMobile(isMobile)
     }, [setMobile]);
+
+    useEffect(() => {
+      const x = cookies.get('_ibcotv1');
+      console.log(123123, !!x);
+      if (!!x) {
+        setTerms(true);
+      };
+    }, [terms]);
 
     // const mobileOpenClickHandler = () => {
     //   setOpenState(!openState);
@@ -32,7 +39,7 @@ const ConnectNav = () => {
             }
           </StyledLogoContainer>
 
-        {!mobile ?
+        {!mobile && terms ?
         <nav className="grid justify-items-end p-4">
           <Web3Button />
         </nav>
@@ -42,7 +49,7 @@ const ConnectNav = () => {
             <a className="mobileMenuClickHandler" onClick={mobileOpenClickHandler}>{!openState ? <Menu size={30} /> : <X size={30}/>}</a>
 
             {
-              openState && (
+              openState && terms (
                 <StyledMobileConnectNavDropdownContainer>
                   <Web3Button />
 
