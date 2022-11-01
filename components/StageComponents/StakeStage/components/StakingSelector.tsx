@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 import moment from 'moment';
-import { StyledDurationContainer, StyledInterestRateContainer, StyledStakeButton, StyledStakingListContainer, StyledStatusContainer, StyledTitleP, StyledTransactionButtonContainer } from "../styles/StakingListStyles";
+import { StyledDurationContainer, StyledInterestRateContainer, StyledMaturityContainer, StyledStakeButton, StyledStakingListContainer, StyledStatusContainer, StyledTitleP, StyledTransactionButtonContainer } from "../styles/StakingListStyles";
 
 type StakingObj = {
     address: string,
@@ -22,6 +22,7 @@ type StakeList = {
 export const StakingSelector = ({stakingObj, clickFunction}:StakeList) => {
     const startPeriod = moment(parseInt(stakingObj.start)*1000);
     const endPeriod = moment(parseInt(stakingObj.end)*1000);
+    const maturity = moment(parseInt(stakingObj.maturity)*1000);
     const [hasOpened, setHasOpened] = useState(false);
 
     const isStakeOpen = hasOpened && moment().isAfter(endPeriod);
@@ -58,12 +59,12 @@ export const StakingSelector = ({stakingObj, clickFunction}:StakeList) => {
                 }
             </StyledStatusContainer>
 
-            {/* <StyledMaturityContainer>
+            <StyledMaturityContainer>
                 <StyledTitleP>Maturity</StyledTitleP>
                 {
                     maturity.format('ll')
                 }
-            </StyledMaturityContainer> */}
+            </StyledMaturityContainer>
 
             <StyledTransactionButtonContainer>
                 {

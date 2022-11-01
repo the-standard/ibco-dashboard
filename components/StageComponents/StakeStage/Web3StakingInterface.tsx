@@ -113,7 +113,8 @@ export const Web3StakingInterface = () => {
         <StyledGridHeaders>
             <span>Opening</span>
             <span>Status</span>
-            <span className="flex2">&nbsp;</span>
+            <span>Maturity</span>
+            <span>&nbsp;</span>
         </StyledGridHeaders> 
         )
         

@@ -46,7 +46,7 @@ export const StyledStatusContainer = styled.div`
     order: -1;
 
     ${media.desktop`
-        flex: 2;
+        flex: 1;
         order: 0;
         text-align: left;
         background: none;
@@ -59,7 +59,7 @@ export const StyledDurationContainer = styled.div`
     padding-top: 1em;
 
     ${media.desktop`
-        flex: 2;
+        flex: 1;
         padding: 0;
     `}
 `;
@@ -105,7 +105,7 @@ export const StyledTransactionButtonContainer = styled.div`
     padding-bottom: 1em;
 
     ${media.desktop`
-        flex: 2;
+        flex: 1;
         padding: 0;
     `}
 `;
@@ -128,12 +128,8 @@ export const StyledGridHeaders = styled.div`
     ${media.desktop`
         margin: 3em 0 0.5em 1.3em;
         & > span {
-           flex: 2;
+           flex: 1;
         }
-
-        & > span.flex1 {
-            flex: 1;
-         }
 
         &.greyBG {
             padding: 1em;
