@@ -57,7 +57,7 @@ const Stage1: NextPage = () => {
 
       <main>
         <DescriptionContainer>
-          <b>What is Stage 1?</b> The Bonding Curve allows users to swap their collateral for sEURO. Initially, sEURO is discounted by 20% meaning 1 EURO of ETH will be exchanged for 1.25 sEURO. This discount declines until the total supply has been exhausted.
+          <b>What is Stage 1?</b> Time to swap your crypto for sEURO. To make it even more attractive, we have made it such that in the beginning, one sEURO only costs 0.8 EUR. You can watch the bonding curve to follow the price evolution. This discount declines until the total supply has been exhausted so don't wait too long!
         </DescriptionContainer>
 
         <StyledLeftRightColContainer>
