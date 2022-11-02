@@ -20,10 +20,11 @@ export const RateSelectionButton = ({rate, isSelected, clickHandler}:RateSelecti
         const minutes2hours = Math.floor(seconds2minutes/60);
         const hours2days = Math.floor(minutes2hours/24);
         const days2weeks = Math.floor(hours2days/7);
-        const weeks2Years = Math.floor(days2weeks/52);
+        const weeks2Months = Math.floor(days2weeks/4.3);
+        const months2Years = Math.floor(weeks2Months/52);
         
-        const value = weeks2Years > 0 ? weeks2Years : days2weeks > 0 ? days2weeks : hours2days > 0 ? hours2days : minutes2hours > 0 ? minutes2hours : seconds2minutes;
-        const time = weeks2Years > 0 ? (weeks2Years > 1 ? 'years' : 'year') : days2weeks > 0 ? (days2weeks > 1 ? 'weeks' : 'week') : hours2days > 0 ? (hours2days > 1 ? 'days' : 'day') : minutes2hours > 0 ? (minutes2hours > 1 ? 'hours' : 'hour') : seconds2minutes > 1 ? 'minutes' : 'minutes';
+        const value = months2Years > 0 ? months2Years : weeks2Months > 0 ? weeks2Months : days2weeks > 0 ? days2weeks : hours2days > 0 ? hours2days : minutes2hours > 0 ? minutes2hours : seconds2minutes;
+        const time = months2Years > 0 ? (months2Years > 1 ? 'years' : 'year') : weeks2Months > 0 ? (weeks2Months > 1 ? 'months' : 'month') : days2weeks > 0 ? (days2weeks > 1 ? 'weeks' : 'week') : hours2days > 0 ? (hours2days > 1 ? 'days' : 'day') : minutes2hours > 0 ? (minutes2hours > 1 ? 'hours' : 'hour') : seconds2minutes > 1 ? 'minutes' : 'minutes';
 
         return {value: value, time: time}
     }
