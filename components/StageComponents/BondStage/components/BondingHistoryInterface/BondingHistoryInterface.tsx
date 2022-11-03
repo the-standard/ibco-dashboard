@@ -22,7 +22,7 @@ type BondingHistoryInterfaceType = {
 export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterfaceType) => {
     const { address, web3Provider } = useWeb3Context();
     const router = useRouter();
-    //const [time, setTime] = useState(30);
+    const [time, setTime] = useState(30);
     const [userBonds, setUserBonds] = useState([]);
     const [claimAmount, setClaimAmount] = useState('0');
     const [mobile, setMobile] = useState();
@@ -47,27 +47,36 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
     }, [address])
 
     useEffect(() => {
-        // if(userBonds.length > 0) {
-        //     refreshIntervalTimer;
-        // } else {
-        //     clearInterval(refreshIntervalTimer);
-        // }
-
         getTSTInfo();
     }, [userBonds, tstTokenInfo.tokenAddress]);
 
+    useEffect(() => {
+        //@ts-ignore
+        let timer;
+
+        if(userBonds.length > 0 && !disableClaim) {
+            timer = setInterval(() => {
+                if (time > 0) {
+                    setTime(time => time - 1);
+                }
+              }, 1000);
+
+              if(time <= 0) {
+                clearInterval(timer);
+                setTime(30);
+                getUserBonds();
+              }
+            //@ts-ignore
+              return () => clearInterval(timer);
+        } else {
+            clearInterval(timer)
+        }
+    }, [time, userBonds])
+
    // const refreshIntervalTimer = setInterval(() => {getUserBonds()}, 30000);
 
-    // const startTimer = () => {
-    //     const timer = setInterval(() => {
-    //         time <= 0 && setTime(30);
-    //         setTime(time - 1);
-    //     }, 1000);
-
-    //     userBonds.length > 0 ? timer : clearInterval(timer);
-    // };
-
     const getUserBonds = async() => {
+        setUserBonds([]);
         const bondStorageContract = await (await BondStorageContract);
         //@ts-ignore
         web3Provider && bondStorageContract.methods.getUserBonds(address).call().then((data:never) => {
@@ -167,7 +176,7 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
                             <p>No Bonds have been created yet</p>
                         }
                     </StyledStakingHistoryContainer>
-                    {/* {userBonds.length > 0 && <p>Time until refresh: {time} {time < 10 ? 'second' : 'seconds'}</p>} */}
+                    {userBonds.length > 0 && !disableClaim && <p className="timer">Time until refresh: {time} {time > 1 ? 'seconds' : 'second'}</p>}
                 </StyledBondGridContainer>
                 
                 <ClaimRewardContainer>
