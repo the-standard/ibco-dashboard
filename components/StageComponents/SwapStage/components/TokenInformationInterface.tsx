@@ -89,15 +89,15 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
     return (
         <StyledTokenInformationContainer className="supplyContainer">
             <div>
-                <h2>Market Cap</h2>
+                <h2>Market Cap:</h2>
                 <p>&euro;{((tokenInfo.seuroPrice * tokenInfo.ibcoTotalSupply) / 1000000000000000000000000000000000000).toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
             </div>
             <div>
-                <h2>sEURO Price</h2>
+                <h2>sEURO Price:</h2>
                 <p>&euro;{ConvertFrom(tokenInfo.seuroPrice, 18).toFloat().toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
             </div>
             <div>
-                <h2>TST/sEURO Price</h2>
+                <h2>TST/sEURO Price:</h2>
                 <p>{((tokenInfo.tstSeuroPrice / 100000000)).toLocaleString(undefined, { minimumFractionDigits: 2 })} sEURO</p>
             </div>
         </StyledTokenInformationContainer>

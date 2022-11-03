@@ -426,9 +426,9 @@ function Web3BondInterface() {
         setDisabledSend(true);
         // @ts-ignore
         toast.success(`Transaction success: ${data['transactionHash']}`);
-      }).catch((error:never) => {
+      }).catch(() => {
         setLoadingTransaction(false);
-        toast.error(`Error creating new bond: ${ error}`);
+        toast.error(`Error creating new bond, please try again`);
       });
   }
 
