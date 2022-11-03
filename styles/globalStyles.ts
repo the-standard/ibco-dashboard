@@ -67,6 +67,10 @@ export default createGlobalStyle`
     outline: none;
   }
 
+  input:disabled {
+    
+  }
+
   button:disabled {
     background: #99f9ff;
     color: #282828;
