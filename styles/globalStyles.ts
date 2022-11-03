@@ -35,6 +35,7 @@ export default createGlobalStyle`
     color: #282828;
     border-radius: 3px;
     opacity: 100%;
+    cursor: pointer;
   }
 
   input {
@@ -67,15 +68,10 @@ export default createGlobalStyle`
     outline: none;
   }
 
-  input:disabled {
-    
-  }
-
   button:disabled {
-    background: #99f9ff;
-    color: #282828;
+    background: ${props => props.theme.colors.disabledGrey};
+    color: ${props => props.theme.colors.black};
     cursor: not-allowed;
-    opacity: 60%;
   }
 
   .greyText {

@@ -135,7 +135,7 @@ export const StyledGridHeaders = styled.div`
             padding: 1em;
             margin: 0;
             background: ${props => props.theme.colors.darkGrey};
-            border-bottom: 1px solid ${props => props.theme.colors.borderLightGrey};
+            border-bottom: 1px solid ${props => props.theme.colors.horizontalRuleGrey};
         }
     `}
 `;
