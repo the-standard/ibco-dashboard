@@ -8,7 +8,7 @@ import NextHeadComponent from '../components/shared/NextHeadComponent'
 import { StyledIndexContainer, StyledIndexDescriptionContainer } from '../components/shared/uiElements/styles/IndexStyles'
 import { StyledSupplyContainer } from "../components/StageComponents/SwapStage/Styles";
 
-import { StyledGlobalContainer } from '../components/shared/uiElements/styles/SharedStylesGlobal'
+import { StyledGlobalContainer, StyledPushFooter } from '../components/shared/uiElements/styles/SharedStylesGlobal'
 import { useWeb3Context } from '../context'
 import Cookies from 'universal-cookie';
 
@@ -45,7 +45,8 @@ const Home: NextPage = () => {
 
     <ConnectNav />
 
-    <StyledIndexContainer>
+    <StyledPushFooter>
+      <StyledIndexContainer>
       <StyledIndexDescriptionContainer>
         <h2>Welcome to The Standard Initial Bonding Curve Offering</h2>
 
@@ -77,6 +78,8 @@ const Home: NextPage = () => {
     </StyledIndexContainer>
 
     <Footer />
+    </StyledPushFooter>
+    
   </StyledGlobalContainer>
   )
 }

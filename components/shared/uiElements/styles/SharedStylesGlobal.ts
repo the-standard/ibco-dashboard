@@ -9,7 +9,15 @@ export const StyledGlobalContainer = styled.div`
     
     ${media.desktop`
         width: 80%;
+        
     `}
+`;
+
+export const StyledPushFooter = styled.div`
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: space-between;
 `;
 
 export const StyledGlobalBetaBanner = styled.div`

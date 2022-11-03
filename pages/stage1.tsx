@@ -14,7 +14,7 @@ import { useWeb3Context } from '../context';
 import { GetJsonAddresses } from '../Utils/ContractManager';
 import { useEffect, useState } from 'react';
 import DescriptionContainer from '../components/shared/uiElements/DescriptionContainer/DescriptionContainer';
-import { StyledGlobalContainer } from '../components/shared/uiElements/styles/SharedStylesGlobal';
+import { StyledGlobalContainer, StyledPushFooter } from '../components/shared/uiElements/styles/SharedStylesGlobal';
 import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledLeftRightColContainer, StyledSupplyContainer, StyledTokenInfoLeftCol, StyledTokenInfoRightCol } from '../components/StageComponents/SwapStage/Styles';
 import { AddToMetamaskHelper } from '../Utils';
 
@@ -56,7 +56,8 @@ const Stage1: NextPage = () => {
       <ConnectNav />
       <SubNavigation />
 
-      <main>
+      <StyledPushFooter>
+         <main>
         <DescriptionContainer>
           <b>What is Stage 1?</b> Time to swap your crypto for sEURO. To make it even more attractive, we have made it such that in the beginning, one sEURO only costs 0.8 EUR. You can watch the bonding curve to follow the price evolution. This discount declines until the total supply has been exhausted so don't wait too long!
         </DescriptionContainer>
@@ -82,6 +83,8 @@ const Stage1: NextPage = () => {
       </main>
 
       <Footer />
+      </StyledPushFooter>
+     
     </StyledGlobalContainer>
   )
 } 
