@@ -43,6 +43,8 @@ export default createGlobalStyle`
     background-color: #282828;
     outline: none;
     padding: 0.8em;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
   }
 
   input::-webkit-outer-spin-button,
@@ -107,6 +109,8 @@ export default createGlobalStyle`
     align-items: center;
     width: 100%;
     justify-content: center;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
 
     &.readOnly {
       border-color: ${props => props.theme.colors.superLightGrey} !important;
