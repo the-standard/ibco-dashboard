@@ -441,7 +441,7 @@ function Web3BondInterface() {
     </DescriptionContainer>
 
     <StyledBondingHistoryButtonContainer>
-      <StyledBondingHistoryButton onClick={bondingHistoryClickHandler}>View History</StyledBondingHistoryButton>
+      <StyledBondingHistoryButton onClick={bondingHistoryClickHandler}>Rewards</StyledBondingHistoryButton>
     </StyledBondingHistoryButtonContainer>
 
     <StyledBondingInterfaceContainer>
