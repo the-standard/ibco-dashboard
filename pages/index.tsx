@@ -70,11 +70,11 @@ const Home: NextPage = () => {
         { !terms ? '' :
           <>
             { mobile ?
-                <h4>How to connect MetaMask with us</h4>
+                <h4>Not available on mobile right now, please swap to a desktop device.</h4>
               :
-                <p>Go to your MetaMask app, log in, click menu (top left) then go to browser, eneter this web address and connect your wallet as normal</p>
+                <p>Please connect your wallet to proceed</p>
             }
-            {!network && <Web3Button />}
+            {!network && !mobile && <Web3Button />}
         </>
         }
       </StyledIndexDescriptionContainer>
