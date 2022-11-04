@@ -11,19 +11,19 @@ import { StyledSupplyContainer } from "../components/StageComponents/SwapStage/S
 import { StyledGlobalContainer, StyledPushFooter } from '../components/shared/uiElements/styles/SharedStylesGlobal'
 import { useWeb3Context } from '../context'
 import Cookies from 'universal-cookie';
-import { CurrentBreakpoint } from '../hooks/BreakpointObserver';
+// import { CurrentBreakpoint } from '../hooks/BreakpointObserver';
 
 const Home: NextPage = () => {
   const cookies = new Cookies();
   const { network } = useWeb3Context();
-  const [mobile, setMobile] = useState<boolean>();
+  // const [mobile, setMobile] = useState<boolean>();
   const [terms, setTerms] = useState<boolean>();
-  const breakpoint = CurrentBreakpoint();
+  // const breakpoint = CurrentBreakpoint();
 
-  useEffect(() => {
-    //@ts-ignore
-    setMobile(breakpoint !== 'desktop');
-  }, [setMobile, breakpoint]);
+  // useEffect(() => {
+  //   //@ts-ignore
+  //   setMobile(breakpoint !== 'desktop');
+  // }, [setMobile, breakpoint]);
 
   useEffect(() => {
     const x = cookies.get('_ibcotv1');
