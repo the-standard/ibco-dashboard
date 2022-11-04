@@ -69,12 +69,12 @@ const Home: NextPage = () => {
 
         { !terms ? '' :
           <>
-            { mobile ?
+            {/* { mobile ?
                 <h4>Not available on mobile right now, please swap to a desktop device.</h4>
               :
                 <p>Please connect your wallet to proceed</p>
-            }
-            {!network && !mobile && <Web3Button />}
+            } */}
+            {!network && <Web3Button />}
         </>
         }
       </StyledIndexDescriptionContainer>
