@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { FaDiscord, FaTwitter, FaYoutube, FaLinkedin, FaInstagramSquare, FaTelegramPlane } from 'react-icons/fa';
 import { FooterLinks } from './footerLinks';
-import { isMobile } from "react-device-detect";
 import { useEffect, useState } from 'react';
 import { StyledBuildIdContainer, StyledFooterNavContainerMain, StyledFooterSocialContainer } from './uiElements/styles/FooterLinksStyles';
+import { CurrentBreakpoint } from '../../hooks/BreakpointObserver';
 
 const Footer = () => {
     const [mobile, setMobile] = useState();
-    
+    const breakpoint = CurrentBreakpoint();
+
     useEffect(() => {
       //@ts-ignore
-      setMobile(isMobile)
-    }, [setMobile]);
+      setMobile(breakpoint !== 'desktop');
+    }, [setMobile, breakpoint]);
 
 
     return (

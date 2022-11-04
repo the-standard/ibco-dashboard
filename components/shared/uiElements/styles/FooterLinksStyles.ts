@@ -7,6 +7,7 @@ import media from "../../../../styles/media";
 export const StyledFooterNavContainer = styled.div`
     max-width: 500px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     font-size: 13px;
     margin: 0 auto;
@@ -16,8 +17,9 @@ export const StyledFooterNavContainer = styled.div`
         text-decoration: none;
     }
 
-    ${media.tablet`
-        font-size: 14px
+    ${media.desktop`
+        font-size: 14px;
+        flex-direction: row;
     `}
 `;
 

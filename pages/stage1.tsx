@@ -5,7 +5,6 @@ import type { NextPage } from 'next'
 import ConnectNav from '../components/shared/navigation/ConnectNav';
 import SubNavigation from '../components/shared/navigation/SubNavigation';
 import NextHeadComponent from '../components/shared/NextHeadComponent';
-import { isMobile } from "react-device-detect";
 import { Web3SwapInterface } from '../components';
 import { TokenInformationInterface, BondingCurveInterface } from '../components';
 import { Contract, SmartContractManager, TOKENS } from '../Utils';
@@ -17,6 +16,7 @@ import DescriptionContainer from '../components/shared/uiElements/DescriptionCon
 import { StyledGlobalContainer, StyledPushFooter } from '../components/shared/uiElements/styles/SharedStylesGlobal';
 import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledLeftRightColContainer, StyledSupplyContainer, StyledTokenInfoLeftCol, StyledTokenInfoRightCol } from '../components/StageComponents/SwapStage/Styles';
 import { AddToMetamaskHelper } from '../Utils';
+import { CurrentBreakpoint } from '../hooks/BreakpointObserver';
 
 const Stage1: NextPage = () => {
   const [seuroAddress, setSeuroAddress] = useState('');
@@ -24,6 +24,7 @@ const Stage1: NextPage = () => {
   const _network = network?.name === 'homestead' ? 'main' : network?.name || 'goerli';
   const BondingCurveContract = SmartContractManager('BondingCurve' as Contract).then((data) =>  data);
   const [mobile, setMobile] = useState();
+  const breakpoint = CurrentBreakpoint();
 
   useEffect(() => {
     getTokenAddress();
@@ -31,8 +32,8 @@ const Stage1: NextPage = () => {
 
   useEffect(() => {
     //@ts-ignore
-    setMobile(isMobile)
-  }, [setMobile]);
+    setMobile(breakpoint !== 'desktop');
+  }, [setMobile, breakpoint]);
 
   const getTokenAddress = async() => {
     //@ts-ignore

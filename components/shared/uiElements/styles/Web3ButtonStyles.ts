@@ -12,7 +12,7 @@ export const StyledWeb3ButtonContainer = styled.div`
     border: 0.1em solid ${props => props.theme.colors.lighterGrey};
     padding: 1em;
     margin-top: 3em;
-    width: 160px;
+    width: auto;
     right: 0;
     font-weight: bold;
 

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from "react";
-import { isMobile } from "react-device-detect";
 import { ChevronLeft } from 'react-feather';
 import { toast } from "react-toastify";
 import { ClaimRewardContainer, StyledBondHistoryContainer, StyledBackButtonContainer, StyledChevronSpan, StyledBondGridContainer } from './styles';
@@ -11,6 +10,7 @@ import { UserBondsHistoryList } from "../UserBondsHistoryList/UserBondsHistoryLi
 import { StyledStakingHistoryContainer } from "../../../StakeStage/Styles";
 import { StyledGridHeaders } from './styles';
 import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledSupplyContainer } from "../../../SwapStage/Styles";
+import { CurrentBreakpoint } from "../../../../../hooks/BreakpointObserver";
 
 type BondingHistoryInterfaceType = {
     otherTokenData:{
@@ -26,6 +26,7 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
     const [userBonds, setUserBonds] = useState([]);
     const [claimAmount, setClaimAmount] = useState('0');
     const [mobile, setMobile] = useState();
+    const breakpoint = CurrentBreakpoint();
     const [disableClaim, setDisableClaim] = useState(false);
     const [tstTokenInfo, setTstTokenInfo] = useState({
         tokenAddress: '',
@@ -35,11 +36,12 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
     const BondStorageContract = SmartContractManager('BondStorage').then((data) => data);
     const TSTTokenInfoContract = SmartContractManager('StandardTokenGateway').then((data) => data);
     const TokenContract_TST = TokenContractManager(tstTokenInfo.tokenAddress).then((data) => data);
+    
 
     useEffect(() => {
-        //@ts-ignore
-        setMobile(isMobile)
-      }, [setMobile]);
+      //@ts-ignore
+      setMobile(breakpoint !== 'desktop');
+    }, [setMobile, breakpoint]);
 
     useEffect(() => {
         getUserBonds();

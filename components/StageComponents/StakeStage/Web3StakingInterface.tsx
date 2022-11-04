@@ -3,7 +3,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
 import { useWeb3Context } from "../../../context";
-import { isMobile } from "react-device-detect";
 import { AddToMetamaskHelper, Contract, SmartContractManager, StakingContractManager, TokenContractManager } from "../../../Utils";
 import { StakingList } from "./components/StakingList";
 import { StakingInterface } from "./components/StakingInterface";
@@ -12,6 +11,7 @@ import DescriptionContainer from "../../shared/uiElements/DescriptionContainer/D
 import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledSupplyContainer } from "../SwapStage/Styles";
 import { StyledStakingHistoryContainer } from "./Styles";
 import { StyledGridHeaders } from "./styles/StakingListStyles";
+import { CurrentBreakpoint } from "../../../hooks/BreakpointObserver";
 
 export const Web3StakingInterface = () => {
     const { address, web3Provider } = useWeb3Context();
@@ -23,6 +23,7 @@ export const Web3StakingInterface = () => {
     const [stakeHistory, setStakeHistory] = useState<string[]>([]);
     const [stakeFilteredHistory, setStakeFilteredHistory] = useState<string[]>([]);
     const [mobile, setMobile] = useState();
+    const breakpoint = CurrentBreakpoint();
     const [tstSeuroPrice, setTstSeuroPrice] = useState(0);
 
     const StakingContract = SmartContractManager('StakingDirectory' as Contract).then((data) => data);
@@ -34,11 +35,12 @@ export const Web3StakingInterface = () => {
             getTstSeuroPrice();
         }
     }, [web3Provider]);
+    
 
     useEffect(() => {
-        //@ts-ignore
-        setMobile(isMobile)
-      }, [setMobile]);
+      //@ts-ignore
+      setMobile(breakpoint !== 'desktop');
+    }, [setMobile, breakpoint]);
 
     useEffect(() => {
         getPositions();

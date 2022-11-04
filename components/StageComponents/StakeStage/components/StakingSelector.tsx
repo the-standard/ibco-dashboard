@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { isMobile } from "react-device-detect";
 import moment from 'moment';
 import { StyledDurationContainer, StyledInterestRateContainer, StyledMaturityContainer, StyledStakeButton, StyledStakingListContainer, StyledStatusContainer, StyledTitleP, StyledTransactionButtonContainer } from "../styles/StakingListStyles";
+import { CurrentBreakpoint } from "../../../../hooks/BreakpointObserver";
 
 type StakingObj = {
     address: string,
@@ -27,11 +27,12 @@ export const StakingSelector = ({stakingObj, clickFunction}:StakeList) => {
 
     const isStakeOpen = hasOpened && moment().isAfter(endPeriod);
     const [mobile, setMobile] = useState();
-    
+    const breakpoint = CurrentBreakpoint();
+
     useEffect(() => {
       //@ts-ignore
-      setMobile(isMobile)
-    }, [setMobile]);
+      setMobile(breakpoint !== 'desktop');
+    }, [setMobile, breakpoint]);
     
     useEffect(() => {
         setHasOpened(moment().isSameOrBefore(endPeriod) && moment().isSameOrAfter(startPeriod));

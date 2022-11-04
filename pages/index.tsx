@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { NextPage } from 'next'
 import { Web3Button } from '../components'
 import React, { useEffect, useState } from "react";
-import { isMobile } from "react-device-detect";
 import Footer from '../components/shared/footer'
 import ConnectNav from '../components/shared/navigation/ConnectNav'
 import NextHeadComponent from '../components/shared/NextHeadComponent'
@@ -11,16 +11,19 @@ import { StyledSupplyContainer } from "../components/StageComponents/SwapStage/S
 import { StyledGlobalContainer, StyledPushFooter } from '../components/shared/uiElements/styles/SharedStylesGlobal'
 import { useWeb3Context } from '../context'
 import Cookies from 'universal-cookie';
+import { CurrentBreakpoint } from '../hooks/BreakpointObserver';
 
 const Home: NextPage = () => {
   const cookies = new Cookies();
   const { network } = useWeb3Context();
   const [mobile, setMobile] = useState<boolean>();
   const [terms, setTerms] = useState<boolean>();
+  const breakpoint = CurrentBreakpoint();
 
   useEffect(() => {
-    setMobile(isMobile)
-  }, [setMobile]);
+    //@ts-ignore
+    setMobile(breakpoint !== 'desktop');
+  }, [setMobile, breakpoint]);
 
   useEffect(() => {
     const x = cookies.get('_ibcotv1');

@@ -55,6 +55,5 @@ export const StyledMobileConnectNavDropdownContainer = styled.div`
 
 export const StyledLogoContainer = styled.div`
     max-width: 274px;
-
-        width: 36%;
+    width: 36%;
 `;
