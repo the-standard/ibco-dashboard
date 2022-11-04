@@ -22,10 +22,6 @@ const ConnectNav = () => {
       };
     }, [terms]);
 
-    // const mobileOpenClickHandler = () => {
-    //   setOpenState(!openState);
-    // }
-
     return (
       <StyledConnectNavContainer>
 
@@ -43,25 +39,7 @@ const ConnectNav = () => {
           <Web3Button />
         </nav>
         :
-        <nav className="grid justify-items-end p-4">
-          {/*  <StyledMobileConnectNavContainer>
-            <a className="mobileMenuClickHandler" onClick={mobileOpenClickHandler}>{!openState ? <Menu size={30} /> : <X size={30}/>}</a>
-
-            {
-              openState && terms (
-                <StyledMobileConnectNavDropdownContainer>
-                  <Web3Button />
-
-                  <StyledMobileLinksContainer>
-                    <FooterLinks />
-                  </StyledMobileLinksContainer>
-                </StyledMobileConnectNavDropdownContainer>
-              )
-            }
-
-          </StyledMobileConnectNavContainer> */}
-
-        </nav>
+        ''
         }
       </StyledConnectNavContainer>
     )

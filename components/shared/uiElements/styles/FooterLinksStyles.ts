@@ -28,12 +28,13 @@ export const StyledFooterSocialContainer = styled.div`
     display: flex;
     justify-content: space-between;
     margin: 1.5em auto;
-    max-width: 140px;
+    max-width: 14%;
     display: flex;
 
     & a {
         color: ${props => props.theme.colors.white};
         text-decoration: none;
+        font-size: 20px;
     }
 `;
 
