@@ -21,7 +21,7 @@ const Stage1: NextPage = () => {
   const [seuroAddress, setSeuroAddress] = useState('');
   const { network } = useWeb3Context();
   const BondingCurveContract = SmartContractManager('BondingCurve' as Contract).then((data) =>  data);
-  const StandardTokenGateway = SmartContractManager('StandardTokenGateway' as Contract).then((data) => data);
+  const SEuroOffering = SmartContractManager('SEuroOffering' as Contract).then((data) => data);
   const [mobile, setMobile] = useState();
   const breakpoint = CurrentBreakpoint();
 
@@ -35,9 +35,9 @@ const Stage1: NextPage = () => {
   }, [setMobile, breakpoint]);
 
   const getSeuroAddress = async () => {
-    const stgContract = await StandardTokenGateway;
+    const stgContract = await SEuroOffering;
     //@ts-ignore
-    stgContract.methods.TOKEN().call().then((data:never) => {
+    stgContract.methods.Seuro().call().then((data:never) => {
       setSeuroAddress(data);
     });
   };

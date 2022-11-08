@@ -48,8 +48,6 @@ export function Web3SwapInterface() {
   //@ts-ignore
   const TokenManager = SmartContractManager('TokenManager' as Contract).then((data) => data);
   //@ts-ignore
-  const StandardTokenGateway = SmartContractManager('StandardTokenGateway' as Contract).then((data) => data);
-  //@ts-ignore
   const TokenContract = TokenContractManager(token.address).then((data) => data);
 
   // PRIVATE HELPERS
@@ -115,9 +113,9 @@ export function Web3SwapInterface() {
   }
 
   const getSeuroAddress = async () => {
-    const stgContract = await StandardTokenGateway;
+    const stgContract = await SmartContract;
     //@ts-ignore
-    web3Provider !== undefined && stgContract.methods.TOKEN().call().then((data:never) => {
+    web3Provider !== undefined && stgContract.methods.Seuro().call().then((data:never) => {
       setSeuroAddress(data);
     });
   }
