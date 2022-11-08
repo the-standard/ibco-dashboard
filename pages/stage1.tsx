@@ -10,7 +10,6 @@ import { TokenInformationInterface, BondingCurveInterface } from '../components'
 import { Contract, SmartContractManager, TOKENS } from '../Utils';
 import Footer from '../components/shared/footer';
 import { useWeb3Context } from '../context';
-import { GetJsonAddresses } from '../Utils/ContractManager';
 import { useEffect, useState } from 'react';
 import DescriptionContainer from '../components/shared/uiElements/DescriptionContainer/DescriptionContainer';
 import { StyledGlobalContainer, StyledPushFooter } from '../components/shared/uiElements/styles/SharedStylesGlobal';
@@ -21,13 +20,13 @@ import { CurrentBreakpoint } from '../hooks/BreakpointObserver';
 const Stage1: NextPage = () => {
   const [seuroAddress, setSeuroAddress] = useState('');
   const { network } = useWeb3Context();
-  const _network = network?.name === 'homestead' ? 'main' : network?.name || 'goerli';
   const BondingCurveContract = SmartContractManager('BondingCurve' as Contract).then((data) =>  data);
+  const StandardTokenGateway = SmartContractManager('StandardTokenGateway' as Contract).then((data) => data);
   const [mobile, setMobile] = useState();
   const breakpoint = CurrentBreakpoint();
 
   useEffect(() => {
-    getTokenAddress();
+    getSeuroAddress();
   }, [network]);
 
   useEffect(() => {
@@ -35,16 +34,13 @@ const Stage1: NextPage = () => {
     setMobile(breakpoint !== 'desktop');
   }, [setMobile, breakpoint]);
 
-  const getTokenAddress = async() => {
+  const getSeuroAddress = async () => {
+    const stgContract = await StandardTokenGateway;
     //@ts-ignore
-    return seuroAddress === '' ? await GetJsonAddresses().then((data:never) => {
-      //@ts-ignore
-      setSeuroAddress(data[_network]['TOKEN_ADDRESSES']['SEURO']);
-      return seuroAddress;
-    })
-    :
-    seuroAddress
-  }
+    stgContract.methods.TOKEN().call().then((data:never) => {
+      setSeuroAddress(data);
+    });
+  };
 
   const copyToClipboardClickFunction = () => {
     seuroAddress && AddToMetamaskHelper(seuroAddress);
