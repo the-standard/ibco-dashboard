@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from "react";
-import { isMobile } from "react-device-detect";
 import { ChevronLeft } from 'react-feather';
 import { toast } from "react-toastify";
 import { ClaimRewardContainer, StyledBondHistoryContainer, StyledBackButtonContainer, StyledChevronSpan, StyledBondGridContainer } from './styles';
 import { useWeb3Context } from "../../../../../context";
 import { useRouter } from "next/router";
-import { ConvertFrom, SmartContractManager, TokenContractManager } from "../../../../../Utils";
+import { AddToMetamaskHelper, ConvertFrom, SmartContractManager, TokenContractManager } from "../../../../../Utils";
 import { UserBondsHistoryList } from "../UserBondsHistoryList/UserBondsHistoryList";
 import { StyledStakingHistoryContainer } from "../../../StakeStage/Styles";
 import { StyledGridHeaders } from './styles';
 import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledSupplyContainer } from "../../../SwapStage/Styles";
+import { CurrentBreakpoint } from "../../../../../hooks/BreakpointObserver";
 
 type BondingHistoryInterfaceType = {
     otherTokenData:{
@@ -22,11 +22,11 @@ type BondingHistoryInterfaceType = {
 export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterfaceType) => {
     const { address, web3Provider } = useWeb3Context();
     const router = useRouter();
-    //const [time, setTime] = useState(30);
+    const [time, setTime] = useState(30);
     const [userBonds, setUserBonds] = useState([]);
-    const [copied, setCopied] = useState(false);
     const [claimAmount, setClaimAmount] = useState('0');
     const [mobile, setMobile] = useState();
+    const breakpoint = CurrentBreakpoint();
     const [disableClaim, setDisableClaim] = useState(false);
     const [tstTokenInfo, setTstTokenInfo] = useState({
         tokenAddress: '',
@@ -36,11 +36,12 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
     const BondStorageContract = SmartContractManager('BondStorage').then((data) => data);
     const TSTTokenInfoContract = SmartContractManager('StandardTokenGateway').then((data) => data);
     const TokenContract_TST = TokenContractManager(tstTokenInfo.tokenAddress).then((data) => data);
+    
 
     useEffect(() => {
-        //@ts-ignore
-        setMobile(isMobile)
-      }, [setMobile]);
+      //@ts-ignore
+      setMobile(breakpoint !== 'desktop');
+    }, [setMobile, breakpoint]);
 
     useEffect(() => {
         getUserBonds();
@@ -48,27 +49,36 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
     }, [address])
 
     useEffect(() => {
-        // if(userBonds.length > 0) {
-        //     refreshIntervalTimer;
-        // } else {
-        //     clearInterval(refreshIntervalTimer);
-        // }
-
         getTSTInfo();
     }, [userBonds, tstTokenInfo.tokenAddress]);
 
+    useEffect(() => {
+        //@ts-ignore
+        let timer;
+
+        if(userBonds.length > 0 && !disableClaim) {
+            timer = setInterval(() => {
+                if (time > 0) {
+                    setTime(time => time - 1);
+                }
+              }, 1000);
+
+              if(time <= 0) {
+                clearInterval(timer);
+                setTime(30);
+                getUserBonds();
+              }
+            //@ts-ignore
+              return () => clearInterval(timer);
+        } else {
+            clearInterval(timer)
+        }
+    }, [time, userBonds])
+
    // const refreshIntervalTimer = setInterval(() => {getUserBonds()}, 30000);
 
-    // const startTimer = () => {
-    //     const timer = setInterval(() => {
-    //         time <= 0 && setTime(30);
-    //         setTime(time - 1);
-    //     }, 1000);
-
-    //     userBonds.length > 0 ? timer : clearInterval(timer);
-    // };
-
     const getUserBonds = async() => {
+        setUserBonds([]);
         const bondStorageContract = await (await BondStorageContract);
         //@ts-ignore
         web3Provider && bondStorageContract.methods.getUserBonds(address).call().then((data:never) => {
@@ -129,8 +139,8 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
     };
 
     const copyToClipboardClickFunction = () => {
-        navigator.clipboard.writeText(tstTokenInfo.tokenAddress).then(() => {toast.success('Copied to clipboard, please import token into MetaMask'); setCopied(true)}).catch(() => {toast.error('Unable to copy address, please manually select and copy'); setCopied(false)});
-      }
+        tstTokenInfo.tokenAddress && AddToMetamaskHelper(tstTokenInfo.tokenAddress);
+    }
 
     const backButton = () => router.push({query: {}})
 
@@ -144,7 +154,7 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
                 <StyledBondGridContainer>
                 <StyledSupplyContainer className="extraMarginBottom">
                     <h2>{tstTokenInfo.tokenSymbol} Address:</h2> <StyledAddressHolderP>{tstTokenInfo.tokenAddress}</StyledAddressHolderP>
-                    { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
+                    { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
                 </StyledSupplyContainer>
                     {
                         !mobile && (
@@ -168,7 +178,7 @@ export const BondingHistoryInterface = ({otherTokenData}:BondingHistoryInterface
                             <p>No Bonds have been created yet</p>
                         }
                     </StyledStakingHistoryContainer>
-                    {/* {userBonds.length > 0 && <p>Time until refresh: {time} {time < 10 ? 'second' : 'seconds'}</p>} */}
+                    {userBonds.length > 0 && !disableClaim && <p className="timer">Time until refresh: {time} {time > 1 ? 'seconds' : 'second'}</p>}
                 </StyledBondGridContainer>
                 
                 <ClaimRewardContainer>

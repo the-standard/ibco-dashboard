@@ -11,6 +11,8 @@ export const GlobalColors = {
     superLightGrey: '#616161',
     middleGrey: '#5E5E5E',
     darkGrey: '#272727',
+    disabledGrey: '#4e4e4e',
+    horizontalRuleGrey: '#494949',
     grey: '#252524',
     black: '#000000',
     red: '#cb4464',

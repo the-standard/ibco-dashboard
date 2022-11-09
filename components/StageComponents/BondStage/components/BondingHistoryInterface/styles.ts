@@ -52,6 +52,12 @@ export const ClaimRewardContainer = styled.div`
 export const StyledBondGridContainer = styled.div`
     width: 100%;
 
+    & p.timer {
+        color: ${props => props.theme.colors.cyan};
+        font-size: 12px;
+        text-align: right;
+    }
+
 `;
 
 export const StyledBackButtonContainer = styled.div`

@@ -4,7 +4,7 @@ import Footer from '../components/shared/footer'
 import ConnectNav from '../components/shared/navigation/ConnectNav'
 import SubNavigation from '../components/shared/navigation/SubNavigation'
 import NextHeadComponent from '../components/shared/NextHeadComponent'
-import { StyledGlobalContainer } from '../components/shared/uiElements/styles/SharedStylesGlobal'
+import { StyledGlobalContainer, StyledPushFooter } from '../components/shared/uiElements/styles/SharedStylesGlobal'
 import { StyledMainContainer } from '../components/StageComponents/StakeStage/Styles'
 
 const Stage3: NextPage = () => {
@@ -15,11 +15,14 @@ const Stage3: NextPage = () => {
       <ConnectNav />
       <SubNavigation />
 
-      <StyledMainContainer>
-        <Web3StakingInterface />
-      </StyledMainContainer>
+      <StyledPushFooter>
+        <StyledMainContainer>
+          <Web3StakingInterface />
+        </StyledMainContainer>
+        
+        <Footer />
+      </StyledPushFooter>
       
-      <Footer />
     </StyledGlobalContainer>
   )
 }

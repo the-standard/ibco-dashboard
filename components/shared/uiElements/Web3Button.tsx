@@ -1,7 +1,7 @@
 import React from 'react'
 import { useWeb3Context } from '../../../context/'
 import { Web3Address } from './Web3Address';
-import { CreditCard } from 'react-feather';
+import { FaWallet } from 'react-icons/fa';
 import { StyledWeb3ButtonContainer, StyledDisconnectButton, StyledMainConnectButton } from './styles/Web3ButtonStyles';
 
 interface ConnectProps {
@@ -9,7 +9,7 @@ interface ConnectProps {
 }
 const ConnectButton = ({ connect }: ConnectProps) => {
   return connect ? (
-    <StyledMainConnectButton className="connectButton" onClick={connect}><span><CreditCard size={20} /></span> Connect Wallet</StyledMainConnectButton>
+    <StyledMainConnectButton className="connectButton" onClick={connect}><span><FaWallet /></span> Connect Wallet</StyledMainConnectButton>
   ) : (
     <button className="px-3 py-2">Loading...</button>
   )

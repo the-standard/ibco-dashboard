@@ -1,24 +1,36 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from "react";
 import { Web3Button } from "../../../components/shared/uiElements/Web3Button";
-import { isMobile } from "react-device-detect";
-import { StyledConnectNavContainer, StyledLogoContainer } from "./styles/ConnectNavStyles";
-// import { StyledConnectNavContainer, StyledLogoContainer, StyledMobileConnectNavContainer, StyledMobileConnectNavDropdownContainer, StyledMobileLinksContainer } from "./styles/ConnectNavStyles";
-// import { Menu, X } from 'react-feather';
-// import { FooterLinks } from "../footerLinks";
+import { StyledConnectNavContainer, StyledLogoContainer, StyledMobileConnectNavContainer, StyledMobileConnectNavDropdownContainer, StyledMobileLinksContainer } from "./styles/ConnectNavStyles";
+import Cookies from 'universal-cookie';
+import { FaBars } from 'react-icons/fa';
+import { GrClose } from 'react-icons/gr';
+import { FooterLinks } from "../footerLinks";
+import { CurrentBreakpoint } from "../../../hooks/BreakpointObserver";
 
 const ConnectNav = () => {
+    const cookies = new Cookies();
     const [mobile, setMobile] = useState();
-    // const [openState, setOpenState] = useState(false);
+    const [terms, setTerms] = useState<boolean>();
+    const [openState, setOpenState] = useState(false);
+    const breakpoint = CurrentBreakpoint();
+    
 
     useEffect(() => {
       //@ts-ignore
-      setMobile(isMobile)
-    }, [setMobile]);
+      setMobile(breakpoint !== 'desktop');
+    }, [setMobile, breakpoint]);
 
-    // const mobileOpenClickHandler = () => {
-    //   setOpenState(!openState);
-    // }
+    useEffect(() => {
+      const x = cookies.get('_ibcotv1');
+      if (!!x) {
+        setTerms(true);
+      };
+    }, [terms]);
+
+    const mobileOpenClickHandler = () => {
+      setOpenState(!openState);
+    }
 
     return (
       <StyledConnectNavContainer>
@@ -32,17 +44,17 @@ const ConnectNav = () => {
             }
           </StyledLogoContainer>
 
-        {!mobile ?
-        <nav className="grid justify-items-end p-4">
+        {!mobile && terms ?
+        <nav>
           <Web3Button />
         </nav>
         :
-        <nav className="grid justify-items-end p-4">
-          {/*  <StyledMobileConnectNavContainer>
-            <a className="mobileMenuClickHandler" onClick={mobileOpenClickHandler}>{!openState ? <Menu size={30} /> : <X size={30}/>}</a>
+        <nav>
+          <StyledMobileConnectNavContainer>
+            <a className="mobileMenuClickHandler" onClick={mobileOpenClickHandler}>{!openState ? <FaBars /> : <GrClose />}</a>
 
             {
-              openState && (
+              openState && terms && (
                 <StyledMobileConnectNavDropdownContainer>
                   <Web3Button />
 
@@ -53,7 +65,7 @@ const ConnectNav = () => {
               )
             }
 
-          </StyledMobileConnectNavContainer> */}
+          </StyledMobileConnectNavContainer>
 
         </nav>
         }

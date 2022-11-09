@@ -426,9 +426,9 @@ function Web3BondInterface() {
         setDisabledSend(true);
         // @ts-ignore
         toast.success(`Transaction success: ${data['transactionHash']}`);
-      }).catch((error:never) => {
+      }).catch(() => {
         setLoadingTransaction(false);
-        toast.error(`Error creating new bond: ${ error}`);
+        toast.error(`Error creating new bond, please try again`);
       });
   }
 
@@ -437,11 +437,11 @@ function Web3BondInterface() {
   return !showHistoryInterface ? (
     <StyledMainContainer>
     <DescriptionContainer>
-      <b>What is sEURO bonding?</b> Earn TST when you bond your {TOKENS.DISPLAY.SEURO} and {otherTokenSymbol}. When your bond expires, you will receive the total EURO value of your bonded assets (paid in TST). Plus a generous reward (also in TST)!
+      <b>What is sEURO bonding?</b> Receive TST when you add your {TOKENS.DISPLAY.SEURO} and {otherTokenSymbol} to the liquidity pool. Lock up your assets, wait the bond period, and claim the reward. You will receive an amount of TST corresponding to the value of the bonded assets plus an interest rate reward of it. Your TST can then be used for protocol governance and staking in Stage 3!
     </DescriptionContainer>
 
     <StyledBondingHistoryButtonContainer>
-      <StyledBondingHistoryButton onClick={bondingHistoryClickHandler}>View History</StyledBondingHistoryButton>
+      <StyledBondingHistoryButton onClick={bondingHistoryClickHandler}>Rewards</StyledBondingHistoryButton>
     </StyledBondingHistoryButtonContainer>
 
     <StyledBondingInterfaceContainer>

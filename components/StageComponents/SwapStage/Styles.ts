@@ -52,6 +52,10 @@ export const StyledSupplyContainer = styled.div`
         &.extraMarginBottom {
             margin-bottom: 3em;
         }
+
+        &.extraMarginTop {
+            margin-top: 18px;
+        }
     `}
 `;
 
@@ -91,8 +95,10 @@ export const StyledTokenInformationContainer = styled.div`
     font-size: 16px;
 
     & > div {
+        display: flex;
         min-width: 50%;
         font-size: 1.1em;
+        flex-direction: row;
     }
 
     & h2 {
@@ -103,8 +109,7 @@ export const StyledTokenInformationContainer = styled.div`
 
     & p {
         font-size: 16px;
-        margin-top: 0.4em;
-        margin-bottom: 0;
+        margin: 0 0 0 10px;
     }
 
     & h2,

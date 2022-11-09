@@ -3,16 +3,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react"
 import { useWeb3Context } from "../../../context";
-import { isMobile } from "react-device-detect";
-import { Contract, SmartContractManager, StakingContractManager, TokenContractManager } from "../../../Utils";
+import { AddToMetamaskHelper, Contract, SmartContractManager, StakingContractManager, TokenContractManager } from "../../../Utils";
 import { StakingList } from "./components/StakingList";
 import { StakingInterface } from "./components/StakingInterface";
 import { StakingHistoryList } from './components/StakingHistoryList';
 import DescriptionContainer from "../../shared/uiElements/DescriptionContainer/DescriptionContainer";
 import { StyledAddressHolderP, StyledCopyButton, StyledDesktopCopyButton, StyledSupplyContainer } from "../SwapStage/Styles";
-import { toast } from "react-toastify";
 import { StyledStakingHistoryContainer } from "./Styles";
 import { StyledGridHeaders } from "./styles/StakingListStyles";
+import { CurrentBreakpoint } from "../../../hooks/BreakpointObserver";
 
 export const Web3StakingInterface = () => {
     const { address, web3Provider } = useWeb3Context();
@@ -24,15 +23,24 @@ export const Web3StakingInterface = () => {
     const [stakeHistory, setStakeHistory] = useState<string[]>([]);
     const [stakeFilteredHistory, setStakeFilteredHistory] = useState<string[]>([]);
     const [mobile, setMobile] = useState();
-    const [copied, setCopied] = useState(false);
+    const breakpoint = CurrentBreakpoint();
+    const [tstSeuroPrice, setTstSeuroPrice] = useState(0);
 
     const StakingContract = SmartContractManager('StakingDirectory' as Contract).then((data) => data);
+    const StandardTokenContract = SmartContractManager('StandardTokenGateway' as Contract).then((data) =>  data);
     const TokenContract_TST = TokenContractManager(tokenAddress).then((data) => data);
 
     useEffect(() => {
-        //@ts-ignore
-        setMobile(isMobile)
-      }, [setMobile]);
+        if (web3Provider) {
+            getTstSeuroPrice();
+        }
+    }, [web3Provider]);
+    
+
+    useEffect(() => {
+      //@ts-ignore
+      setMobile(breakpoint !== 'desktop');
+    }, [setMobile, breakpoint]);
 
     useEffect(() => {
         getPositions();
@@ -47,7 +55,15 @@ export const Web3StakingInterface = () => {
         //@ts-ignore
        const newArray = stakeHistory.length > 1 && [...new Map(stakeHistory.map(item => [item['address'], item])).values()];
        newArray && setStakeFilteredHistory(newArray)
-    }, [stakeHistory])
+    }, [stakeHistory]);
+
+    const getTstSeuroPrice = async () => {
+        const standardTokenContractInit = await StandardTokenContract;
+        //@ts-ignore
+        standardTokenContractInit.methods.priceTstEur().call().then((data:never) => {
+            setTstSeuroPrice(data)
+        })
+    };
 
     const getTokenAddress = async (stakeAddress:string) => {
         const StakingContract = StakingContractManager(stakeAddress as Contract).then((data) => data);
@@ -96,26 +112,31 @@ export const Web3StakingInterface = () => {
     }
 
     const copyToClipboardClickFunction = () => {
-        navigator.clipboard.writeText(tokenAddress).then(() => {toast.success('Copied to clipboard, please import token into MetaMask'); setCopied(true)}).catch(() => {toast.error('Unable to copy address, please manually select and copy'); setCopied(false)});
+        tokenAddress && AddToMetamaskHelper(tokenAddress);
     }
 
    return !ShowStakingInterface ? (
     <>
     <DescriptionContainer>
-        <b>What is staking?</b> Similar to the bonding event, a user can transfer their TST during limited time periods. This means that there will be one or multiple campaigns throughout the year where staking is possible with varying interest rates. If the user decides to participate then, at the end of the period, the initial amount of TST is returned to the user and an interest payment on top of it, paid in sEURO.
+        <b>What is staking?</b> Stake your TST for a time period and have them returned to you with a staking reward in sEURO. There will be various of staking events throughout the year with varying staking reward rates. Stake now to allow your TST to work for you!
     </DescriptionContainer>
 
     <div>
         <StyledSupplyContainer>
               <h2>{tokenSymbol} Address:</h2> <StyledAddressHolderP>{tokenAddress}</StyledAddressHolderP>
-             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>{copied ? 'Copied to clipboard' : 'Add to MetaMask'}</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
-            </StyledSupplyContainer>
+             { mobile ? <StyledCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledCopyButton> : <StyledDesktopCopyButton onClick={copyToClipboardClickFunction}>Add to MetaMask</StyledDesktopCopyButton>}
+        </StyledSupplyContainer>
+
+        <StyledSupplyContainer className="extraMarginTop">
+              <h2>{tokenSymbol} Current Price:</h2> <StyledAddressHolderP>{((tstSeuroPrice / 100000000)).toLocaleString(undefined, { minimumFractionDigits: 2 })} sEURO</StyledAddressHolderP>
+        </StyledSupplyContainer>
         {
         !mobile && (
         <StyledGridHeaders>
             <span>Opening</span>
             <span>Status</span>
-            <span className="flex2">&nbsp;</span>
+            <span>Maturity</span>
+            <span>&nbsp;</span>
         </StyledGridHeaders> 
         )
         

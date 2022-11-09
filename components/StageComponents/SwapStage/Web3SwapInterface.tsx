@@ -23,6 +23,7 @@ import SwapSuccessModal from '../../shared/uiElements/Modal/SwapSuccessModal/Swa
 export function Web3SwapInterface() {
   const { address, network, web3Provider } = useWeb3Context();
   const [contractAddresses, setContractAddresses] = useState({});
+  const [seuroAddress, setSeuroAddress] = useState();
   const [from, setFrom] = useState('0');
   const [to, setTo] = useState(0.0);
   const [token, setToken] = useState({token: TOKENS.HUMAN_READABLE.ETH, address: ''});
@@ -60,6 +61,7 @@ export function Web3SwapInterface() {
     setEtherscanUrl(network?.name === 'homestead' ? 'https://etherscan.io' : `https://${network?.name}.etherscan.io`);
 
     getContractAddresses();
+    getSeuroAddress();
   }, [network]);
 
   useEffect(() => {
@@ -75,10 +77,9 @@ export function Web3SwapInterface() {
       const _from:string = from || '0';
       const _deposit:number = ConvertTo(_from, tokenDecimal).toInt();
       //@ts-ignore
-      const contractAddress = getSeuroAddress();
       isTokenNotEth(token.token) ? setTokenApprove(_from !== '' && allowance >= _deposit) : setTokenApprove(true);
       //@ts-ignore
-      isTokenNotEth(token.token) && checkAllowance(address, contractAddress);
+      isTokenNotEth(token.token) && checkAllowance(address, seuroAddress);
     }
   }, [from])
 
@@ -111,10 +112,12 @@ export function Web3SwapInterface() {
      }) : contractAddresses
   }
 
-  const getSeuroAddress = () => {
+  const getSeuroAddress = async () => {
+    const stgContract = await SmartContract;
     //@ts-ignore
-    const contractAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['SEuroOffering'];
-    return contractAddress;
+    web3Provider !== undefined && stgContract.methods.Seuro().call().then((data:never) => {
+      setSeuroAddress(data);
+    });
   }
 
   //MAIN FUNCTIONS

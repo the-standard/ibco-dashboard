@@ -35,6 +35,7 @@ export default createGlobalStyle`
     color: #282828;
     border-radius: 3px;
     opacity: 100%;
+    cursor: pointer;
   }
 
   input {
@@ -43,6 +44,8 @@ export default createGlobalStyle`
     background-color: #282828;
     outline: none;
     padding: 0.8em;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
   }
 
   input::-webkit-outer-spin-button,
@@ -66,10 +69,9 @@ export default createGlobalStyle`
   }
 
   button:disabled {
-    background: #99f9ff;
-    color: #282828;
+    background: ${props => props.theme.colors.disabledGrey};
+    color: ${props => props.theme.colors.black};
     cursor: not-allowed;
-    opacity: 60%;
   }
 
   .greyText {
@@ -107,6 +109,8 @@ export default createGlobalStyle`
     align-items: center;
     width: 100%;
     justify-content: center;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
 
     &.readOnly {
       border-color: ${props => props.theme.colors.superLightGrey} !important;
