@@ -41,7 +41,9 @@ const getContractABI = async(contract:string) => {
 }
 
 const getContractAddressessJson = async() => {
-    return await axios.get(`https://raw.githubusercontent.com/the-standard/ibco-addresses/main/addresses.json`).then((data) => data)
+    const env = process.env.NEXT_PUBLIC_ENV === 'prod' ? 'prod' : 'beta';
+    console.log('env', env);
+    return await axios.get(`https://raw.githubusercontent.com/the-standard/ibco-addresses/main/addresses.${env}.json`).then((data) => data)
 }
 
 /**
