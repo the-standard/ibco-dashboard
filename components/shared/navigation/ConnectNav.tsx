@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from "react";
 import { Web3Button } from "../../../components/shared/uiElements/Web3Button";
-import { StyledConnectNavContainer, StyledLogoContainer, StyledMobileConnectNavContainer, StyledMobileConnectNavDropdownContainer, StyledMobileLinksContainer } from "./styles/ConnectNavStyles";
+import { StyledConnectNavContainer, StyledLogoContainer } from "./styles/ConnectNavStyles";
 import Cookies from 'universal-cookie';
-import { FaBars } from 'react-icons/fa';
-import { GrClose } from 'react-icons/gr';
-import { FooterLinks } from "../footerLinks";
+// import { FaBars } from 'react-icons/fa';
+// import { GrClose } from 'react-icons/gr';
+// import { FooterLinks } from "../footerLinks";
 import { CurrentBreakpoint } from "../../../hooks/BreakpointObserver";
 
 const ConnectNav = () => {
     const cookies = new Cookies();
     const [mobile, setMobile] = useState();
     const [terms, setTerms] = useState<boolean>();
-    const [openState, setOpenState] = useState(false);
+    // const [openState, setOpenState] = useState(false);
     const breakpoint = CurrentBreakpoint();
     
 
@@ -28,9 +28,9 @@ const ConnectNav = () => {
       };
     }, [terms]);
 
-    const mobileOpenClickHandler = () => {
-      setOpenState(!openState);
-    }
+    // const mobileOpenClickHandler = () => {
+    //   setOpenState(!openState);
+    // }
 
     return (
       <StyledConnectNavContainer>
@@ -50,7 +50,7 @@ const ConnectNav = () => {
         </nav>
         :
         <nav>
-          <StyledMobileConnectNavContainer>
+          {/* <StyledMobileConnectNavContainer>
             <a className="mobileMenuClickHandler" onClick={mobileOpenClickHandler}>{!openState ? <FaBars /> : <GrClose />}</a>
 
             {
@@ -65,7 +65,7 @@ const ConnectNav = () => {
               )
             }
 
-          </StyledMobileConnectNavContainer>
+          </StyledMobileConnectNavContainer> */}
 
         </nav>
         }
