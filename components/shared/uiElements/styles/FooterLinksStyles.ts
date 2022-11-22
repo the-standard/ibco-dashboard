@@ -30,13 +30,13 @@ export const StyledFooterSocialContainer = styled.div`
     display: flex;
     justify-content: space-between;
     margin: 1.5em auto;
-    max-width: 10%;
+    max-width: 14%;
     display: flex;
 
     & a {
         color: ${props => props.theme.colors.white};
         text-decoration: none;
-        font-size: 26px;
+        font-size: 20px;
     }
 `;
 

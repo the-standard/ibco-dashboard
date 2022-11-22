@@ -41,8 +41,7 @@ const getContractABI = async(contract:string) => {
 }
 
 const getContractAddressessJson = async() => {
-    const env = process.env.NEXT_PUBLIC_ENV === 'prod' ? 'prod' : 'beta';
-    return await axios.get(`https://raw.githubusercontent.com/the-standard/ibco-addresses/main/addresses.${env}.json`).then((data) => data)
+    return await axios.get(`https://raw.githubusercontent.com/the-standard/ibco-addresses/main/addresses.json`).then((data) => data)
 }
 
 /**
@@ -67,7 +66,7 @@ export const TokenContractManager = async (token:string) => {
     
     const web3Interface = Web3Manager();
     //@ts-ignore
-    const _network = await web3Interface.eth.net.getNetworkType() === 'main' ? 'mainnet' : 'goerli';
+    const _network = await web3Interface.eth.net.getNetworkType() || 'goerli';
     // @ts-ignore
     const ERC20ABIItem:AbiItem = ERC20ABI;
     //@ts-ignore
@@ -94,7 +93,7 @@ export const TokenContractManager = async (token:string) => {
  */
 export const SmartContractManager = async (contract:Contract) => {
     const web3Interface = Web3Manager();
-    const _network = await web3Interface.eth.net.getNetworkType() === 'main' ? 'mainnet' : 'goerli';
+    const _network = await web3Interface.eth.net.getNetworkType() || 'goerli';
 
     return await getContractABI(contract)
                     .then(async (ABIData) => {

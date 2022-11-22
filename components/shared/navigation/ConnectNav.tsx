@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from "react";
 import { Web3Button } from "../../../components/shared/uiElements/Web3Button";
-import { StyledConnectNavContainer, StyledLogoContainer } from "./styles/ConnectNavStyles";
+import { StyledConnectNavContainer, StyledLogoContainer, StyledMobileConnectNavContainer, StyledMobileConnectNavDropdownContainer, StyledMobileLinksContainer } from "./styles/ConnectNavStyles";
 import Cookies from 'universal-cookie';
-// import { FaBars } from 'react-icons/fa';
-// import { GrClose } from 'react-icons/gr';
-// import { FooterLinks } from "../footerLinks";
+import { FaBars } from 'react-icons/fa';
+import { GrClose } from 'react-icons/gr';
+import { FooterLinks } from "../footerLinks";
 import { CurrentBreakpoint } from "../../../hooks/BreakpointObserver";
 
 const ConnectNav = () => {
     const cookies = new Cookies();
     const [mobile, setMobile] = useState();
     const [terms, setTerms] = useState<boolean>();
-    // const [openState, setOpenState] = useState(false);
+    const [openState, setOpenState] = useState(false);
     const breakpoint = CurrentBreakpoint();
     
 
@@ -28,15 +28,8 @@ const ConnectNav = () => {
       };
     }, [terms]);
 
-    useEffect(() => {
-      const x = cookies.get('_ibcotv1');
-      if (!!x) {
-        setTerms(true);
-      };
-    }, [terms]);
-
     const mobileOpenClickHandler = () => {
-      //setOpenState(!openState);
+      setOpenState(!openState);
     }
 
     return (
@@ -57,14 +50,14 @@ const ConnectNav = () => {
         </nav>
         :
         <nav>
-          {
-          /* <StyledMobileConnectNavContainer>
+          <StyledMobileConnectNavContainer>
             <a className="mobileMenuClickHandler" onClick={mobileOpenClickHandler}>{!openState ? <FaBars /> : <GrClose />}</a>
 
             {
               openState && terms && (
                 <StyledMobileConnectNavDropdownContainer>
                   <Web3Button />
+
                   <StyledMobileLinksContainer>
                     <FooterLinks />
                   </StyledMobileLinksContainer>
@@ -73,9 +66,9 @@ const ConnectNav = () => {
             }
 
           </StyledMobileConnectNavContainer>
-          */}
+
         </nav>
-          
+        }
       </StyledConnectNavContainer>
     )
 }

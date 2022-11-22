@@ -78,7 +78,7 @@ function Web3BondInterface() {
 
   // MAIN UPDATE FUNCTIONS
   useEffect(() => {
-    setNetwork(network?.name === 'homestead' ? 'mainnet' : network?.name);
+    setNetwork(network?.name === 'homestead' ? 'main' : network?.name);
     setEtherscanUrl(network?.name === 'homestead' ? 'https://etherscan.io' : `https://${network?.name}.etherscan.io`);
     getContractAddresses();
   }, [network]);
