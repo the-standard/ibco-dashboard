@@ -35,6 +35,8 @@ export const StyledTokenInfoRightCol =styled.div`
 export const StyledSupplyContainer = styled.div`
     background-color: ${props => props.theme.colors.darkGrey};
     padding: 1em 1.5em;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px ${props => props.theme.colors.black};
 
     & h2 {
         font-size: 16px;
@@ -93,6 +95,8 @@ export const StyledTokenInformationContainer = styled.div`
     padding: 1em 1.5em;
     margin: 8px 0;
     font-size: 16px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px ${props => props.theme.colors.black};
 
     & > div {
         display: flex;
@@ -133,6 +137,8 @@ export const StyledSwapInterfaceContainer = styled.div`
     background-color: ${props => props.theme.colors.darkGrey};
     margin: 1em 0;
     font-size: 14px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px ${props => props.theme.colors.black};
 
     ${media.desktop`
         margin: 0;
@@ -189,4 +195,6 @@ export const StyledBondingCurveContainer = styled.div`
     font-size: 16px;
     padding 2em 1.5em;
     background-color: ${props => props.theme.colors.darkGrey};
+    border-radius: 4px;
+    box-shadow: 0 2px 4px ${props => props.theme.colors.black};
 `;
