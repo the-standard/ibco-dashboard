@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useCallback } from 'react'
 import { ethers } from 'ethers'
 import Web3Modal from 'web3modal'
+import Cookies from 'universal-cookie';
 
 import {
   Web3ProviderState,
@@ -10,6 +11,8 @@ import {
 } from '../reducers'
 
 import { toast } from 'react-toastify'
+
+const cookies = new Cookies();
 
 const providerOptions = {
 }
@@ -36,9 +39,10 @@ export const useWeb3 = () => {
         const signer = web3Provider.getSigner()
         const address = await signer.getAddress()
         const network = await web3Provider.getNetwork()
+        const termsCookie = cookies.get('_ibcotv1');
 
         toast.success(`Connected to wallet: ${address.substring(0, 5)}...${address.slice(-4)}`);
-        if (!window.location.href.includes('/stage')) window.location.href = '/stage1';
+        if (!window.location.href.includes('/stage') && termsCookie !== undefined) window.location.href = '/stage1';
 
         dispatch({
           type: 'SET_WEB3_PROVIDER',
@@ -56,7 +60,8 @@ export const useWeb3 = () => {
   }, [])
 
   const redirectIfStagePage = () => {
-    if (window.location.href.includes('/stage')) window.location.href = '/';
+    const termsCookie = cookies.get('_ibcotv1');
+    if (window.location.href.includes('/stage') || termsCookie === undefined) window.location.href = '/';
   }
 
   const disconnect = useCallback(async () => {
