@@ -42,7 +42,11 @@ const getContractABI = async(contract:string) => {
 
 const getContractAddressessJson = async() => {
     const location = process.env.NEXT_PUBLIC_ENV !== 'prod' ? 'beta' : process.env.NEXT_PUBLIC_ENV;
-    return await axios.get(`https://raw.githubusercontent.com/the-standard/ibco-addresses/main/addresses.${location}.json`).then((data) => data)
+    console.log('environment location', location);
+    return await axios.get(`https://raw.githubusercontent.com/the-standard/ibco-addresses/main/addresses.${location}.json`).then((data) => {
+        console.log('using address list:', data);
+        return data
+    })
 }
 
 /**
@@ -71,6 +75,7 @@ export const TokenContractManager = async (token:string) => {
     const tokenAddress = token !== null && token.slice(0,2) === '0x' && token;
 
     if (tokenAddress !== undefined) {
+        console.log('conecting to token contract address:', tokenAddress);
         // @ts-ignore
         const contract = new web3Interface.eth.Contract(ERC20ABIItem, tokenAddress);
 
@@ -93,6 +98,7 @@ export const SmartContractManager = async (contract:Contract) => {
                     .then(async (ABIData) => {
                         return await GetJsonAddresses()
                             .then(async (contractAddress) => {
+                                console.log('conecting to contract:', contract, 'at address:',  contractAddress[_network]['CONTRACT_ADDRESSES'][contract]);
                                 const _contract = new web3Interface.eth.Contract(ABIData['data'].abi, contractAddress[_network]['CONTRACT_ADDRESSES'][contract]);
 
                                 return _contract
