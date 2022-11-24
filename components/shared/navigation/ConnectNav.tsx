@@ -38,9 +38,9 @@ const ConnectNav = () => {
           <StyledLogoContainer>
             {
               !mobile ?
-                <img src='/Images/theStandardLogo.svg' alt='The Standard' width='100%' />
+                <a href="https://www.thestandard.io/" rel="noreferrer" target="_blank"><img src='/Images/theStandardLogo.svg' alt='The Standard' width='100%' /></a>
               :
-                <img src='/Images/StandardLogo-Icon.svg' alt='The Standard Icon' width='25px' />
+              <a href="https://www.thestandard.io/" rel="noreferrer" target="_blank"><img src='/Images/StandardLogo-Icon.svg' alt='The Standard Icon' width='25px' /></a>
             }
           </StyledLogoContainer>
 

@@ -56,6 +56,9 @@ const Home: NextPage = () => {
         { !terms ?
             <StyledSupplyContainer>
             <span style={{ padding: '20px' }}>
+              <h2>Disclaimer</h2>
+              <p>The Standard.io is a fully decentralized stablecoin. No representation or warranty is made concerning any aspect of the The Standard.io, including its suitability, quality, availability, accessibility, accuracy or safety. As more fully explained in the Terms of Use, your access to and use of the The Standard.io and smart contracts through this interface is entirely at your own risk and could lead to substantial losses. You take full responsibility for your use of the interface, and acknowledge that you use it on the basis of your own enquiry, without solicitation or inducement by Contributors (as defined in the Terms of Use).</p>
+              <p>This interface is not available to residents of Belarus, the Central African Republic, the Democratic Republic of Congo, the Democratic People’s Republic of Korea, the Crimea region of Ukraine, Cuba, Iran, Libya, Somalia, Sudan, South Sudan, Syria, the USA, Yemen, and Zimbabwe or any other jurisdiction in which accessing or using The Standard.io is prohibited (“Prohibited Jurisdictions”). In using this interface, you confirm that you are not located in, incorporated or otherwise established in, or a citizen or resident of, a Prohibited Jurisdiction.</p>
             <label>
               <input
                 type="checkbox"
@@ -63,7 +66,7 @@ const Home: NextPage = () => {
                 onChange={handleChange}
               />
             </label>
-            &nbsp; I pinky promise I&apos;m not from one of the places that&apos;s not allowed to use IBCO.
+            &nbsp; I confirm that I have read, understand and accept the Terms of Use
             </span>
         </StyledSupplyContainer> : '' }
 

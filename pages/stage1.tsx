@@ -56,7 +56,7 @@ const Stage1: NextPage = () => {
       <StyledPushFooter>
          <main>
         <DescriptionContainer>
-          <b>What is Stage 1?</b> Time to swap your crypto for sEURO. To make it even more attractive, we have made it such that in the beginning, one sEURO only costs 0.8 EUR. You can watch the bonding curve to follow the price evolution. This discount declines until the total supply has been exhausted so don't wait too long!
+          Stage1: Initial Discount Curve Offering for Standard Euro (sEURO)<br />Mint sEURO at a massive discount starting at 80 cents. As more liquidity comes into the pool, the discount will become less until we reach a 1:1 peg. The sEURO is only considered a stablecoin once the Stage 1 discount reaches 1:1 and the protocol controlled value is greater than the sEURO minted.
         </DescriptionContainer>
 
         <StyledLeftRightColContainer>
