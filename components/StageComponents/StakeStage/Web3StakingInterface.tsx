@@ -118,7 +118,7 @@ export const Web3StakingInterface = () => {
    return !ShowStakingInterface ? (
     <>
     <DescriptionContainer>
-    Stage 3: Staking The Standard Token (TST)<br />The yields of this pooled fund will initially be rewarded to TST stakers and later also help the protocols treasury for R&D, marketing, and expansion. All yields paid out will be paid out in SEURO. Your TST will be locked in until the maturity date.
+    Stage 3: Staking The Standard Token (TST)<br />The yields of this pooled fund will initially be rewarded to TST stakers and later also help the protocol's treasury for R&D, marketing, and expansion. All yields paid out will be paid out in sEURO. Your TST will be locked in until the maturity date.
     </DescriptionContainer>
 
     <div>

@@ -66,7 +66,7 @@ const Home: NextPage = () => {
                 onChange={handleChange}
               />
             </label>
-            &nbsp; I confirm that I have read, understand and accept the Terms of Use
+            &nbsp; I confirm that I have read, understood and accept the Terms of Use
             </span>
         </StyledSupplyContainer> : '' }
 
