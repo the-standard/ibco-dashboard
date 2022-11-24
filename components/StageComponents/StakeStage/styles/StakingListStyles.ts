@@ -143,6 +143,8 @@ export const StyledGridHeaders = styled.div`
 export const StyledStakingHistorySelector = styled.div`
         display: flex;
         font-size: 15px;
+        border-radius: 4px;
+    box-shadow: 0 2px 4px ${props => props.theme.colors.black};
 
         & > span {
             flex: 1;

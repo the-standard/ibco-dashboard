@@ -17,6 +17,8 @@ export const StyledMainContainer = styled.main`
 export const StyledBondingInterfaceContainer = styled.div`
     background-color: ${props => props.theme.colors.darkGrey};
     padding: 2.5em 1.5em;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px ${props => props.theme.colors.black};
 
     ${media.desktop`
         position: relative;
@@ -29,6 +31,8 @@ export const StyledBondingHistoryButtonContainer = styled.div`
     background-color: ${props => props.theme.colors.darkGrey};
     margin: -20px 0 1em 0;
     padding-bottom: 1em;
+    border-radius: 4px;
+    box-shadow: 0 4px 4px ${props => props.theme.colors.black};
 
     ${media.desktop`
         position: relative;

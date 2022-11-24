@@ -94,7 +94,7 @@ export const TokenInformationInterface = ({bondingCurveContract}) => {
             </div>
             <div>
                 <h2>sEURO Price:</h2>
-                <p>&euro;{ConvertFrom(tokenInfo.seuroPrice, 18).toFloat().toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                <p>&euro;{tokenInfo.ibcoTotalSupply <= 0 ? '0.80' : ConvertFrom(tokenInfo.seuroPrice, 18).toFloat().toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
             </div>
             <div>
                 <h2>TST/sEURO Price:</h2>
