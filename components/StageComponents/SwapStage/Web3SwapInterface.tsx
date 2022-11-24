@@ -50,6 +50,7 @@ export function Web3SwapInterface() {
   //@ts-ignore
   const TokenContract = TokenContractManager(token.address).then((data) => data);
 
+  console.log('_network', _network !== undefined ? _network : 'locating network please wait...');
   // PRIVATE HELPERS
   const isTokenNotEth = (token:string) => {
     return token !== TOKENS.HUMAN_READABLE.ETH
