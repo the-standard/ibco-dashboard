@@ -83,7 +83,7 @@ jobs:
     # 
     - name: Build
       run: |-
-        docker build --build-arg COMMIT=${GITHUB_SHA} -t "gcr.io/$PROJECT_NAME/$DEPLOYMENT:${GITHUB_REF##*/}.$GITHUB_SHA" .
+        docker build --build-arg ENV=${prod} COMMIT=${GITHUB_SHA} -t "gcr.io/$PROJECT_NAME/$DEPLOYMENT:${GITHUB_REF##*/}.$GITHUB_SHA" .
 
     # Push the Docker image to Google Container Registry
     - name: Publish
