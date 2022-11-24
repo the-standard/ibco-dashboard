@@ -5,11 +5,11 @@ import { StyledWalletAddressContainer, StyledWalletNetworkContainer, StyledWeb3A
 
 export function Web3Address() {
   const { address, network } = useWeb3Context();
-  const _network = network?.name === 'homestead' ? 'main' : network?.name;
+  const _network = network?.name === 'homestead' ? 'mainnet' : network?.name;
 
   return (
     <StyledWeb3AddressContainer>
-          {_network !== 'main' && <StyledWalletNetworkContainer>
+          {_network !== 'mainnet' && <StyledWalletNetworkContainer>
           {
             // @ts-ignore
             _network
