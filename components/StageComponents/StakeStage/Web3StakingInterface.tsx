@@ -72,7 +72,7 @@ export const Web3StakingInterface = () => {
         stakingContractInit.methods.TST_ADDRESS().call().then((data:never) => setTokenAddress(data));
 
         const TokenContract = await TokenContract_TST;
-        if(TokenContract && Object.keys(TokenContract).length !== 0) {
+        if(TokenContract && tokenAddress && Object.keys(TokenContract).length !== 0) {
             //@ts-ignore
             TokenContract.methods.symbol().call()
             .then((data:never) => setTokenSymbol(data));
@@ -118,7 +118,7 @@ export const Web3StakingInterface = () => {
    return !ShowStakingInterface ? (
     <>
     <DescriptionContainer>
-        <b>What is staking?</b> Stake your TST for a time period and have them returned to you with a staking reward in sEURO. There will be various of staking events throughout the year with varying staking reward rates. Stake now to allow your TST to work for you!
+    Stage 3: Staking The Standard Token (TST)<br />The yields of this pooled fund will initially be rewarded to TST stakers and later also help the protocol's treasury for R&D, marketing, and expansion. All yields paid out will be paid out in sEURO. Your TST will be locked in until the maturity date.
     </DescriptionContainer>
 
     <div>

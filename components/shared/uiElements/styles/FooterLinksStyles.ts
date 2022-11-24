@@ -5,7 +5,7 @@ import styled from "styled-components";
 import media from "../../../../styles/media";
 
 export const StyledFooterNavContainer = styled.div`
-    max-width: 500px;
+    max-width: 660px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

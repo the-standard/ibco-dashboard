@@ -437,7 +437,7 @@ function Web3BondInterface() {
   return !showHistoryInterface ? (
     <StyledMainContainer>
     <DescriptionContainer>
-      <b>What is sEURO bonding?</b> Receive TST when you add your {TOKENS.DISPLAY.SEURO} and {otherTokenSymbol} to the liquidity pool. Lock up your assets, wait the bond period, and claim the reward. You will receive an amount of TST corresponding to the value of the bonded assets plus an interest rate reward of it. Your TST can then be used for protocol governance and staking in Stage 3!
+    Stage 2: Liquidity Bonding for sEURO<br />Realise the full EURO value by setting up a liquidity bond with sEURO. You can commit the sEURO received in stage 1 with an equal amount of USDC to get a high yield payout in The Standard Token (TST). Note: The sEURO and USDC will remain in the pool and all payouts are done in The Standard Token (TST), our governance token that can be used for staking in Stage 3.
     </DescriptionContainer>
 
     <StyledBondingHistoryButtonContainer>

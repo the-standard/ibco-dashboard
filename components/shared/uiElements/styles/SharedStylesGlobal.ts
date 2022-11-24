@@ -15,7 +15,7 @@ export const StyledGlobalContainer = styled.div`
 
 export const StyledPushFooter = styled.div`
     display: flex;
-    min-height: 90vh;
+    min-height: 80vh;
     flex-direction: column;
     justify-content: space-between;
 `;
