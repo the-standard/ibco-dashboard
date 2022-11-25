@@ -25,7 +25,7 @@ export default createGlobalStyle`
     width: 100%;
     height: 100%;
     color: white;
-    margin: 0 auto;
+    margin: 16px auto;
     font-size: 14px;
     line-height: normal;
   }

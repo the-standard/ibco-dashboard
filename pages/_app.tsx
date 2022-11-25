@@ -9,7 +9,6 @@ import { ThemeProvider } from 'styled-components';
 import { GlobalColors } from '../styles/globalColors';
 import GlobalCSS from '../styles/globalStyles';
 import 'react-toastify/scss/main.scss'
-import { StyledGlobalBetaBanner } from '../components/shared/uiElements/styles/SharedStylesGlobal';
 
 function getInitialProps() {
   return {};  
@@ -37,7 +36,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Web3ContextProvider>
         <ThemeProvider theme={theme}>
         <GlobalCSS />
-        <StyledGlobalBetaBanner>Goerli Testnet Only. Mainnet Launch Coming November 28th.</StyledGlobalBetaBanner>
           <Component {...pageProps} />
           <ToastContainer
             hideProgressBar
