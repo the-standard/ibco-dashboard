@@ -38,7 +38,7 @@ export const useWeb3 = () => {
         const network = await web3Provider.getNetwork()
 
         toast.success(`Connected to wallet: ${address.substring(0, 5)}...${address.slice(-4)}`);
-        if (!window.location.href.includes('/stage')) window.location.href = '/stage1';
+        if (!window.location.href.includes('/coming-soon')) if (!window.location.href.includes('/stage')) window.location.href = '/stage1';
 
         dispatch({
           type: 'SET_WEB3_PROVIDER',
@@ -56,7 +56,7 @@ export const useWeb3 = () => {
   }, [])
 
   const redirectIfStagePage = () => {
-    if (window.location.href.includes('/stage')) window.location.href = '/';
+    if (!window.location.href.includes('/coming-soon')) if (window.location.href.includes('/stage')) window.location.href = '/';
   }
 
   const disconnect = useCallback(async () => {
