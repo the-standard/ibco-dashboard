@@ -10,7 +10,7 @@ export const StyledMainContainer = styled.div`
 
 export const StyledCountdownContainer = styled.div`
     display: flex;
-    width: 60%;
+    width: 40%;
     justify-content: center;
     border-radius: 4px;
     box-shadow: 0 2px 4px ${props => props.theme.colors.black};
