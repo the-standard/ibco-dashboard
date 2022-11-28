@@ -437,7 +437,7 @@ function Web3BondInterface() {
   return !showHistoryInterface ? (
     <StyledMainContainer>
     <DescriptionContainer>
-    Stage 2: Liquidity Bonding for sEURO<br />Realise the full EURO value by setting up a liquidity bond with sEURO. You can commit the sEURO received in stage 1 with an equal amount of USDC to get a high yield payout in The Standard Token (TST). Note: The sEURO and USDC will remain in the pool and all payouts are done in The Standard Token (TST), our governance token that can be used for staking in Stage 3.
+    Stage 2: Liquidity Bonding for sEURO<br />Realise the full EURO value by setting up a liquidity bond with sEURO. You can commit the sEURO received in stage 1 with an equal amount of USDC to get a high yield payout in The Standard Token (TST). Note: The sEURO and USDC will remain in the pool and all payouts are done in The Standard Token (TST), our governance token that can be used for staking in Stage 3.<br /> <br /> Note: Percentage yields below are calculated in ROI. For example: 11.22% ROI = 45% APY
     </DescriptionContainer>
 
     <StyledBondingHistoryButtonContainer>
