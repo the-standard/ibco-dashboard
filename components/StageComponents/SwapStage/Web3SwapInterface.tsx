@@ -78,7 +78,7 @@ export function Web3SwapInterface() {
       const _from:string = from || '0';
       const _deposit:number = ConvertTo(_from, tokenDecimal).toInt();
       //@ts-ignore
-      isTokenNotEth(token.token) ? setTokenApprove(_from !== '' && allowance >= _deposit) : setTokenApprove(true);
+      isTokenNotEth(token.token) ? setTokenApprove(_from !== '' && parseInt(allowance) >= _deposit) : setTokenApprove(true);
       //@ts-ignore
       isTokenNotEth(token.token) && checkAllowance(address, seuroAddress);
     }
@@ -168,8 +168,11 @@ export function Web3SwapInterface() {
   }
 
   const checkAllowance = async (_address:string, _seuroAddress:string) => {
+    const tokenContract = await TokenContract;
+    console.log('checkAllowance tokenContract', tokenContract, '_address', _address, '_seuroAddress', _seuroAddress);
     //@ts-ignore
-    await (await TokenContract).methods.allowance(_address, _seuroAddress).call().then((data: React.SetStateAction<number>) => {
+    tokenContract.methods.allowance(_address, contractAddresses[_network]['CONTRACT_ADDRESSES']['SEuroOffering']).call().then((data: React.SetStateAction<number>) => {
+      console.log('checkAllowance setAllowance', data);
       setAllowance(data)
     });
   }
