@@ -66,7 +66,7 @@ const Home: NextPage = () => {
                 onChange={handleChange}
               />
             </label>
-            &nbsp; I confirm that I have read, understood and accept the Terms of Use
+            &nbsp; I confirm that I have read, understood and accept the <a href="https://www.thestandard.io/termsofuse" rel="noreferrer" target="_blank">Terms of Use</a>
             </span>
         </StyledSupplyContainer> : '' }
 
