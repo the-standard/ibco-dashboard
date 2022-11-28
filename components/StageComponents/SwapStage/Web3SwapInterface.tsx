@@ -19,6 +19,7 @@ import Dropdown from '../../shared/uiElements/Dropdown/Dropdown';
 import { GetJsonAddresses } from '../../../Utils/ContractManager';
 import { StyledInputContainers, StyledPContainer, StyledSwapButton, StyledSwapInterfaceContainer } from './Styles';
 import SwapSuccessModal from '../../shared/uiElements/Modal/SwapSuccessModal/SwapSuccessModal';
+import { toLocaleFixed } from '../../../Utils/IntegerConverter';
 
 export function Web3SwapInterface() {
   const { address, network, web3Provider } = useWeb3Context();
@@ -267,7 +268,7 @@ export function Web3SwapInterface() {
 
               <StyledPContainer>Receiving</StyledPContainer>
               <StyledInputContainers>
-                <input type='string' readOnly={true} placeholder="0" value={to > 0 ? to.toLocaleString( undefined, { minimumFractionDigits: 2 }) : ''} /> 
+                <input type='string' readOnly={true} placeholder="0" value={to > 0 ? toLocaleFixed(to, 18) : ''} /> 
                 <div className="dropdownSelect readOnly">
                   {TOKENS.DISPLAY.SEURO}
                 </div>
