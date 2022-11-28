@@ -20,6 +20,7 @@ import { RateSelectionButton } from './components/RateSelectionButton/RateSelect
 import { BondingHistoryInterface } from './components/BondingHistoryInterface/BondingHistoryInterface';
 import DescriptionContainer from '../../shared/uiElements/DescriptionContainer/DescriptionContainer';
 import { StyledBondingHistoryButton, StyledBondingHistoryButtonContainer, StyledBondingInterfaceContainer, StyledInputContainers, StyledMainContainer, StyledNoFormatP, StyledPContainer, StyledRateSelectionContainer, StyledTransactionButton, StyledTransactionButtonContainer } from './Styles';
+import { toLocaleFixed } from '../../../Utils/IntegerConverter';
 
 type Rate = {
   duration: string, 
@@ -45,7 +46,7 @@ function Web3BondInterface() {
   const [from, setFrom] = useState(0);
   const [to, setTo] = useState('0');
   const [reward, setReward] = useState('0');
-  const [toDisplay, setToDisplay] = useState(0);
+  const [toDisplay, setToDisplay] = useState('0');
   const [rates, setRates] = useState([]);
   const [balance, setBalance] = useState({main: '0', other: '0'});
   const [allowance, setAllowance] = useState({main: 0, other: 0});
@@ -400,8 +401,8 @@ function Web3BondInterface() {
       const _otherTokenDecimal = parseInt(otherTokenDecimal.toString());
 
       const bigNumberTo = ConvertFrom(data['amountOther'], otherTokenDecimal).raw();
-      const convertDisplayTo = ConvertFrom(data['amountOther'], _otherTokenDecimal).toFloat();
-
+      const convertDisplayTo = toLocaleFixed(data['amountOther'], _otherTokenDecimal)
+      //@ts-ignore
       setToDisplay(convertDisplayTo);
       setTo(bigNumberTo);
 
@@ -425,7 +426,7 @@ function Web3BondInterface() {
         setTransactionData(data);
         setFrom(0);
         setTo('');
-        setToDisplay(0);
+        setToDisplay('0');
         setBondingLength(rates[defaultBondIndex]);
         setDisabledSend(true);
         // @ts-ignore
@@ -472,7 +473,7 @@ function Web3BondInterface() {
           <StyledPContainer>Bonding Asset 2</StyledPContainer>
           <div>
             <StyledInputContainers>
-              <input className="w-9/12" type='number' step="any" readOnly={true} placeholder={`${otherTokenSymbol} amount`} value={to !== '0' ? toDisplay : ''} />
+              <input className="w-9/12" type='string' step="any" readOnly={true} placeholder={`${otherTokenSymbol} amount`} value={to !== '0' ? toDisplay : ''} />
               <div className="dropdownSelect readOnly">
                 <StyledNoFormatP>{otherTokenSymbol ? otherTokenSymbol : 'Loading...'}</StyledNoFormatP>
               </div>
