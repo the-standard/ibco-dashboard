@@ -99,15 +99,15 @@ function Web3BondInterface() {
   }, [tstTokenInfo])
 
   useEffect(() => {
-    const allowanceOther = ConvertFrom(allowance.other, otherTokenDecimal).toFloat();
-    const allowanceMain = ConvertFrom(allowance.main, mainTokenDecimal).toFloat();
+    const convertFrom = ConvertTo(from, mainTokenDecimal).toInt();
+    const convertTo = ConvertTo(to, otherTokenDecimal).toInt();
 
-    from > 0 && allowanceMain >= from ?
+    from > 0 && allowance.main >= convertFrom ?
       setAssetApproved(prevState => ({...prevState, main: true}))
       :
       setAssetApproved(prevState => ({...prevState, main: false}));
 
-    parseFloat(to) > 0 && allowanceOther >= parseFloat(to) ?
+      convertTo > 0 && allowance.other >= convertTo ?
       setAssetApproved(prevState => ({...prevState, other: true}))
       :
       setAssetApproved(prevState => ({...prevState, other: false}))
@@ -118,6 +118,10 @@ function Web3BondInterface() {
     getOtherContractAddress();
     checkAllowances();
   }, [otherTokenAddress])
+
+  useEffect(() => {
+    checkAllowances();
+  }, [from, to])
 
   // tokens are currently fixed to SEURO and USDT
   useEffect(() => {

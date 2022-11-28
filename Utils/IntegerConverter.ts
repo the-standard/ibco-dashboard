@@ -83,3 +83,19 @@ export const ConvertTo = (value:number|string, decimal:number) => {
         raw: () => toWei,
     }
 }
+
+export const toLocaleFixed = (num: number, dec: number) => {
+    let localeFixed;
+    const number = num || 0;
+
+    const formatter = new Intl.NumberFormat(undefined, {
+      minimumFractionDigits: dec,
+      maximumFractionDigits: dec,
+    });
+
+    if (number && dec) {
+      localeFixed = formatter.format(number);
+    }
+    
+    return localeFixed;
+  }
