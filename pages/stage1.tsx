@@ -56,7 +56,7 @@ const Stage1: NextPage = () => {
       <StyledPushFooter>
          <main>
         <DescriptionContainer>
-          Stage1: Initial Discount Curve Offering for Standard Euro (sEURO)<br />Mint sEURO at a massive discount starting at 80 cents. As more liquidity comes into the pool, the discount will become less until we reach a 1:1 peg. The sEURO is only considered a stablecoin once the Stage 1 discount reaches 1:1 and the protocol controlled value is greater than the sEURO minted.
+          Stage 1: Initial Discount Curve Offering for Standard Euro (sEURO)<br />Mint sEURO at a massive discount starting at 80 cents. As more liquidity comes into the pool, the discount will become less until we reach a 1:1 peg. The sEURO is only considered a stablecoin once the Stage 1 discount reaches 1:1 and the protocol controlled value is greater than the sEURO minted.
         </DescriptionContainer>
 
         <StyledLeftRightColContainer>
