@@ -75,7 +75,7 @@ export const ConvertFrom = (value:number|string, decimal:number) => {
  */
 export const ConvertTo = (value:number|string, decimal:number) => {
     const decimalName = decimal2name(decimal) as Unit;
-    const toWei = web3.utils.toWei((value).toString(), decimalName);
+    const toWei = value > 0 && value !== undefined && value !== NaN ? web3.utils.toWei((value).toString(), decimalName) : '0' ;
 
     return {
         toInt: () => parseInt(toWei),
