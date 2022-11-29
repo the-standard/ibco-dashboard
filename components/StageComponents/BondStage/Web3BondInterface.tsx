@@ -260,7 +260,8 @@ function Web3BondInterface() {
 
   //MAIN FUNCTIONS
   const setTokenValues = (data:number) => {
-    setFrom(data);
+    const number = data && data < 0 ? 0 : data;
+    setFrom(number);
   }
 
   const getTokenBalance = async (token:string) => {
@@ -365,7 +366,7 @@ function Web3BondInterface() {
       // @ts-ignore
       storage && await storage.methods.calculateBondYield(_formatFrom, _formatTo, _rate).call()
       .then((data:never) => {
-        const convertedReward = from > 0 ? ConvertFrom(data['payout'], tstTokenInfo.decimal).toFloat().toFixed(2) : 0;
+        const convertedReward = from > 0 ? ConvertFrom(data['payout'], tstTokenInfo.decimal).raw() : 0;
         //@ts-ignore
         setReward(convertedReward);
       }).catch((error:never) => {
@@ -400,10 +401,10 @@ function Web3BondInterface() {
       setLoading(false);
       const _otherTokenDecimal = parseInt(otherTokenDecimal.toString());
 
-      const bigNumberTo = ConvertFrom(data['amountOther'], _otherTokenDecimal).raw();
+      const bigNumberTo = data['amountOther'] > 0 ? ConvertFrom(data['amountOther'], _otherTokenDecimal).raw() : 0 ;
       //@ts-ignore
       setToDisplay(toLocaleFixed(bigNumberTo, 2));
-      setTo(bigNumberTo);
+      setTo(bigNumberTo.toString());
 
     }).catch((error:never) => {
       setLoading(false);
