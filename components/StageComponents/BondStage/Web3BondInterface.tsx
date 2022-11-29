@@ -400,10 +400,9 @@ function Web3BondInterface() {
       setLoading(false);
       const _otherTokenDecimal = parseInt(otherTokenDecimal.toString());
 
-      const bigNumberTo = ConvertFrom(data['amountOther'], otherTokenDecimal).raw();
-      const convertDisplayTo = toLocaleFixed(data['amountOther'], _otherTokenDecimal)
+      const bigNumberTo = ConvertFrom(data['amountOther'], _otherTokenDecimal).raw();
       //@ts-ignore
-      setToDisplay(convertDisplayTo);
+      setToDisplay(toLocaleFixed(bigNumberTo, 2));
       setTo(bigNumberTo);
 
     }).catch((error:never) => {

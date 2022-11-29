@@ -89,8 +89,8 @@ export const toLocaleFixed = (num: number, dec: number) => {
     const number = num || 0;
 
     const formatter = new Intl.NumberFormat(undefined, {
-      minimumFractionDigits: dec,
-      maximumFractionDigits: dec,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     });
 
     if (number && dec) {
