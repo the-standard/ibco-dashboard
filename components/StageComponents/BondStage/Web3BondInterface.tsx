@@ -286,7 +286,7 @@ function Web3BondInterface() {
   const approveCurrency = async (token:string) => {
     setTransactionData(null);
     token === TOKENS.HUMAN_READABLE.SEURO ? setLoadingMain(true) : setLoadingOther(true);
-    const _depositAmount = token === TOKENS.HUMAN_READABLE.SEURO ? ConvertTo(from, mainTokenDecimal).raw() : ConvertTo(to, otherTokenDecimal).raw();
+    const _depositAmount = token === TOKENS.HUMAN_READABLE.SEURO ? ConvertTo(from, mainTokenDecimal).raw() : to;
     //@ts-ignore
     const bondingEventAddress = contractAddresses[_network]['CONTRACT_ADDRESSES']['BondingEvent'];
     const TokenContract = token === TOKENS.HUMAN_READABLE.SEURO ? await (await TokenContract_main) : await (await TokenContract_other);
@@ -360,11 +360,10 @@ function Web3BondInterface() {
       const storage = await Storage;
       //@ts-ignore
       const _formatFrom = from > 0 ? ConvertTo(from, mainTokenDecimal).raw() : 0;
-      const _formatTo = ConvertFrom(to, otherTokenDecimal).raw() || 0;
       const _rate = bondingLength?.rate || 9000;
 
       // @ts-ignore
-      storage && await storage.methods.calculateBondYield(_formatFrom, _formatTo, _rate).call()
+      storage && await storage.methods.calculateBondYield(_formatFrom, to, _rate).call()
       .then((data:never) => {
         const payoutConvert = ConvertFrom(data['payout'], 18).raw();
         const convertedReward = from > 0 ? payoutConvert : 0;
@@ -402,10 +401,10 @@ function Web3BondInterface() {
       setLoading(false);
       const _otherTokenDecimal = parseInt(otherTokenDecimal.toString());
 
-      const bigNumberTo = data['amountOther'] > 0 ? ConvertFrom(data['amountOther'], _otherTokenDecimal).raw() : 0 ;
+      const displayToConvert = data['amountOther'] > 0 ? ConvertFrom(data['amountOther'], _otherTokenDecimal).raw() : 0 ;
       //@ts-ignore
-      setToDisplay(toLocaleFixed(bigNumberTo, 2));
-      setTo(bigNumberTo.toString());
+      setToDisplay(toLocaleFixed(displayToConvert, 2));
+      setTo(data['amountOther']);
 
     }).catch((error:never) => {
       setLoading(false);
