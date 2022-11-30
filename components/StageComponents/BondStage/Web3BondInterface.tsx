@@ -157,8 +157,8 @@ function Web3BondInterface() {
 
     // enable bonding button if both assets are approved
     assetApproved.main && assetApproved.other && bondingLength !== undefined && setDisabledSend(false);
-
     from > 0 ? getTokenAmount() : setTo('0');
+    console.log('updatefrom', from)
     //@ts-ignore
     getRewardAmount();
   }, [from, to, assetApproved, bondingLength]);
@@ -261,7 +261,8 @@ function Web3BondInterface() {
   //MAIN FUNCTIONS
   const setTokenValues = (data:number) => {
     const number = data && data < 0 ? 0 : data;
-    setFrom(number);
+    const setNumber = number !== NaN ? number : 0;
+    setFrom(setNumber);
   }
 
   const getTokenBalance = async (token:string) => {
@@ -401,9 +402,10 @@ function Web3BondInterface() {
       setLoading(false);
       const _otherTokenDecimal = parseInt(otherTokenDecimal.toString());
 
-      const displayToConvert = data['amountOther'] > 0 ? ConvertFrom(data['amountOther'], _otherTokenDecimal).raw() : 0 ;
+      const displayToConvert = from && from > 0 ? ConvertFrom(data['amountOther'], _otherTokenDecimal).raw() : 0 ;
+      console.log('otheramount', data['amountOther'], 'from', from);
       //@ts-ignore
-      setToDisplay(toLocaleFixed(displayToConvert, 2));
+      setToDisplay(toLocaleFixed(displayToConvert, 2) || 0);
       setTo(data['amountOther']);
 
     }).catch((error:never) => {
@@ -503,7 +505,7 @@ function Web3BondInterface() {
                 {
                   <>
                   <StyledTransactionButton className="halfWidth" disabled={loadingOther || loadingMain || loading || disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${from} ${TOKENS.DISPLAY.SEURO} Approved` : loadingMain ? `Approving ${from} ${TOKENS.DISPLAY.SEURO}...` : `Approve ${from || 0} ${TOKENS.DISPLAY.SEURO}`}</StyledTransactionButton>
-                  <StyledTransactionButton className="halfWidth noRightMargin" disabled={loadingMain || loadingOther || loading || disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${toDisplay} ${otherTokenSymbol} Approved` : loadingOther ? `Approving ${toDisplay} ${otherTokenSymbol}...` : `Approve ${toDisplay || 0} ${otherTokenSymbol}`}</StyledTransactionButton>
+                  <StyledTransactionButton className="halfWidth noRightMargin" disabled={loadingMain || loadingOther || loading || disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${toDisplay} ${otherTokenSymbol} Approved` : loadingOther ? `Approving ${toDisplay} ${otherTokenSymbol}...` : `Approve ${from > 0 ? toDisplay : 0} ${otherTokenSymbol}`}</StyledTransactionButton>
                   </>
                 }
               </StyledTransactionButtonContainer>
