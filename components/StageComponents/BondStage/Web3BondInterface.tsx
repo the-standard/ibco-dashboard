@@ -502,8 +502,8 @@ function Web3BondInterface() {
               <StyledTransactionButtonContainer>
                 {
                   <>
-                  <StyledTransactionButton className="halfWidth" disabled={loadingOther || loadingMain || loading || disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${from} ${TOKENS.DISPLAY.SEURO} Approved` : loadingMain ? `Approving ${from} ${TOKENS.DISPLAY.SEURO}...` : `Approve ${from} ${TOKENS.DISPLAY.SEURO}`}</StyledTransactionButton>
-                  <StyledTransactionButton className="halfWidth noRightMargin" disabled={loadingMain || loadingOther || loading || disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${toDisplay} ${otherTokenSymbol} Approved` : loadingOther ? `Approving ${toDisplay} ${otherTokenSymbol}...` : `Approve ${toDisplay} ${otherTokenSymbol}`}</StyledTransactionButton>
+                  <StyledTransactionButton className="halfWidth" disabled={loadingOther || loadingMain || loading || disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${from} ${TOKENS.DISPLAY.SEURO} Approved` : loadingMain ? `Approving ${from} ${TOKENS.DISPLAY.SEURO}...` : `Approve ${from || 0} ${TOKENS.DISPLAY.SEURO}`}</StyledTransactionButton>
+                  <StyledTransactionButton className="halfWidth noRightMargin" disabled={loadingMain || loadingOther || loading || disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${toDisplay} ${otherTokenSymbol} Approved` : loadingOther ? `Approving ${toDisplay} ${otherTokenSymbol}...` : `Approve ${toDisplay || 0} ${otherTokenSymbol}`}</StyledTransactionButton>
                   </>
                 }
               </StyledTransactionButtonContainer>
