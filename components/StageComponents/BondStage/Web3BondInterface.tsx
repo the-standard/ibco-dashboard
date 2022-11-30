@@ -360,15 +360,16 @@ function Web3BondInterface() {
       const storage = await Storage;
       //@ts-ignore
       const _formatFrom = from > 0 ? ConvertTo(from, mainTokenDecimal).raw() : 0;
-      const _formatTo = ConvertTo(to, otherTokenDecimal).raw() || 0;
+      const _formatTo = ConvertFrom(to, otherTokenDecimal).raw() || 0;
       const _rate = bondingLength?.rate || 9000;
 
       // @ts-ignore
       storage && await storage.methods.calculateBondYield(_formatFrom, _formatTo, _rate).call()
       .then((data:never) => {
-        const convertedReward = from > 0 ? ConvertFrom(data['payout'], tstTokenInfo.decimal).raw() : 0;
+        const payoutConvert = ConvertFrom(data['payout'], 18).raw();
+        const convertedReward = from > 0 ? payoutConvert : 0;
         //@ts-ignore
-        setReward(convertedReward);
+        setReward(toLocaleFixed(convertedReward, 2));
       }).catch((error:never) => {
         console.log('error fetching yield', error);
       });
