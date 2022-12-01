@@ -440,7 +440,7 @@ function Web3BondInterface() {
   }
 
   const bondingHistoryClickHandler = () => router.push({query: {'history': 'true'}});
-
+  console.log('main token balance', parseInt(ConvertTo(from, mainTokenDecimal).raw()) > parseInt(balance.main), 'other token balance', parseInt(ConvertTo(to, mainTokenDecimal).raw()) > parseInt(balance.other), 'other balance', parseInt(to), parseInt(balance.other))
   return !showHistoryInterface ? (
     <StyledMainContainer>
     <DescriptionContainer>
@@ -504,15 +504,15 @@ function Web3BondInterface() {
               <StyledTransactionButtonContainer>
                 {
                   <>
-                  <StyledTransactionButton className="halfWidth" disabled={loadingOther || loadingMain || loading || disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${from} ${TOKENS.DISPLAY.SEURO} Approved` : loadingMain ? `Approving ${from} ${TOKENS.DISPLAY.SEURO}...` : `Approve ${from || 0} ${TOKENS.DISPLAY.SEURO}`}</StyledTransactionButton>
-                  <StyledTransactionButton className="halfWidth noRightMargin" disabled={loadingMain || loadingOther || loading || disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${toDisplay} ${otherTokenSymbol} Approved` : loadingOther ? `Approving ${toDisplay} ${otherTokenSymbol}...` : `Approve ${from > 0 ? toDisplay : 0} ${otherTokenSymbol}`}</StyledTransactionButton>
+                  <StyledTransactionButton className="halfWidth" disabled={parseInt(ConvertTo(from, mainTokenDecimal).raw()) > parseInt(balance.main) || loadingOther || loadingMain || loading || disabledApprovalButton.main} onClick={() => approveCurrency(TOKENS.HUMAN_READABLE.SEURO)}>{assetApproved.main ? `${from} ${TOKENS.DISPLAY.SEURO} Approved` : loadingMain ? `Approving ${from} ${TOKENS.DISPLAY.SEURO}...` : `Approve ${from || 0} ${TOKENS.DISPLAY.SEURO}`}</StyledTransactionButton>
+                  <StyledTransactionButton className="halfWidth noRightMargin" disabled={parseInt(to) > parseInt(balance.other) || loadingMain || loadingOther || loading || disabledApprovalButton.other} onClick={() => approveCurrency(otherTokenSymbol)}>{assetApproved.other ? `${toDisplay} ${otherTokenSymbol} Approved` : loadingOther ? `Approving ${toDisplay} ${otherTokenSymbol}...` : `Approve ${from > 0 ? toDisplay : 0} ${otherTokenSymbol}`}</StyledTransactionButton>
                   </>
                 }
               </StyledTransactionButtonContainer>
             }
             
             {            
-            <StyledTransactionButton disabled={loading || loadingTransaction || disabledSend} onClick={() => SendBondTransaction()}>{loadingTransaction ? 'Processing bond...' : transactionData ? 'Start Another Bond' : 'Start Bond'}</StyledTransactionButton>
+            <StyledTransactionButton disabled={parseInt(ConvertTo(from, mainTokenDecimal).raw()) > parseInt(balance.main) || parseInt(to) > parseInt(balance.other) || loading || loadingTransaction || disabledSend} onClick={() => SendBondTransaction()}>{loadingTransaction ? 'Processing bond...' : transactionData ? 'Start Another Bond' : 'Start Bond'}</StyledTransactionButton>
             }
             {// @ts-ignore
             transactionData && <StyledTransactionButton className='marginTop' onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledTransactionButton>

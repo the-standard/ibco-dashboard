@@ -274,11 +274,11 @@ export function Web3SwapInterface() {
                 </div>
               </StyledInputContainers>
             {
-              isTokenNotEth(token.token) ? from !== '0' && from !== '' && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <StyledSwapButton className="extraMarginTop" disabled={approveLoading || disabledCheck} onClick={() => confirmCurrency()}>{approveLoading ? `Approving ${from} ${token.token}...` : `Approve ${from} ${token.token}`}</StyledSwapButton> : ''
+              isTokenNotEth(token.token) ? from !== '0' && from !== '' && allowance < ConvertTo(from, tokenDecimal).toInt() && !tokenApproved && <StyledSwapButton className="extraMarginTop" disabled={ConvertTo(from, tokenDecimal).toInt() > ConvertTo(balance, tokenDecimal).toInt() || approveLoading || disabledCheck} onClick={() => confirmCurrency()}>{approveLoading ? `Approving ${from} ${token.token}...` : `Approve ${from} ${token.token}`}</StyledSwapButton> : ''
             }
             
             {            
-            web3Provider && <StyledSwapButton disabled={approveLoading || loading || disabledSend} onClick={() => SendTransaction()}>{loading ? 'Processing swap...' : `Swap for ${to.toLocaleString( undefined, { minimumFractionDigits: 2 })} ${TOKENS.DISPLAY.SEURO}`}</StyledSwapButton>
+            web3Provider && <StyledSwapButton disabled={ConvertTo(from, tokenDecimal).toInt() > ConvertTo(balance, tokenDecimal).toInt() || approveLoading || loading || disabledSend} onClick={() => SendTransaction()}>{loading ? 'Processing swap...' : `Swap for ${to.toLocaleString( undefined, { minimumFractionDigits: 2 })} ${TOKENS.DISPLAY.SEURO}`}</StyledSwapButton>
             }
             {// @ts-ignore
             transactionData && <StyledSwapButton onClick={() => window.open(`${etherscanUrl}/tx/${transactionData['transactionHash']}`,"_blank")}>Show Transaction</StyledSwapButton>
