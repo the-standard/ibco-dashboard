@@ -440,8 +440,6 @@ function Web3BondInterface() {
 
   const checkApprovals = parseInt(ConvertTo(from, mainTokenDecimal).raw()) > parseInt(balance.main) || parseInt(to) > parseInt(balance.other);
 
-  console.log('checkApprovals', checkApprovals);
-
   const bondingHistoryClickHandler = () => router.push({query: {'history': 'true'}});
   console.log('main token balance', parseInt(ConvertTo(from, mainTokenDecimal).raw()) > parseInt(balance.main), 'other token balance', parseInt(ConvertTo(to, mainTokenDecimal).raw()) > parseInt(balance.other), 'other balance', parseInt(to), parseInt(balance.other))
   return !showHistoryInterface ? (
@@ -470,7 +468,7 @@ function Web3BondInterface() {
               </div>
         </StyledInputContainers>
 
-              <p style={{margin: '-20px 0 25px 0', color: '#99f9ff', fontSize: '12px'}}>Available: {balance.main !== '0' ? `${ConvertFrom(balance.main.toString(), mainTokenDecimal).toFloat().toFixed(2)} ${TOKENS.DISPLAY.SEURO}`: `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`}</p>
+              <p style={balance.main !== '0' ? {margin: '-20px 0 25px 0', color: '#99f9ff', fontSize: '12px'} : {margin: '-20px 0 25px 0', color: '#cb4464', fontSize: '12px'}}>{balance.main !== '0' ? `Available: ${ConvertFrom(balance.main.toString(), mainTokenDecimal).toFloat().toFixed(2)} ${TOKENS.DISPLAY.SEURO}`: `Warning: you do not have enough ${TOKENS.DISPLAY.SEURO}`}</p>
 
           </div>
         
@@ -484,7 +482,7 @@ function Web3BondInterface() {
               </div>
             </StyledInputContainers>
         
-            <p style={{margin: '-20px 0 25px 0', color: '#99f9ff', fontSize: '12px'}}>Available: {balance.other !== '0' ? `${ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2)} ${otherTokenSymbol}` : `Warning: you do not have enough ${otherTokenSymbol}`}</p>
+            <p style={balance.other !== '0' ? {margin: '-20px 0 25px 0', color: '#99f9ff', fontSize: '12px'} : {margin: '-20px 0 25px 0', color: '#cb4464', fontSize: '12px'}}>{balance.other !== '0' ? `Available: ${ConvertFrom(balance.other.toString(), parseInt(otherTokenDecimal.toString())).toFloat().toFixed(2)} ${otherTokenSymbol}` : `Warning: you do not have enough ${otherTokenSymbol}`}</p>
           </div>
         </span>
         
@@ -501,7 +499,7 @@ function Web3BondInterface() {
           }
         </StyledRateSelectionContainer>
 
-        <p style={{margin: 'px 0 25px 0', color: '#99f9ff', fontSize: '12px'}}>Reward: {reward} {tstTokenInfo.symbol} </p>
+        <p style={{margin: 'px 0 25px 0', color: '#99f9ff', fontSize: '12px'}}>Reward: {reward || 0} {tstTokenInfo.symbol} </p>
 
             {
               <StyledTransactionButtonContainer>

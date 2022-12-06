@@ -264,7 +264,7 @@ export function Web3SwapInterface() {
                   <Dropdown ddElements={ddTokens} changeHandler={changeTokenClickHandler} defaultValue={TOKENS.HUMAN_READABLE.ETH} />
                   }
               </StyledInputContainers>
-              <p style={{margin: '-15px 0 25px 0', color: '#99f9ff', fontSize: '12px'}}>Available: {balance} {token.token}</p>
+              <p style={balance > 0 ? {margin: '-15px 0 25px 0', color: '#99f9ff', fontSize: '12px'} : {margin: '-15px 0 25px 0', color: '#cb4464', fontSize: '12px'}}>{balance > 0 ? `Available: ${balance} ${token.token}` : `Warning: you do not have enough ${token.token}`}</p>
 
               <StyledPContainer>Receiving</StyledPContainer>
               <StyledInputContainers>
