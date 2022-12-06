@@ -81,18 +81,18 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
 
   //MAIN FUNCTIONS
   const getTokenInformation = async () => {
-    const TokenContract = await (await TokenContract_TST);
-
-    if(TokenContract && Object.keys(TokenContract).length !== 0) {
+    const TokenContract =  await TokenContract_TST;
+    
+    if(tokenAddress && TokenContract && Object.keys(TokenContract).length !== 0) {
       //@ts-ignore
       TokenContract.methods.symbol().call()
       .then((data:never) => setTokenSymbol(data));
       //@ts-ignore
       TokenContract.methods.decimals().call()
       .then((data:never) => setTokenDecimal(data));
-
+      //@ts-ignore
       TokenContract.methods.allowance(address, contractAddress).call().then((data:never) => setAllowance(parseInt(data)));
-
+      //@ts-ignore
       TokenContract.methods.balanceOf(address).call().then((data:never) => {
         const formattedBalance = ConvertFrom(data, parseInt(tokenDecimal)).toFloat().toFixed(2);
         setBalance(parseFloat(formattedBalance));
