@@ -176,7 +176,7 @@ export const StakingInterface = ({contractAddress, backButton}:StakingInterfaceT
             </StyledDropdownContainer>
         </StyledInputContainer>
         
-        <p style={{margin: '15px 0 0 0', color: '#99f9ff', fontSize: '12px'}}>Available: {balance} {tokenSymbol}</p>
+        <p style={balance > 0 ? {color: '#99f9ff', margin: '15px 0 0 0', fontSize: '12px'} : {color: '#cb4464', margin: '15px 0 0 0', fontSize: '12px'}}>{balance > 0 ? `Available: ${balance} ${tokenSymbol}` : `Warning: you do not have enough ${tokenSymbol}`}</p>
 
           <StyledWarning>
             <StyledWarningIconSpan><AlertTriangle size={20} /></StyledWarningIconSpan><StyledWarningP>Warning: once you have staked your Standard Token ({tokenSymbol}) you can not unstake them until {moment(parseInt(stakeTermsEnd)*1000).format('lll')}</StyledWarningP>
