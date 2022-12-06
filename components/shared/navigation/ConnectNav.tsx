@@ -44,7 +44,7 @@ const ConnectNav = () => {
             }
           </StyledLogoContainer>
 
-        {!mobile && terms ?
+        {!mobile ?
         <nav>
           <Web3Button />
         </nav>
