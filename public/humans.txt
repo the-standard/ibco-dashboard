@@ -1,0 +1,31 @@
+/* TEAM */
+
+The people who made this be.
+
+Name: Bradley Horner
+AKA: Crazy Brad
+Role: Lead Frontend Engineer
+Skills: Web3, Javascript, Typescript, CSS!, Design, Bubble Tea
+Location: Middle England
+Github: https://github.com/bahorner87
+
+Name: Daniel Kastensson Fan
+AKA: Crazy Dan
+Role: Lead Solidity Engineer
+Skills: Solidity, GO, Rust, Bench Pressing
+Location: London, Nice, Sweden, An Airport
+Github: https://github.com/therealdannzor
+
+Name: Ewan Sheldon
+AKA: Crazy Ian
+Role: Senior Solidity Engineer
+Skills: Solidity, Javascript, Typescript, Swimming in Cold Ponds
+Location: Berlin, London, A Cold Pond
+Github: https://github.com/ewansheldon
+
+Name: Simon Morley
+AKA: Crazy Si
+Role: Team Lead & CTO
+Skills: Solidity, Go, Javascript, Kubenetes, Dad Jokes
+Location: Bromley, London, The Shed
+Github: https://github.com/simonmorley
