@@ -17,7 +17,7 @@ Location: London, Nice, Sweden, An Airport
 Github: https://github.com/therealdannzor
 
 Name: Ewan Sheldon
-AKA: Crazy Ian
+AKA: Crazy Jan
 Role: Senior Solidity Engineer
 Skills: Solidity, Javascript, Typescript, Swimming in Cold Ponds
 Location: Berlin, London, A Cold Pond
