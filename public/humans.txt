@@ -26,6 +26,6 @@ Github: https://github.com/ewansheldon
 Name: Simon Morley
 AKA: Crazy Si
 Role: Team Lead & CTO
-Skills: Solidity, Go, Javascript, Kubenetes, Dad Jokes
+Skills: Solidity, Go, Javascript, Kubernetes, Dad Jokes
 Location: Bromley, London, The Shed
 Github: https://github.com/simonmorley
